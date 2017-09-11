@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */; };
+		1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */; };
 		18C4B5F21F5FF025002430E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F11F5FF025002430E4 /* main.m */; };
 		18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F41F5FF025002430E4 /* AppDelegate.m */; };
 		18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F71F5FF025002430E4 /* ViewController.m */; };
@@ -17,6 +19,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayer.h; sourceTree = "<group>"; };
+		1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayer.m; sourceTree = "<group>"; };
+		1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCommonHeader.h; sourceTree = "<group>"; };
+		1895D6D01F64E6BD00A3D3CD /* ZJControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJControlView.h; sourceTree = "<group>"; };
+		1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJControlView.m; sourceTree = "<group>"; };
 		18C4B5ED1F5FF025002430E4 /* ZJPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZJPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C4B5F11F5FF025002430E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		18C4B5F31F5FF025002430E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -61,6 +68,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		1895D6CB1F64BCE200A3D3CD /* ZJPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */,
+				1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */,
+				1895D6D01F64E6BD00A3D3CD /* ZJControlView.h */,
+				1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */,
+				1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */,
+			);
+			path = ZJPlayer;
+			sourceTree = "<group>";
+		};
 		18C4B5E41F5FF025002430E4 = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +105,7 @@
 				18C4B5F41F5FF025002430E4 /* AppDelegate.m */,
 				18C4B5F61F5FF025002430E4 /* ViewController.h */,
 				18C4B5F71F5FF025002430E4 /* ViewController.m */,
+				1895D6CB1F64BCE200A3D3CD /* ZJPlayer */,
 				18C4B5F91F5FF025002430E4 /* Main.storyboard */,
 				18C4B5FC1F5FF025002430E4 /* Assets.xcassets */,
 				18C4B5FE1F5FF025002430E4 /* LaunchScreen.storyboard */,
@@ -228,6 +248,8 @@
 			files = (
 				18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */,
 				18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */,
+				1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */,
+				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,
 				18C4B5F21F5FF025002430E4 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -395,6 +417,7 @@
 				18C4B6061F5FF025002430E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
