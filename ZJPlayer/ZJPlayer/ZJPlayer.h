@@ -13,16 +13,23 @@
 @class ZJControlView;
 
 @interface ZJPlayer : UIView
+
 @property(strong,nonatomic) AVPlayer * player;
+
 @property(strong,nonatomic) AVPlayerLayer * playerLayer;
+
 @property(strong,nonatomic) AVPlayerItem * playerItem;
 
 @property(strong,nonatomic) UIView * topView;
+
 @property(strong,nonatomic) ZJControlView * bottomView;
 
 @property(strong,nonatomic) UILabel * titleLabel;
+
 @property(assign,nonatomic) BOOL  isDragSlider;
-// 定时器 自动消失View
+/**
+ 定时器 自动消失View
+ */
 @property(strong,nonatomic) NSTimer * autoDismissTimer;
 /**
  是否隐藏bottomView

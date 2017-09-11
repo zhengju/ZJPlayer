@@ -9,6 +9,28 @@
 #import "ZJControlView.h"
 
 @implementation ZJControlView
+- (void)setCurrentTime:(NSString *)currentTime{
+    _currentTime = currentTime;
+    self.nowLabel.text = _currentTime;
+    
+}
+- (void)setRemainingTime:(NSString *)remainingTime{
+    _remainingTime = remainingTime;
+    self.remainLabel.text = _remainingTime;
+}
+- (float)sliderValue{
+    return self.slider.value;
+    
+}
+- (void)setSliderValue:(float)sliderValue{
+    
+    self.slider.value = sliderValue;
+}
+
+- (void)setProgress:(float)progress{
+    _progress = progress;
+     [self.progressView setProgress:_progress animated:NO];
+}
 
 - (instancetype)init{
     if (self = [super init]) {
@@ -55,27 +77,30 @@
     // 底部进度条
     
     self.slider = [[UISlider alloc]init];
+    self.slider.continuous = YES;
     self.slider.minimumValue = 0.0;
     self.slider.minimumTrackTintColor = [UIColor greenColor];
     self.slider.maximumTrackTintColor = [UIColor clearColor];
     self.slider.value = 0.0;
     
     [self.slider addTarget:self action:@selector(sliderDragValueChange:) forControlEvents:UIControlEventValueChanged];
+    
     [self.slider addTarget:self action:@selector(sliderTapValueChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.slider addTarget:self action:@selector(sliderTapValueChange:) forControlEvents:UIControlEventTouchUpOutside];
     [self.slider addTarget:self action:@selector(sliderTapValueChange:) forControlEvents:UIControlEventTouchCancel];
+    
     UITapGestureRecognizer *tapSlider = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchSlider:)];
     [self.slider addGestureRecognizer:tapSlider];
     [self addSubview:self.slider];
     
     [self.slider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.mas_centerY);
-        make.height.mas_equalTo(1);
+        make.height.mas_equalTo(20);
         make.left.mas_equalTo(self.playBtn.mas_right);
         make.right.mas_equalTo(self.scalingBtn.mas_left);
         
     }];
-    // 底部缓存进度条
+//    // 底部缓存进度条
     self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     self.progressView.progressTintColor = [UIColor blueColor];
     self.progressView.trackTintColor = [UIColor lightGrayColor];
@@ -133,7 +158,6 @@
 {
     if ([self.delegate respondsToSelector:@selector(sliderTapValueChange:)]) {
         [self.delegate sliderTapValueChange:slider];
-        
     }
 }
 // 点击事件的Slider

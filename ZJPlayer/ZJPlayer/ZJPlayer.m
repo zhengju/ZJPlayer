@@ -17,30 +17,6 @@
 
 
 @implementation ZJPlayer
-//+(Class)layerClass{
-//    return [AVPlayerLayer class];
-//}
-//- (AVPlayer *)player{
-//
-//    return [(AVPlayerLayer *)[self layer] player];
-//}
-//- (void)setPlayer:(AVPlayer *)player {
-//    [(AVPlayerLayer *)[self layer] setPlayer:player];
-//}
-//- (instancetype)init{
-//    if (self = [super init]) {
-//        [self configureUI];
-//    }
-//    return self;
-//}
-
-
-//- (instancetype)initWithFrame:(CGRect)frame{
-//    if (self = [super initWithFrame:frame]) {
-//        [self configureUI];
-//    }
-//    return self;
-//}
 
 
 #pragma 实例化
@@ -50,7 +26,6 @@
         _url = url;
         [self configureUI];
          [self setupObservers];//监听应用状态
-        //[self assetWithURL:url];
     }
     return self;
 }
@@ -385,7 +360,10 @@
         //
         CGFloat durationTime = CMTimeGetSeconds(duration);
         //        // 监听到了给进度条赋值
-        [self.bottomView.progressView setProgress:timeInterval / durationTime animated:NO];
+        
+        self.bottomView.progress = timeInterval / durationTime;
+        
+       
     }else if ([keyPath isEqualToString:@"playbackBufferEmpty"]){
         NSLog(@"playbackBufferEmpty");
        // [self.viewLogin setHidden:YES];
@@ -422,13 +400,16 @@
         // 总时间
         CGFloat duration = CMTimeGetSeconds(weakSelf.playerItem.duration);
         // sec 转换成时间点
-        weakSelf.bottomView.nowLabel.text = [weakSelf convertToTime:nowTime];
-        weakSelf.bottomView.remainLabel.text = [weakSelf convertToTime:(duration - nowTime)];
+        
+        weakSelf.bottomView.currentTime = [weakSelf convertToTime:nowTime];
+        
+        
+        weakSelf.bottomView.remainingTime = [weakSelf convertToTime:(duration - nowTime)];
         
         // 不是拖拽中的话更新UI
         if (!weakSelf.isDragSlider)
         {
-            weakSelf.bottomView.slider.value = CMTimeGetSeconds(weakSelf.playerItem.currentTime);
+            weakSelf.bottomView.sliderValue = CMTimeGetSeconds(weakSelf.playerItem.currentTime);
         }
         
     }];
@@ -482,6 +463,7 @@
 -(void)toFullScreenWithInterfaceOrientation:(UIInterfaceOrientation )interfaceOrientation{
     // 先移除之前的
     [self removeFromSuperview];
+   
     // 初始化
     self.transform = CGAffineTransformIdentity;
     if (interfaceOrientation==UIInterfaceOrientationLandscapeLeft) {
@@ -559,7 +541,7 @@
 {
     self.isDragSlider = YES;
     
-    
+   
 }
 
 - (void)sliderTapValueChange:(UISlider *)slider
@@ -575,8 +557,8 @@
     // 根据点击的坐标计算对应的比例
     CGPoint touch = [tap locationInView:self.bottomView.slider];
     CGFloat scale = touch.x / self.bottomView.slider.bounds.size.width;
-    self.bottomView.slider.value = CMTimeGetSeconds(self.playerItem.duration) * scale;
-    [self.player seekToTime:CMTimeMakeWithSeconds(self.bottomView.slider.value, self.playerItem.currentTime.timescale)];
+    self.bottomView.sliderValue = CMTimeGetSeconds(self.playerItem.duration) * scale;
+    [self.player seekToTime:CMTimeMakeWithSeconds(self.bottomView.sliderValue, self.playerItem.currentTime.timescale)];
     /* indicates the current rate of playback; 0.0 means "stopped", 1.0 means "play at the natural rate of the current item" */
     if (self.player.rate != 1)
     {

@@ -24,7 +24,6 @@
 @end
 
 
-
 @interface ZJControlView : UIView
 @property(strong,nonatomic) UISlider * slider;
 @property (nonatomic,strong) UIProgressView *progressView;
@@ -40,6 +39,23 @@
 @property(strong,nonatomic) UILabel * nowLabel;
 
 @property(strong,nonatomic) UILabel * remainLabel;
+
+/**
+ 当前时间
+ */
+@property(copy,nonatomic) NSString * currentTime;
+/**
+ 剩余时间
+ */
+@property(copy,nonatomic) NSString * remainingTime;
+/**
+ slider的值
+ */
+@property(nonatomic,assign) float sliderValue;
+/**
+ 视频缓冲进度
+ */
+@property(nonatomic,assign) float progress;
 
 @property(weak,nonatomic) id<ZJControlViewDelegate> delegate;
 

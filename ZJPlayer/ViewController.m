@@ -19,6 +19,7 @@
     [super viewDidLoad];
 
     // http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4
+    //
     ZJPlayer * player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://baobab.wdjcdn.com/14564977406580.mp4"]];
 
     [self.view addSubview:player];
@@ -29,6 +30,6 @@
         make.right.mas_equalTo(self.view);
         make.height.mas_equalTo(300);
     }];
-    
+    NSLog(@"-----");
 }
 @end
