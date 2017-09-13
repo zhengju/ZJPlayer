@@ -187,18 +187,83 @@
         self.url = _url;
     }
 
+    
+    [self addNotificationCenter];
+    
+    [self addSwipeGesture];
+    
+    //给playView加手势
+    [self bk_whenTapped:^{
+        [self singleTap];
+        
+    }];
+}
+#pragma 加滑动手势
+- (void)addSwipeGesture{
+    UISwipeGestureRecognizer * swipeGestureLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
+    [swipeGestureLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self addGestureRecognizer:swipeGestureLeft];
+    UISwipeGestureRecognizer * swipeGestureRight = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
+    [swipeGestureRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self addGestureRecognizer:swipeGestureRight];
+}
+- (void)swipeAction:(UISwipeGestureRecognizer *)swipeGesture{
+    if (swipeGesture.direction == UISwipeGestureRecognizerDirectionLeft) {//左滑
+        [self swipeToPlusTime:NO];
+    }else if (swipeGesture.direction == UISwipeGestureRecognizerDirectionRight){//右滑
+        [self swipeToPlusTime:YES];
+    }
+}
+#pragma 滑动调整播放时间
+- (void)swipeToPlusTime:(BOOL)isPlus{
+    // 获取当前播放的时间
+    NSTimeInterval currentTime = CMTimeGetSeconds(self.player.currentItem.currentTime);
+    
+    if (isPlus) {
+        currentTime += 10;
+    }else{
+    
+        currentTime -= 10;
+    }
+    
+    if (currentTime >= CMTimeGetSeconds(self.player.currentItem.duration)) {
+        
+        currentTime = CMTimeGetSeconds(self.player.currentItem.duration) - 1;
+    } else if (currentTime <= 0) {
+        currentTime = 0;
+    }
+    
+    [self.player seekToTime:CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    
+}
+
+#pragma 添加通知
+- (void)addNotificationCenter{
     //旋转屏幕通知
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onDeviceOrientationChange)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil
      ];
-    //给playView加手势
-    [self bk_whenTapped:^{
-        [self singleTap];
-        
-    }];
+    
+    //监听AVPlayer播放完成通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+}
 
+#pragma 监听AVPlayer播放完成通知
+- (void)playerItemDidReachEnd:(NSNotification *)notification{
+   //播放完毕
+    
+    __weak typeof(self) weakSelf = self;
+    [self.player seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {
+        [weakSelf initTimer];
+       
+    }];
+    
+        self.bottomView.isPlay = NO;
+        if ([self.delegate respondsToSelector:@selector(playFinishedPlayer:)]) {
+            [self.delegate playFinishedPlayer:self];
+        }
 }
 /**
  *  给AVPlayerItem添加监控
@@ -212,7 +277,7 @@
     [playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
     //监听播放的区域缓存是否为空
     [playerItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
-    //缓存可以播放的时候调用
+    //缓存可以播放的时候调用 // 缓冲区有足够数据可以播放了
     [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
 }
 
@@ -503,13 +568,6 @@
             weakSelf.bottomView.sliderValue = CMTimeGetSeconds(weakSelf.playerItem.currentTime);
         }
         
-        if (nowTime == duration) {//播放完毕
-            weakSelf.bottomView.isPlay = NO;
-            if ([weakSelf.delegate respondsToSelector:@selector(playFinishedPlayer:)]) {
-                [weakSelf.delegate playFinishedPlayer:weakSelf];
-            }
-            
-        }
         
     }];
 }
