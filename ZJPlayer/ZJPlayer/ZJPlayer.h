@@ -28,6 +28,14 @@
 
 @property(assign,nonatomic) BOOL  isDragSlider;
 /**
+ 当前播放视频的标题
+ */
+@property(copy,nonatomic) NSString * title;
+/**
+ 当前播放url
+ */
+@property (nonatomic,strong) NSURL *url;
+/**
  定时器 自动消失View
  */
 @property(strong,nonatomic) NSTimer * autoDismissTimer;

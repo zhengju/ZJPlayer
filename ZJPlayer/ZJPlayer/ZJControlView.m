@@ -39,6 +39,7 @@
     return self;
 }
 - (void)configureUI{
+    
     //播放按钮
     self.playBtn = [[UIButton alloc]init];
     [self.playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
@@ -57,9 +58,7 @@
     [self.scalingBtn setImage:[UIImage imageNamed:@"放大"] forState:UIControlStateNormal];
     self.scalingBtn.showsTouchWhenHighlighted = YES;
     [self.scalingBtn bk_addEventHandler:^(id sender) {
-        
-        
-        
+
         if ([self.delegate respondsToSelector:@selector(clickFullScreen)]) {
             [self.delegate clickFullScreen];
         }

@@ -16,6 +16,8 @@
 		18C204DB1F68FFFD0043A18E /* ZJTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204D61F68FFFD0043A18E /* ZJTabBarItem.m */; };
 		18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204DD1F6900260043A18E /* MyTabBarController.m */; };
 		18C204E11F6900800043A18E /* VideoListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204E01F6900800043A18E /* VideoListController.m */; };
+		18C204E41F690A410043A18E /* VideoListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204E31F690A410043A18E /* VideoListCell.m */; };
+		18C204E71F6911B00043A18E /* VideoList.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204E61F6911B00043A18E /* VideoList.m */; };
 		18C4B5F21F5FF025002430E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F11F5FF025002430E4 /* main.m */; };
 		18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F41F5FF025002430E4 /* AppDelegate.m */; };
 		18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F71F5FF025002430E4 /* ViewController.m */; };
@@ -45,6 +47,10 @@
 		18C204DD1F6900260043A18E /* MyTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTabBarController.m; sourceTree = "<group>"; };
 		18C204DF1F6900800043A18E /* VideoListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoListController.h; sourceTree = "<group>"; };
 		18C204E01F6900800043A18E /* VideoListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoListController.m; sourceTree = "<group>"; };
+		18C204E21F690A410043A18E /* VideoListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoListCell.h; sourceTree = "<group>"; };
+		18C204E31F690A410043A18E /* VideoListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoListCell.m; sourceTree = "<group>"; };
+		18C204E51F6911B00043A18E /* VideoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoList.h; sourceTree = "<group>"; };
+		18C204E61F6911B00043A18E /* VideoList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoList.m; sourceTree = "<group>"; };
 		18C4B5ED1F5FF025002430E4 /* ZJPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZJPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C4B5F11F5FF025002430E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		18C4B5F31F5FF025002430E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -145,6 +151,10 @@
 				18C4B5F71F5FF025002430E4 /* ViewController.m */,
 				18C204DF1F6900800043A18E /* VideoListController.h */,
 				18C204E01F6900800043A18E /* VideoListController.m */,
+				18C204E21F690A410043A18E /* VideoListCell.h */,
+				18C204E31F690A410043A18E /* VideoListCell.m */,
+				18C204E51F6911B00043A18E /* VideoList.h */,
+				18C204E61F6911B00043A18E /* VideoList.m */,
 				18C204DC1F6900260043A18E /* MyTabBarController.h */,
 				18C204DD1F6900260043A18E /* MyTabBarController.m */,
 				18C204CC1F68FFFD0043A18E /* ZJTabBar */,
@@ -291,10 +301,12 @@
 			files = (
 				18C204DA1F68FFFD0043A18E /* ZJTabBarController.m in Sources */,
 				18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */,
+				18C204E41F690A410043A18E /* VideoListCell.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
 				18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */,
 				18C204DB1F68FFFD0043A18E /* ZJTabBarItem.m in Sources */,
 				18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */,
+				18C204E71F6911B00043A18E /* VideoList.m in Sources */,
 				1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */,
 				18C204E11F6900800043A18E /* VideoListController.m in Sources */,
 				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,

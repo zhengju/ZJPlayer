@@ -10,8 +10,7 @@
 #import "ZJControlView.h"
 
 @interface ZJPlayer()<ZJControlViewDelegate>
-//当前播放url
-@property (nonatomic,strong) NSURL *url;
+
 @property(weak,nonatomic) UIView * fatherView;
 
 @property(nonatomic) CGRect  currentFrame;
@@ -40,6 +39,22 @@
     //隐藏状态栏
     currentController.navigationController.navigationBar.hidden = _isTabNavigationHidden;
     
+}
+
+#pragma 设置当前url
+- (void)setUrl:(NSURL *)url{
+    
+    _url = url;
+    
+    self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    
+    [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
+    
+}
+#pragma  当前播放视频的标题
+- (void)setTitle:(NSString *)title{
+    _title = title;
+    self.titleLabel.text = _title;
 }
 - (void)layoutSubviews{
     [super layoutSubviews];
@@ -74,7 +89,7 @@
 
 - (void)configureUI{
     self.isFullScreen = NO;
-
+    
     // 初始化播放器item
     self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
     self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
@@ -126,7 +141,6 @@
         
     }];
     self.titleLabel = [[UILabel alloc]init];
-    self.titleLabel.text = @"奥特曼爱打小怪兽";
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self.topView addSubview:self.titleLabel];
