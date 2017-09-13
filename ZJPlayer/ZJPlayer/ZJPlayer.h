@@ -57,5 +57,9 @@
  视频播放
  */
 - (void)play;
+/**
+ 视频暂停
+ */
+- (void)pause;
 
 @end

@@ -23,6 +23,10 @@
  是否隐藏底航栏和导航栏 YES:自动横屏 NO:手动横屏
  */
 @property(assign,nonatomic) BOOL  isTabNavigationHidden;
+/**
+ 是否添加过监听 YES:已经监听 NO:无监听
+ */
+@property(assign,nonatomic) BOOL  isAddObserverToPlayerItem;
 
 @end
 
@@ -40,22 +44,35 @@
     currentController.navigationController.navigationBar.hidden = _isTabNavigationHidden;
     
 }
-
+/**
+ 因复用，移除监听，重新监听
+ */
 #pragma 设置当前url
 - (void)setUrl:(NSURL *)url{
     
     _url = url;
+
+    if (self.isAddObserverToPlayerItem) {
+        
+        self.isAddObserverToPlayerItem = NO;
+        
+        [self removeObserverFromPlayerItem:self.playerItem];
+    }
     
+    self.playerItem = nil;
     self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
-    
     [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
-    
+    if (self.isAddObserverToPlayerItem == NO) {
+        self.isAddObserverToPlayerItem = YES;
+        [self addObserverToPlayerItem:self.playerItem];
+    }
 }
 #pragma  当前播放视频的标题
 - (void)setTitle:(NSString *)title{
     _title = title;
     self.titleLabel.text = _title;
 }
+
 - (void)layoutSubviews{
     [super layoutSubviews];
 
@@ -166,9 +183,10 @@
         
     }];
 
-    // 监听播放器状态变化
-    [self addObserverToPlayerItem:self.playerItem];
-    
+    if (_url != nil) {
+        self.url = _url;
+    }
+
     //旋转屏幕通知
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onDeviceOrientationChange)
@@ -186,6 +204,7 @@
  *  给AVPlayerItem添加监控
  *  @param playerItem AVPlayerItem对象
  */
+#pragma 监听播放器状态变化
 - (void)addObserverToPlayerItem:(AVPlayerItem *)playerItem{
     //监控状态属性，注意AVPlayer也有一个status属性，通过监控它的status也可以获得播放状态
     [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
@@ -673,24 +692,26 @@
     [self clickFullScreen:nil];
     
 }
+#pragma 视频播放
 - (void)play{
     if (self.player.rate != 1.0f)
     {
         [self.bottomView.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
         [self.player play];
     }
-    else
+}
+#pragma 视频暂停
+- (void)pause{
+    if (self.player.rate == 1.0f)
     {
         [self.bottomView.playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
         [self.player pause];
     }
 }
-
 - (void)sliderDragValueChange:(UISlider *)slider
 {
     self.isDragSlider = YES;
     
-   
 }
 
 - (void)sliderTapValueChange:(UISlider *)slider

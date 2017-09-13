@@ -22,22 +22,26 @@
         self.userInteractionEnabled = YES;
         
         [self configure];
-        NSLog(@"初始化...");
+    
     }
     return self;
     
 }
 
 - (void)configure{
-   self.player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:nil]];
+   
+    self.player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@""]];
+    
     self.player.backgroundColor = [UIColor redColor];
+    
     [self addSubview:self.player];
     
     [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self);
         make.left.mas_equalTo(self);
         make.right.mas_equalTo(self);
-        make.bottom.mas_equalTo(self);
+        make.bottom.mas_equalTo(self).offset(-10);
+
     }];
 }
 
