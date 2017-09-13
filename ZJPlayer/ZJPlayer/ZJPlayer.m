@@ -31,6 +31,18 @@
 @end
 
 @implementation ZJPlayer
+
++ (id)sharePlayer
+{
+    static ZJPlayer *player = nil;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        player = [[ZJPlayer alloc]init];
+        
+    });
+    return player;
+}
+
 - (void)setIsTabNavigationHidden:(BOOL)isTabNavigationHidden{
     
     _isTabNavigationHidden = isTabNavigationHidden;
@@ -103,7 +115,9 @@
     }
     return self;
 }
-
+- (instancetype)init{
+    return [self initWithUrl:[NSURL URLWithString:@""]];
+}
 - (void)configureUI{
     self.isFullScreen = NO;
     
@@ -395,7 +409,7 @@
        // weakSelf.frame = CGRectMake(0, 80, kScreenWidth, kScreenHeight / 2.5);
        // weakSelf.playerLayer.frame =  weakSelf.bounds;
         // 再添加到View上
-        // [self.fatherView addSubview:weakSelf];
+         [weakSelf.fatherView addSubview:weakSelf];
    
         // remark 约束
         [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -613,7 +627,7 @@
         }
     }
 }
-// 全屏显示
+#pragma 全屏显示
 -(void)toFullScreenWithInterfaceOrientation:(UIInterfaceOrientation )interfaceOrientation{
 
     
@@ -628,6 +642,13 @@
         height = kScreenWidth;
 
     }
+
+    
+    _fatherView = self.superview;
+    
+    
+    UIViewController * controller = [self getCurrentViewController];
+    [controller.view addSubview:self];
 
     self.frame = CGRectMake(0, 0, width, height);
     
@@ -660,7 +681,7 @@
         return;
     }
 
-//    _fatherView = self.superview;
+
 //    
 //    // 先移除之前的
 //    [self removeFromSuperview];

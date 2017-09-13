@@ -10,4 +10,5 @@
 @class VideoList;
 @interface VideoListCell : UITableViewCell
 @property(strong,nonatomic) VideoList * model;
+@property(strong,nonatomic) NSIndexPath *indexPath ;
 @end

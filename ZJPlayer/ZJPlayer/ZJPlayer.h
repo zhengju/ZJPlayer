@@ -41,6 +41,10 @@
 
 @property(assign,nonatomic) BOOL  isDragSlider;
 /**
+ tableView中player显示的位置
+ */
+@property(strong,nonatomic) NSIndexPath *indexPath;
+/**
  当前播放视频的标题
  */
 @property(copy,nonatomic) NSString * title;
@@ -64,6 +68,10 @@
  是否全屏 YES:全屏 ；NO:非全屏
  */
 @property (nonatomic,assign) BOOL isFullScreen;
+/**
+ 单例生成player
+ */
++ (id)sharePlayer;
 /**
  与url初始化
  */

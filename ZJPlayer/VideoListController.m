@@ -78,10 +78,16 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    VideoListCell * cell = [tableView dequeueReusableCellWithIdentifier:@"VideoListCell" forIndexPath:indexPath];
     
-    cell.model = self.datas[indexPath.row];
+    VideoListCell *cell = [tableView cellForRowAtIndexPath:indexPath]; //根据indexPath准确地取出一行，而不是从cell重用队列中取出
+    if (cell == nil) {
+        cell = [[VideoListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"VideoListCell"];
+    }
 
+    cell.model = self.datas[indexPath.row];
+    
+    cell.indexPath = indexPath;
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return  cell;
