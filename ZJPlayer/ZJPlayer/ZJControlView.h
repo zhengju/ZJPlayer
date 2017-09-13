@@ -15,7 +15,14 @@
  点击全屏的事件
  */
 - (void)clickFullScreen;
+/**
+ 播放
+ */
 - (void)play;
+/**
+ 暂停
+ */
+- (void)pause;
 - (void)sliderDragValueChange:(UISlider *)slider;
 - (void)sliderTapValueChange:(UISlider *)slider;
 // 点击事件的Slider
@@ -25,7 +32,9 @@
 
 
 @interface ZJControlView : UIView
+
 @property(strong,nonatomic) UISlider * slider;
+
 @property (nonatomic,strong) UIProgressView *progressView;
 /**
  播放暂停按钮
@@ -39,7 +48,10 @@
 @property(strong,nonatomic) UILabel * nowLabel;
 
 @property(strong,nonatomic) UILabel * remainLabel;
-
+/**
+ 是否播放状态 YES:播放状态 NO:暂停状态
+ */
+@property(assign,nonatomic) BOOL isPlay;
 /**
  当前时间
  */

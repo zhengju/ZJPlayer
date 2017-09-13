@@ -9,7 +9,7 @@
 #import "VideoListCell.h"
 #import "ZJPlayer.h"
 #import "VideoList.h"
-@interface VideoListCell()
+@interface VideoListCell()<ZJPlayerDelegate>
 @property(strong,nonatomic) ZJPlayer* player;
 @end
 
@@ -31,7 +31,7 @@
 - (void)configure{
    
     self.player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@""]];
-    
+    self.player.delegate = self;
     self.player.backgroundColor = [UIColor redColor];
     
     [self addSubview:self.player];
@@ -49,5 +49,10 @@
     _model = model;
     self.player.url = [NSURL URLWithString:model.url];
     self.player.title = _model.title;
+}
+#pragma ZJPlayerDelegate
+- (void)playFinishedPlayer:(ZJPlayer *)player{
+    NSLog(@"播放完毕");
+    
 }
 @end

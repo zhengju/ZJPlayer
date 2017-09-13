@@ -12,7 +12,20 @@
 
 @class ZJControlView;
 
+@class ZJPlayer;
+
+@protocol ZJPlayerDelegate <NSObject>
+
+- (void)playFinishedPlayer:(ZJPlayer *)player;
+
+
+@end
+
+
 @interface ZJPlayer : UIView
+
+
+@property(weak,nonatomic) id<ZJPlayerDelegate> delegate;
 
 @property(strong,nonatomic) AVPlayer * player;
 
@@ -47,11 +60,13 @@
  左上角关闭按钮
  */
 @property(strong,nonatomic) UIButton * closeButton;
-
-// 是否全屏
+/**
+ 是否全屏 YES:全屏 ；NO:非全屏
+ */
 @property (nonatomic,assign) BOOL isFullScreen;
-
-//与url初始化
+/**
+ 与url初始化
+ */
 -(instancetype)initWithUrl:(NSURL *)url;
 /**
  视频播放

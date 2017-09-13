@@ -235,7 +235,7 @@
     if (self.player.rate == 0) {
         [self.player play];
        
-        [self.bottomView.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
+        self.bottomView.isPlay  = YES;
     }
 }
 
@@ -244,7 +244,7 @@
     if (self.player.rate == 1){
         [self.player pause];
         
-        [self.bottomView.playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
+        self.bottomView.isPlay  = NO;
     }
 }
 
@@ -503,10 +503,15 @@
             weakSelf.bottomView.sliderValue = CMTimeGetSeconds(weakSelf.playerItem.currentTime);
         }
         
+        if (nowTime == duration) {//播放完毕
+            weakSelf.bottomView.isPlay = NO;
+            if ([weakSelf.delegate respondsToSelector:@selector(playFinishedPlayer:)]) {
+                [weakSelf.delegate playFinishedPlayer:weakSelf];
+            }
+            
+        }
+        
     }];
-    
-    
-    
 }
 
 // sec 转换成指定的格式
@@ -648,44 +653,6 @@
 
 }
 
-#pragma 查询当前控制器
-
-- (UIViewController * )getCurrentViewController{
- 
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    
-    return [self getCurrentVCFrom:rootViewController];
-}
-
-// 获取当前屏幕显示的viewcontroller
-- (UIViewController *)getCurrentVCFrom:(UIViewController *)rootVC
-{
-
-    UIViewController *currentVC;
-    
-    if ([rootVC presentedViewController]) {
-        // 视图是被presented出来的
-        rootVC = [rootVC presentedViewController];
-    }
-    
-    if ([rootVC isKindOfClass:[UITabBarController class]]) {
-        // 根视图为UITabBarController
-        currentVC = [self getCurrentVCFrom:[(UITabBarController *)rootVC selectedViewController]];
-        
-    } else if ([rootVC isKindOfClass:[UINavigationController class]]){
-        // 根视图为UINavigationController
-        currentVC = [self getCurrentVCFrom:[(UINavigationController *)rootVC visibleViewController]];
-        
-    } else {
-        // 根视图为非导航类
-        currentVC = rootVC;
-    }
-    
-    return currentVC;
-}
-
-
-
 #pragma ZJControlViewDelegate
 - (void)clickFullScreen{
 
@@ -696,7 +663,7 @@
 - (void)play{
     if (self.player.rate != 1.0f)
     {
-        [self.bottomView.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
+        self.bottomView.isPlay  = YES;
         [self.player play];
     }
 }
@@ -704,7 +671,7 @@
 - (void)pause{
     if (self.player.rate == 1.0f)
     {
-        [self.bottomView.playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
+        self.bottomView.isPlay  = NO;
         [self.player pause];
     }
 }
@@ -732,7 +699,7 @@
     /* indicates the current rate of playback; 0.0 means "stopped", 1.0 means "play at the natural rate of the current item" */
     if (self.player.rate != 1)
     {
-        [self.bottomView.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
+        self.bottomView.isPlay  = YES;
         [self.player play];
     }
 }

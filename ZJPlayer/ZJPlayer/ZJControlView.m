@@ -8,6 +8,12 @@
 
 #import "ZJControlView.h"
 
+
+@interface ZJControlView()
+
+
+@end
+
 @implementation ZJControlView
 - (void)setCurrentTime:(NSString *)currentTime{
     _currentTime = currentTime;
@@ -31,7 +37,16 @@
     _progress = progress;
      [self.progressView setProgress:_progress animated:NO];
 }
-
+- (void)setIsPlay:(BOOL)isPlay{
+    _isPlay = isPlay;
+    if (_isPlay) {
+        
+        [self.playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
+    }else{
+     
+        [self.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
+    }
+}
 - (instancetype)init{
     if (self = [super init]) {
         [self configureUI];
@@ -42,10 +57,13 @@
     
     //播放按钮
     self.playBtn = [[UIButton alloc]init];
-    [self.playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
+    
+    self.isPlay = NO;
     
     self.playBtn.showsTouchWhenHighlighted = YES;
+    
     [self.playBtn addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
+    
     [self addSubview:self.playBtn];
     
     [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,7 +117,7 @@
         make.right.mas_equalTo(self.scalingBtn.mas_left);
         
     }];
-//    // 底部缓存进度条
+ // 底部缓存进度条
     self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     self.progressView.progressTintColor = [UIColor blueColor];
     self.progressView.trackTintColor = [UIColor lightGrayColor];
@@ -140,8 +158,17 @@
 
 }
 - (void)play:(UIButton *)button{
-    if ([self.delegate respondsToSelector:@selector(play)]) {
-        [self.delegate play];
+    
+    self.isPlay = !self.isPlay;
+    
+    if (self.isPlay) {
+        if ([self.delegate respondsToSelector:@selector(play)]) {
+            [self.delegate play];
+        }
+    }else{
+        if ([self.delegate respondsToSelector:@selector(pause)]) {
+            [self.delegate pause];
+        }
     }
 }
 // 拖拽的时候调用  这个时候不更新视频进度
