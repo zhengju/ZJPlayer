@@ -17,11 +17,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    // http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4
+    
+  
+    
+    self.view.backgroundColor = [UIColor whiteColor];
     //
-    ZJPlayer * player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://baobab.wdjcdn.com/14564977406580.mp4"]];
-
+    // http://baobab.wdjcdn.com/14564977406580.mp4
+    ZJPlayer * player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4"]];
+    player.backgroundColor = [UIColor redColor];
     [self.view addSubview:player];
     
     [player mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -30,6 +33,23 @@
         make.right.mas_equalTo(self.view);
         make.height.mas_equalTo(300);
     }];
-    NSLog(@"-----");
+
+    UIButton * button = [[UIButton alloc]init];
+    
+    [button setBackgroundColor:[UIColor redColor]];
+    
+    [button bk_addEventHandler:^(id sender) {
+    
+        [player play];
+        
+    } forControlEvents:UIControlEventTouchUpInside];
+
+    [self.view addSubview:button];
+    
+    [button mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(player.mas_bottom).offset(64);
+        make.centerX.mas_equalTo(self.view.mas_centerX);
+        make.height.width.mas_equalTo(30);
+    }];
 }
 @end

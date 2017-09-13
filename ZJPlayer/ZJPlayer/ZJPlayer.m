@@ -12,13 +12,55 @@
 @interface ZJPlayer()<ZJControlViewDelegate>
 //当前播放url
 @property (nonatomic,strong) NSURL *url;
+@property(weak,nonatomic) UIView * fatherView;
+
+@property(nonatomic) CGRect  currentFrame;
+
+/**
+ 是否自动横屏 YES:自动横屏 NO:手动横屏
+ */
+@property(assign,nonatomic) BOOL  isAutomaticHorizontal;
+/**
+ 是否隐藏底航栏和导航栏 YES:自动横屏 NO:手动横屏
+ */
+@property(assign,nonatomic) BOOL  isTabNavigationHidden;
 
 @end
 
-
 @implementation ZJPlayer
+- (void)setIsTabNavigationHidden:(BOOL)isTabNavigationHidden{
+    
+    _isTabNavigationHidden = isTabNavigationHidden;
+    
+    UIViewController * currentController = [self getCurrentViewController];
+    //隐藏状态栏
+    [[UIApplication sharedApplication] setStatusBarHidden:_isTabNavigationHidden withAnimation:UIStatusBarAnimationNone];
+    //隐藏底航栏
+    currentController.tabBarController.tabBar.hidden = _isTabNavigationHidden;
+    //隐藏状态栏
+    currentController.navigationController.navigationBar.hidden = _isTabNavigationHidden;
+    
+}
+- (void)layoutSubviews{
+    [super layoutSubviews];
 
-
+    self.isTabNavigationHidden = self.isFullScreen;
+    
+    if (self.isFullScreen) {
+        
+        self.frame = self.currentFrame;
+        if (self.isAutomaticHorizontal) {
+             self.playerLayer.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+        }else{
+         
+            self.playerLayer.frame = CGRectMake(0, 0, kScreenHeight, kScreenWidth);
+        }
+ 
+    }else{
+        self.playerLayer.frame = self.bounds;
+   
+    }
+}
 #pragma 实例化
 -(instancetype)initWithUrl:(NSURL *)url{
     self = [super init];
@@ -36,10 +78,10 @@
     // 初始化播放器item
     self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
     self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
+    self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     // 初始化播放器的Layer
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-    // layer的frame
-    self.playerLayer.frame = CGRectMake(0, 0, kScreenWidth, 300);
+    
     /*
      * layer的填充属性 和UIImageView的填充属性类似
      * AVLayerVideoGravityResizeAspect 等比例拉伸，会留白
@@ -47,9 +89,9 @@
      * AVLayerVideoGravityResize // 保持原有大小拉伸
      */
     self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    // 把Layer加到底部View上
+    // 把Layer加到底部View上 //放到最下面，防止遮挡
     [self.layer insertSublayer:self.playerLayer atIndex:0];
-//    [self.layer addSublayer:self.playerLayer];
+
     //顶部栏
     self.topView = [[UIView alloc]init];
     
@@ -111,9 +153,6 @@
     }];
 
     // 监听播放器状态变化
-   // [self.playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-    // 监听缓存进去，就是大家所看到的一开始进去底部灰色的View会迅速加载
-   // [self.playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
     [self addObserverToPlayerItem:self.playerItem];
     
     //旋转屏幕通知
@@ -143,6 +182,8 @@
     //缓存可以播放的时候调用
     [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
 }
+
+
 - (void)removeObserverFromPlayerItem:(AVPlayerItem *)playerItem{
     [playerItem removeObserver:self forKeyPath:@"status"];
     [playerItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
@@ -189,24 +230,25 @@
             break;
         case UIInterfaceOrientationPortrait:{
             NSLog(@"第0个旋转方向---电池栏在上");
-            
-            //[self toCell];
+            self.isFullScreen = NO;
+            [self toCell];
             
             
         }
             break;
         case UIInterfaceOrientationLandscapeLeft:{
             NSLog(@"第2个旋转方向---电池栏在右");
-            
+          self.isAutomaticHorizontal =  self.isFullScreen = YES;
             
             [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
         }
             break;
         case UIInterfaceOrientationLandscapeRight:{
             NSLog(@"第1个旋转方向---电池栏在左");
-            
+           self.isAutomaticHorizontal =  self.isFullScreen = YES;
             
             [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
+            
         }
             break;
         default:
@@ -219,52 +261,69 @@
 {
     if (!self.isFullScreen)
     {
+        
+        self.isAutomaticHorizontal = NO;
+        
         [self toFullScreenWithInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"放大"] forState:UIControlStateNormal];
     }
     else
     {
+        
+        
+        if (self.isAutomaticHorizontal) {//自动横屏没有放小功能
+            
+            
+            //横屏情况下，缩小cell
+            
+            
+            return;
+        }
+
         [self toCell];
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"缩小"] forState:UIControlStateNormal];
     }
     self.isFullScreen = !self.isFullScreen;
-    
+   
 }
 // 缩小到cell
 -(void)toCell{
     // 先移除
-    [self removeFromSuperview];
+    //[self removeFromSuperview];
     
     __weak typeof(self)weakSelf = self;
     [UIView animateWithDuration:0.5f animations:^{
         weakSelf.transform = CGAffineTransformIdentity;
-        weakSelf.frame = CGRectMake(0, 80, kScreenWidth, kScreenHeight / 2.5);
-        weakSelf.playerLayer.frame =  weakSelf.bounds;
+       // weakSelf.frame = CGRectMake(0, 80, kScreenWidth, kScreenHeight / 2.5);
+       // weakSelf.playerLayer.frame =  weakSelf.bounds;
         // 再添加到View上
-        // [weakSelf addSubview:weakSelf.playerView];
-        // remark约束
+        // [self.fatherView addSubview:weakSelf];
+   
+        // remark 约束
         [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(weakSelf).with.offset(0);
-            make.right.equalTo(weakSelf).with.offset(0);
             make.height.mas_equalTo(50);
-            make.bottom.equalTo(weakSelf).with.offset(0);
-        }];
-        [self.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(weakSelf).with.offset(0);
-            make.right.equalTo(weakSelf).with.offset(0);
-            make.height.mas_equalTo(50);
-            make.top.equalTo(weakSelf).with.offset(0);
+            make.bottom.mas_equalTo(self);
+            make.left.mas_equalTo(self);
+            make.width.mas_equalTo(kScreenWidth);
         }];
         
-        [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(weakSelf).with.offset(5);
-            make.centerY.equalTo(weakSelf.topView);
-            make.size.mas_equalTo(CGSizeMake(30, 30));
+        [self.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).with.offset(0);
+            make.width.mas_equalTo(kScreenWidth);
+            make.top.equalTo(self).with.offset(0);
+            make.height.mas_equalTo(50);
         }];
+
+//        
+//        [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(weakSelf).with.offset(5);
+//            make.centerY.equalTo(weakSelf.topView);
+//            make.size.mas_equalTo(CGSizeMake(30, 30));
+//        }];
+        
     }completion:^(BOOL finished) {
         
     }];
-    
 }
 
 #pragma mark - 单击手势
@@ -331,8 +390,7 @@
                     self.autoDismissTimer = [NSTimer timerWithTimeInterval:8.0 target:self selector:@selector(autoDismissView:) userInfo:nil repeats:YES];
                     [[NSRunLoop currentRunLoop] addTimer:self.autoDismissTimer forMode:NSDefaultRunLoopMode];
                 }
-                
-                [self.player play];
+
                 break;
                 
             case AVPlayerItemStatusUnknown:
@@ -461,73 +519,150 @@
 }
 // 全屏显示
 -(void)toFullScreenWithInterfaceOrientation:(UIInterfaceOrientation )interfaceOrientation{
-    // 先移除之前的
-    [self removeFromSuperview];
-   
-    // 初始化
-    self.transform = CGAffineTransformIdentity;
-    if (interfaceOrientation==UIInterfaceOrientationLandscapeLeft) {
-        self.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    }else if(interfaceOrientation==UIInterfaceOrientationLandscapeRight){
-        self.transform = CGAffineTransformMakeRotation(M_PI_2);
+
+    
+    
+    CGFloat width = kScreenWidth;
+    CGFloat height = kScreenHeight;
+    
+    self.currentFrame = CGRectMake(0, 0, width, height);
+    
+    if (self.isAutomaticHorizontal) {
+        width = kScreenHeight;
+        height = kScreenWidth;
+
     }
-    // BackView的frame能全屏
-    self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
-    // layer的方向宽和高对调
-    self.playerLayer.frame = CGRectMake(0, 0, kScreenHeight, kScreenWidth);
-    [self.layer addSublayer:self.playerLayer];
+
+    self.frame = CGRectMake(0, 0, width, height);
+    
+    //    // layer的方向宽和高对调
+    
+    //
+    //    [self.layer insertSublayer:self.playerLayer atIndex:0];
+    //
+    //    return;
+    
     // remark 约束
     [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(50);
-        make.top.mas_equalTo(kScreenWidth-50);
-        make.left.equalTo(self).with.offset(0);
-        make.width.mas_equalTo(kScreenHeight);
+        make.top.mas_equalTo(self).offset(width - 50);
+        make.left.mas_equalTo(self);
+        make.width.mas_equalTo(height);
     }];
     
     [self.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(50);
         make.left.equalTo(self).with.offset(0);
-        make.width.mas_equalTo(kScreenHeight);
+        make.width.mas_equalTo(height);
+        make.top.equalTo(self).with.offset(0);
+        make.height.mas_equalTo(50);
     }];
+
+    //获取到当前状态条的方向
+    UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    //判断如果当前方向和要旋转的方向一致,那么不做任何操作
+    if (currentOrientation == interfaceOrientation) {
+        return;
+    }
+
+//    _fatherView = self.superview;
+//    
+//    // 先移除之前的
+//    [self removeFromSuperview];
+//    
+//    // 加到window上面
+//    [[UIApplication sharedApplication].keyWindow addSubview:self];
+
+//    // 初始化
+    self.transform = CGAffineTransformIdentity;
+    //UIInterfaceOrientationLandscapeLeft 横屏 Home键在左侧
+    if (interfaceOrientation==UIInterfaceOrientationLandscapeLeft) {
+        self.transform = CGAffineTransformMakeRotation(-M_PI_2);
+
+    }else if(interfaceOrientation==UIInterfaceOrientationLandscapeRight){
+        //UIInterfaceOrientationLandscapeRight 横屏 Home键在右侧
+        self.transform = CGAffineTransformMakeRotation(M_PI_2);
+    }
     
-    [self.closeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).with.offset(5);
-        make.height.mas_equalTo(30);
-        make.width.mas_equalTo(30);
-        make.top.equalTo(self).with.offset(10);
-        
-    }];
-    //
-    [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.topView).with.offset(45);
-        make.right.equalTo(self.topView).with.offset(-45);
-        make.center.equalTo(self.topView);
-        make.top.equalTo(self.topView).with.offset(0);
-    }];
+
     
-    [self.bottomView.nowLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bottomView.slider.mas_left).with.offset(0);
-        make.top.equalTo(self.bottomView.slider.mas_bottom).with.offset(0);
-        make.size.mas_equalTo(CGSizeMake(100, 20));
-    }];
-    
-    [self.bottomView.remainLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.bottomView.slider.mas_right).with.offset(0);
-        make.top.equalTo(self.bottomView.slider.mas_bottom).with.offset(0);
-        make.size.mas_equalTo(CGSizeMake(100, 20));
-    }];
-    // 加到window上面
-    [[UIApplication sharedApplication].keyWindow addSubview:self];
+//
+//    [self.closeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self).with.offset(5);
+//        make.height.mas_equalTo(30);
+//        make.width.mas_equalTo(30);
+//        make.top.equalTo(self).with.offset(10);
+//        
+//    }];
+//    //
+//    [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.topView).with.offset(45);
+//        make.right.equalTo(self.topView).with.offset(-45);
+//        make.center.equalTo(self.topView);
+//        make.top.equalTo(self.topView).with.offset(0);
+//    }];
+//    
+//    [self.bottomView.nowLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.bottomView.slider.mas_left).with.offset(0);
+//        make.top.equalTo(self.bottomView.slider.mas_bottom).with.offset(0);
+//        make.size.mas_equalTo(CGSizeMake(100, 20));
+//    }];
+//    
+//    [self.bottomView.remainLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.right.equalTo(self.bottomView.slider.mas_right).with.offset(0);
+//        make.top.equalTo(self.bottomView.slider.mas_bottom).with.offset(0);
+//        make.size.mas_equalTo(CGSizeMake(100, 20));
+//    }];
+
 }
+
+#pragma 查询当前控制器
+
+- (UIViewController * )getCurrentViewController{
+ 
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    return [self getCurrentVCFrom:rootViewController];
+}
+
+// 获取当前屏幕显示的viewcontroller
+- (UIViewController *)getCurrentVCFrom:(UIViewController *)rootVC
+{
+
+    UIViewController *currentVC;
+    
+    if ([rootVC presentedViewController]) {
+        // 视图是被presented出来的
+        rootVC = [rootVC presentedViewController];
+    }
+    
+    if ([rootVC isKindOfClass:[UITabBarController class]]) {
+        // 根视图为UITabBarController
+        currentVC = [self getCurrentVCFrom:[(UITabBarController *)rootVC selectedViewController]];
+        
+    } else if ([rootVC isKindOfClass:[UINavigationController class]]){
+        // 根视图为UINavigationController
+        currentVC = [self getCurrentVCFrom:[(UINavigationController *)rootVC visibleViewController]];
+        
+    } else {
+        // 根视图为非导航类
+        currentVC = rootVC;
+    }
+    
+    return currentVC;
+}
+
+
+
 #pragma ZJControlViewDelegate
 - (void)clickFullScreen{
+
     [self clickFullScreen:nil];
+    
 }
 - (void)play{
     if (self.player.rate != 1.0f)
     {
         [self.bottomView.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
-        
         [self.player play];
     }
     else
@@ -566,4 +701,5 @@
         [self.player play];
     }
 }
+
 @end

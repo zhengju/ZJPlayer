@@ -45,5 +45,9 @@
 
 //与url初始化
 -(instancetype)initWithUrl:(NSURL *)url;
+/**
+ 视频播放
+ */
+- (void)play;
 
 @end
