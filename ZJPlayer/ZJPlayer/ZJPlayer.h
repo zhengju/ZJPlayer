@@ -51,6 +51,9 @@
  当前播放url
  */
 @property (nonatomic,strong) NSURL *url;
+
+@property (nonatomic,strong) AVURLAsset *asset;
+
 /**
  定时器 自动消失View
  */

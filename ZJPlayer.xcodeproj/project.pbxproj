@@ -19,6 +19,7 @@
 		18C204E41F690A410043A18E /* VideoListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204E31F690A410043A18E /* VideoListCell.m */; };
 		18C204E71F6911B00043A18E /* VideoList.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204E61F6911B00043A18E /* VideoList.m */; };
 		18C204ED1F692AC60043A18E /* UIView+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204EC1F692AC60043A18E /* UIView+Player.m */; };
+		18C204F81F6A74F30043A18E /* ZJCacheTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204F71F6A74F30043A18E /* ZJCacheTask.m */; };
 		18C4B5F21F5FF025002430E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F11F5FF025002430E4 /* main.m */; };
 		18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F41F5FF025002430E4 /* AppDelegate.m */; };
 		18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F71F5FF025002430E4 /* ViewController.m */; };
@@ -54,6 +55,8 @@
 		18C204E61F6911B00043A18E /* VideoList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoList.m; sourceTree = "<group>"; };
 		18C204EB1F692AC60043A18E /* UIView+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Player.h"; sourceTree = "<group>"; };
 		18C204EC1F692AC60043A18E /* UIView+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Player.m"; sourceTree = "<group>"; };
+		18C204F61F6A74F30043A18E /* ZJCacheTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCacheTask.h; sourceTree = "<group>"; };
+		18C204F71F6A74F30043A18E /* ZJCacheTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJCacheTask.m; sourceTree = "<group>"; };
 		18C4B5ED1F5FF025002430E4 /* ZJPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZJPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C4B5F11F5FF025002430E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		18C4B5F31F5FF025002430E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -108,6 +111,8 @@
 				18C204EB1F692AC60043A18E /* UIView+Player.h */,
 				18C204EC1F692AC60043A18E /* UIView+Player.m */,
 				1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */,
+				18C204F61F6A74F30043A18E /* ZJCacheTask.h */,
+				18C204F71F6A74F30043A18E /* ZJCacheTask.m */,
 			);
 			path = ZJPlayer;
 			sourceTree = "<group>";
@@ -307,6 +312,7 @@
 				18C204DA1F68FFFD0043A18E /* ZJTabBarController.m in Sources */,
 				18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */,
 				18C204E41F690A410043A18E /* VideoListCell.m in Sources */,
+				18C204F81F6A74F30043A18E /* ZJCacheTask.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
 				18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */,
 				18C204DB1F68FFFD0043A18E /* ZJTabBarItem.m in Sources */,

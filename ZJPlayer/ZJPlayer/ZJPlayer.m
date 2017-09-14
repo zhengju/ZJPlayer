@@ -23,6 +23,11 @@
  */
 @property(assign,nonatomic) BOOL  isAutomaticHorizontal;
 /**
+ 是否是暂停之后的播放 YES:暂停后播放 NO:首次播放或被动暂停播放
+ */
+@property(assign,nonatomic) BOOL  isPlayAfterPause;
+
+/**
  是否隐藏底航栏和导航栏 YES:自动横屏 NO:手动横屏
  */
 @property(assign,nonatomic) BOOL  isTabNavigationHidden;
@@ -67,6 +72,8 @@
     
     _url = url;
 
+    self.isPlayAfterPause = NO;
+    
     if (self.isAddObserverToPlayerItem) {
         
         self.isAddObserverToPlayerItem = NO;
@@ -75,7 +82,12 @@
     }
     
     self.playerItem = nil;
-    self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    
+    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
+    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+    
+  //  self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    
     [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
     if (self.isAddObserverToPlayerItem == NO) {
         self.isAddObserverToPlayerItem = YES;
@@ -121,11 +133,19 @@
 - (instancetype)init{
     return [self initWithUrl:[NSURL URLWithString:@""]];
 }
+
+- (void)dealloc{
+    NSLog(@"销毁......");
+}
+
 - (void)configureUI{
     self.isFullScreen = NO;
-    
+    self.isPlayAfterPause = NO;
     // 初始化播放器item
-    self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+   // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
+    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+    
     self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     // 初始化播放器的Layer
@@ -214,7 +234,7 @@
         
     }];
 }
-#pragma 加滑动手势
+#pragma  mark -- 加滑动手势
 - (void)addSwipeGesture{
     UISwipeGestureRecognizer * swipeGestureLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
     [swipeGestureLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
@@ -230,7 +250,7 @@
         [self swipeToPlusTime:YES];
     }
 }
-#pragma 滑动调整播放时间
+#pragma mark -- 滑动调整播放时间
 - (void)swipeToPlusTime:(BOOL)isPlus{
     // 获取当前播放的时间
     NSTimeInterval currentTime = CMTimeGetSeconds(self.player.currentItem.currentTime);
@@ -251,6 +271,7 @@
     
     [self.player seekToTime:CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     
+
 }
 
 #pragma 添加通知
@@ -588,6 +609,12 @@
         
         weakSelf.bottomView.remainingTime = [weakSelf convertToTime:(duration - nowTime)];
         
+        
+        // 获取当前播放的时间
+        NSTimeInterval currentTime = CMTimeGetSeconds(weakSelf.player.currentItem.currentTime);
+        ZJCacheTask * task =  [ZJCacheTask shareTask];
+        [task writeToFileUrl:weakSelf.url.absoluteString time:currentTime];
+
         // 不是拖拽中的话更新UI
         if (!weakSelf.isDragSlider)
         {
@@ -738,13 +765,21 @@
     
     [self.player play];
    
+    ZJCacheTask * task =  [ZJCacheTask shareTask];
+    
+    NSTimeInterval time = [task queryToFileUrl:_url.absoluteString];
+    
+    //判断是开始播放，还是暂停之后的播放
+    if (time > 0 &&self.isPlayAfterPause == NO) {
+        
+        [self.player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    }
 }
 #pragma 视频暂停
 - (void)pause{
 
-    
     self.bottomView.isPlay  = NO;
-    
+    self.isPlayAfterPause = YES;
     [self.player pause];
    
 }

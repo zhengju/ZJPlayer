@@ -11,7 +11,7 @@
 
 
 #import "UIView+Player.h"
-
+#import "ZJCacheTask.h"
 #import <Masonry/Masonry.h>
 #import <BlocksKit/BlocksKit.h>
 #import <BlocksKit/BlocksKit+UIKit.h>

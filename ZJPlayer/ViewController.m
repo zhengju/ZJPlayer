@@ -50,5 +50,6 @@
         make.centerX.mas_equalTo(self.view.mas_centerX);
         make.height.width.mas_equalTo(30);
     }];
+
 }
 @end
