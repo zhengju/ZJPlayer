@@ -14,7 +14,10 @@
 @property(weak,nonatomic) UIView * fatherView;
 
 @property(nonatomic) CGRect  currentFrame;
-
+/**
+ 在父类上的frame
+ */
+@property(nonatomic) CGRect  frameOnFatherView;
 /**
  是否自动横屏 YES:自动横屏 NO:手动横屏
  */
@@ -197,11 +200,10 @@
         
     }];
 
-    if (_url != nil) {
+    if (_url.absoluteString.length > 0) {
         self.url = _url;
     }
 
-    
     [self addNotificationCenter];
     
     [self addSwipeGesture];
@@ -324,6 +326,13 @@
         [self.player pause];
         
         self.bottomView.isPlay  = NO;
+        
+#warning 暂未调试好，app切换到后台，唤起其他app声音
+       // OSStatus ret = AudioSessionSetActiveWithFlags(NO, kAudioSessionSetActiveFlag_NotifyOthersOnDeactivation);
+        
+      //  [[AVAudioSession sharedInstance] setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+        
+       // [AVAudioSession sharedInstance]
     }
 }
 
@@ -400,17 +409,21 @@
 }
 // 缩小到cell
 -(void)toCell{
-    // 先移除
-    //[self removeFromSuperview];
-    
+
     __weak typeof(self)weakSelf = self;
     [UIView animateWithDuration:0.5f animations:^{
         weakSelf.transform = CGAffineTransformIdentity;
-       // weakSelf.frame = CGRectMake(0, 80, kScreenWidth, kScreenHeight / 2.5);
-       // weakSelf.playerLayer.frame =  weakSelf.bounds;
+
         // 再添加到View上
-         [weakSelf.fatherView addSubview:weakSelf];
+        [weakSelf.fatherView addSubview:weakSelf];
    
+        [weakSelf mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(weakSelf.fatherView).offset(self.frameOnFatherView.origin.y);
+            make.left.mas_equalTo(weakSelf.fatherView).offset(self.frameOnFatherView.origin.x);
+            make.width.mas_equalTo(self.frameOnFatherView.size.width);
+            make.height.mas_equalTo(self.frameOnFatherView.size.height);
+        }];
+        
         // remark 约束
         [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(50);
@@ -426,13 +439,7 @@
             make.height.mas_equalTo(50);
         }];
 
-//        
-//        [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.equalTo(weakSelf).with.offset(5);
-//            make.centerY.equalTo(weakSelf.topView);
-//            make.size.mas_equalTo(CGSizeMake(30, 30));
-//        }];
-        
+
     }completion:^(BOOL finished) {
         
     }];
@@ -645,19 +652,12 @@
 
     
     _fatherView = self.superview;
-    
+    self.frameOnFatherView = self.frame;
     
     UIViewController * controller = [self getCurrentViewController];
     [controller.view addSubview:self];
 
     self.frame = CGRectMake(0, 0, width, height);
-    
-    //    // layer的方向宽和高对调
-    
-    //
-    //    [self.layer insertSublayer:self.playerLayer atIndex:0];
-    //
-    //    return;
     
     // remark 约束
     [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -681,14 +681,6 @@
         return;
     }
 
-
-//    
-//    // 先移除之前的
-//    [self removeFromSuperview];
-//    
-//    // 加到window上面
-//    [[UIApplication sharedApplication].keyWindow addSubview:self];
-
 //    // 初始化
     self.transform = CGAffineTransformIdentity;
     //UIInterfaceOrientationLandscapeLeft 横屏 Home键在左侧
@@ -699,39 +691,34 @@
         //UIInterfaceOrientationLandscapeRight 横屏 Home键在右侧
         self.transform = CGAffineTransformMakeRotation(M_PI_2);
     }
-    
-
-    
-//
-//    [self.closeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self).with.offset(5);
-//        make.height.mas_equalTo(30);
-//        make.width.mas_equalTo(30);
-//        make.top.equalTo(self).with.offset(10);
-//        
-//    }];
-//    //
-//    [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.topView).with.offset(45);
-//        make.right.equalTo(self.topView).with.offset(-45);
-//        make.center.equalTo(self.topView);
-//        make.top.equalTo(self.topView).with.offset(0);
-//    }];
-//    
-//    [self.bottomView.nowLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.bottomView.slider.mas_left).with.offset(0);
-//        make.top.equalTo(self.bottomView.slider.mas_bottom).with.offset(0);
-//        make.size.mas_equalTo(CGSizeMake(100, 20));
-//    }];
-//    
-//    [self.bottomView.remainLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.bottomView.slider.mas_right).with.offset(0);
-//        make.top.equalTo(self.bottomView.slider.mas_bottom).with.offset(0);
-//        make.size.mas_equalTo(CGSizeMake(100, 20));
-//    }];
 
 }
 
+#pragma 其它App播放声音
+- (void)otherAudioPlay{
+    //判断还有没有其它业务的声音在播放。
+    if ([AVAudioSession sharedInstance].otherAudioPlaying) {
+        NSLog(@"有其他声音在播放");
+        
+    }
+}
+#pragma 获取视频第一帧 返回图片
+- (UIImage*) getVideoPreViewImage:(NSURL *)path
+{
+    
+    
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:path options:nil];
+    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    
+    assetGen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+    return videoImage;
+}
 #pragma ZJControlViewDelegate
 - (void)clickFullScreen{
 
@@ -740,19 +727,21 @@
 }
 #pragma 视频播放
 - (void)play{
-    if (self.player.rate != 1.0f)
-    {
-        self.bottomView.isPlay  = YES;
-        [self.player play];
-    }
+
+    
+    self.bottomView.isPlay  = YES;
+    
+    [self.player play];
+   
 }
 #pragma 视频暂停
 - (void)pause{
-    if (self.player.rate == 1.0f)
-    {
-        self.bottomView.isPlay  = NO;
-        [self.player pause];
-    }
+
+    
+    self.bottomView.isPlay  = NO;
+    
+    [self.player pause];
+   
 }
 - (void)sliderDragValueChange:(UISlider *)slider
 {

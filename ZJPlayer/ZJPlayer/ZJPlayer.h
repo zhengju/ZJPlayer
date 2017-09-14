@@ -84,5 +84,8 @@
  视频暂停
  */
 - (void)pause;
-
+/**
+ 获取视频第一帧 返回图片
+ */
+- (UIImage*) getVideoPreViewImage:(NSURL *)path;
 @end

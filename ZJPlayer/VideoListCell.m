@@ -55,6 +55,8 @@
 
         [self initPlayer];
 
+        [self.player play];
+        
     } forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:_playBtn];
@@ -65,9 +67,6 @@
         make.height.with.mas_equalTo(40);
         
     }];
-    
-    
-    
 }
 
 #pragma 加载视频player
@@ -77,11 +76,13 @@
 
     self.player.indexPath = _indexPath;
     
-    self.player.backgroundColor = [UIColor redColor];
+    [self.player removeFromSuperview];
+    self.player.delegate = nil;
+
     self.player.delegate = self;
     [self addSubview:self.player];
 
-    [self.player mas_remakeConstraints:^(MASConstraintMaker *make) {
+    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self);
         make.left.mas_equalTo(self);
         make.right.mas_equalTo(self);
@@ -91,23 +92,27 @@
     self.player.url = [NSURL URLWithString:self.model.url];
     
     self.player.title = self.model.title;
-    
-    [self.player play];
-    
+
 }
 - (void)setModel:(VideoList *)model{
     _model = model;
 
+    self.player = [ZJPlayer sharePlayer];
+    
+    _bgView.image = [self.player getVideoPreViewImage:[NSURL URLWithString:_model.url]];
+    
+    [self initPlayer];
+    [self.player pause];
 }
 - (void)setIndexPath:(NSIndexPath *)indexPath{
     _indexPath = indexPath;
     
     self.player = [ZJPlayer sharePlayer];
 
-    if (self.player.indexPath == _indexPath) {//最后播放的cell
+    if (self.player.indexPath == _indexPath) {//当前播放的cell
         
         [self initPlayer];
-        
+        [self.player pause];
     }
 
 }
