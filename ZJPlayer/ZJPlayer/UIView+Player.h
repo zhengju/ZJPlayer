@@ -13,4 +13,9 @@
  查询当前控制器
  */
 - (UIViewController * )getCurrentViewController;
+/**
+ 当前view是否显示在屏幕中
+ */
+- (BOOL)windowVisible;
+
 @end

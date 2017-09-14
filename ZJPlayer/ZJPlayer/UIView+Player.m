@@ -45,4 +45,10 @@
     return currentVC;
 }
 
+#pragma 当前view是否显示在屏幕中
+- (BOOL)windowVisible{
+
+    return self.window == nil ? NO : YES;
+    
+}
 @end

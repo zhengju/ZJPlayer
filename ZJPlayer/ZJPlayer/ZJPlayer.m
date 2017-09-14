@@ -96,16 +96,16 @@
     if (self.isFullScreen) {
         
         self.frame = self.currentFrame;
-        if (self.isAutomaticHorizontal) {
-             self.playerLayer.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
-        }else{
-         
-            self.playerLayer.frame = CGRectMake(0, 0, kScreenHeight, kScreenWidth);
-        }
+
+        
+        self.playerLayer.frame = CGRectMake(0, 0, kScreenHeight, kScreenWidth);
+      
  
     }else{
+        
+        
         self.playerLayer.frame = self.bounds;
-   
+        
     }
 }
 #pragma 实例化
@@ -351,7 +351,6 @@
             break;
         case UIInterfaceOrientationPortrait:{
             NSLog(@"第0个旋转方向---电池栏在上");
-            self.isFullScreen = NO;
             [self toCell];
             
             
@@ -359,14 +358,14 @@
             break;
         case UIInterfaceOrientationLandscapeLeft:{
             NSLog(@"第2个旋转方向---电池栏在右");
-          self.isAutomaticHorizontal =  self.isFullScreen = YES;
+          self.isAutomaticHorizontal =  YES;
             
             [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
         }
             break;
         case UIInterfaceOrientationLandscapeRight:{
             NSLog(@"第1个旋转方向---电池栏在左");
-           self.isAutomaticHorizontal =  self.isFullScreen = YES;
+           self.isAutomaticHorizontal =  YES;
             
             [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
             
@@ -394,9 +393,7 @@
         
         if (self.isAutomaticHorizontal) {//自动横屏没有放小功能
             
-            
             //横屏情况下，缩小cell
-            
             
             return;
         }
@@ -404,12 +401,20 @@
         [self toCell];
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"缩小"] forState:UIControlStateNormal];
     }
-    self.isFullScreen = !self.isFullScreen;
    
 }
 // 缩小到cell
 -(void)toCell{
 
+    self.isFullScreen = NO;
+    
+    
+    if (self.fatherView == nil) {
+        
+        return;
+    }
+    
+    
     __weak typeof(self)weakSelf = self;
     [UIView animateWithDuration:0.5f animations:^{
         weakSelf.transform = CGAffineTransformIdentity;
@@ -417,7 +422,7 @@
         // 再添加到View上
         [weakSelf.fatherView addSubview:weakSelf];
    
-        [weakSelf mas_makeConstraints:^(MASConstraintMaker *make) {
+        [weakSelf mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(weakSelf.fatherView).offset(self.frameOnFatherView.origin.y);
             make.left.mas_equalTo(weakSelf.fatherView).offset(self.frameOnFatherView.origin.x);
             make.width.mas_equalTo(self.frameOnFatherView.size.width);
@@ -638,27 +643,27 @@
 -(void)toFullScreenWithInterfaceOrientation:(UIInterfaceOrientation )interfaceOrientation{
 
     
+    if ([self windowVisible] == NO) {//判断当前player是否显示在window上
+        
+        return;
+        
+    }
     
     CGFloat width = kScreenWidth;
     CGFloat height = kScreenHeight;
     
     self.currentFrame = CGRectMake(0, 0, width, height);
-    
-    if (self.isAutomaticHorizontal) {
-        width = kScreenHeight;
-        height = kScreenWidth;
 
+    if (!self.isFullScreen) {//如果是第二次横屏就不执行此代码
+        _fatherView = self.superview;
+        self.frameOnFatherView = self.frame;
     }
+    
+    self.isFullScreen = YES;
 
-    
-    _fatherView = self.superview;
-    self.frameOnFatherView = self.frame;
-    
     UIViewController * controller = [self getCurrentViewController];
     [controller.view addSubview:self];
-
     self.frame = CGRectMake(0, 0, width, height);
-    
     // remark 约束
     [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(50);

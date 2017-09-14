@@ -36,7 +36,6 @@
 - (void)configure{
    
     _bgView = [[UIImageView alloc]init];
-    _bgView.backgroundColor = [UIColor blueColor];
     [self addSubview:_bgView];
     
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -49,7 +48,6 @@
     
     _playBtn = [[UIButton alloc]init];
     [_playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
-    [_playBtn setBackgroundColor:[UIColor redColor]];
     [_playBtn bk_addEventHandler:^(id sender) {
 
 
@@ -121,4 +119,5 @@
     NSLog(@"播放完毕");
     
 }
+
 @end

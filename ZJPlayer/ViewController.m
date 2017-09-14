@@ -21,10 +21,9 @@
   
     
     self.view.backgroundColor = [UIColor whiteColor];
-    //
-    // http://baobab.wdjcdn.com/14564977406580.mp4
+
     ZJPlayer * player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4"]];
-    player.backgroundColor = [UIColor redColor];
+    
     [self.view addSubview:player];
     
     [player mas_makeConstraints:^(MASConstraintMaker *make) {

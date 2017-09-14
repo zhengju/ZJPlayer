@@ -24,7 +24,6 @@
 
 @interface ZJPlayer : UIView
 
-
 @property(weak,nonatomic) id<ZJPlayerDelegate> delegate;
 
 @property(strong,nonatomic) AVPlayer * player;
