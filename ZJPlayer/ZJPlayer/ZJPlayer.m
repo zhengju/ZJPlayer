@@ -10,6 +10,7 @@
 #import "ZJControlView.h"
 
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
+NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 
 @interface ZJPlayer()<ZJControlViewDelegate>
 
@@ -33,6 +34,12 @@ NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear"
  是否隐藏底航栏和导航栏 YES:自动横屏 NO:手动横屏
  */
 @property(assign,nonatomic) BOOL  isTabNavigationHidden;
+
+/**
+ 当前player是否消失 YES:消失 NO:不消失 ，默认是NO
+ */
+@property(assign,nonatomic) BOOL  isDisappear;
+
 /**
  是否添加过监听 YES:已经监听 NO:无监听
  */
@@ -305,21 +312,48 @@ NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear"
     
     //监听AVPlayer播放完成通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerWillDisappear) name:ZJViewControllerWillDisappear object:nil];
+    //监听有控制器消失
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerWillDisappear) name:ZJViewControllerWillDisappear object:nil];
+    //监听有控制器即将出现
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerWillAppear) name:ZJViewControllerWillAppear object:nil];
 }
-#pragma 监听有控制器消失
+#pragma  mark -- 监听有控制器即将消失
 - (void)viewControllerWillDisappear{
 
     if ([self windowVisible] == YES) {//当前player即将不显示
+        
+        
+        self.isDisappear = YES;
         //player暂停
         if (self.player.rate != 0){
             [self.player pause];
             self.bottomView.isPlay  = NO;
         }
-        
     }
-    
 }
+#pragma mark -- 监听有控制器即将出现
+- (void)viewControllerWillAppear{
+    
+    if (self.isDisappear) {
+        
+        self.isDisappear = NO;
+        
+        return;
+    }
+
+    if ([self windowVisible] == NO) {//当前player即将显示,此时还不显示
+        //player暂停
+        if (self.player.rate == 0){
+            
+            [UIView animateWithDuration:1 animations:^{
+                [self.player play];
+                self.bottomView.isPlay  = YES;
+            }];
+
+        }
+    }
+}
+
 #pragma 监听AVPlayer播放完成通知
 - (void)playerItemDidReachEnd:(NSNotification *)notification{
    //播放完毕
@@ -564,9 +598,13 @@ NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear"
                 self.bottomView.slider.maximumValue = CMTimeGetSeconds(self.playerItem.duration);
                 
                 [self.loadingIndicator dismiss];
-                
+               
                 [self initTimer];
-                //                // 启动定时器 5秒自动隐藏
+                
+                if (self.isAutoPlay) {
+                    [self play];
+                }
+              // 启动定时器 5秒自动隐藏
                 if (!self.autoDismissTimer)
                 {
                     self.autoDismissTimer = [NSTimer timerWithTimeInterval:8.0 target:self selector:@selector(autoDismissView:) userInfo:nil repeats:YES];

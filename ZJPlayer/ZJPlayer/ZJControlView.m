@@ -11,7 +11,6 @@
 
 @interface ZJControlView()
 
-
 @end
 
 @implementation ZJControlView

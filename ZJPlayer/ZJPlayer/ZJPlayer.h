@@ -21,6 +21,7 @@
 
 @end
 
+extern NSString *const ZJViewControllerWillAppear;
 extern NSString *const ZJViewControllerWillDisappear; // 一个控制器消失
 
 @interface ZJPlayer : UIView
@@ -60,6 +61,10 @@ extern NSString *const ZJViewControllerWillDisappear; // 一个控制器消失
  */
 @property(strong,nonatomic) NSTimer * autoDismissTimer;
 /**
+ 是否自动播放,默认是NO
+ */
+@property(assign,nonatomic) BOOL  isAutoPlay;
+/**
  是否隐藏bottomView
  */
 @property(assign,nonatomic) BOOL  isBottomViewHidden;
@@ -91,4 +96,5 @@ extern NSString *const ZJViewControllerWillDisappear; // 一个控制器消失
  获取视频第一帧 返回图片
  */
 - (UIImage*) getVideoPreViewImage:(NSURL *)path;
+
 @end

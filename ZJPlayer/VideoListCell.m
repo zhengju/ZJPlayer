@@ -97,6 +97,8 @@
 
     self.player = [ZJPlayer sharePlayer];
     self.player.tag = 1002;
+    
+    self.player.isAutoPlay = YES;
     _bgView.image = [self.player getVideoPreViewImage:[NSURL URLWithString:_model.url]];
     
     [self initPlayer];
