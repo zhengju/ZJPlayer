@@ -21,8 +21,8 @@
 
 @end
 
-extern NSString *const ZJViewControllerWillAppear;
-extern NSString *const ZJViewControllerWillDisappear; // 一个控制器消失
+extern NSString *const ZJViewControllerWillAppear;// 一个控制器即将出现
+extern NSString *const ZJViewControllerWillDisappear; // 一个控制器即将消失
 
 @interface ZJPlayer : UIView
 

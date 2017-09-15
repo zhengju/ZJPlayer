@@ -269,6 +269,17 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     UISwipeGestureRecognizer * swipeGestureRight = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
     [swipeGestureRight setDirection:UISwipeGestureRecognizerDirectionRight];
     [self addGestureRecognizer:swipeGestureRight];
+    
+    //增加音量的手势
+    UISwipeGestureRecognizer *increaseGesture=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(increaseVolume:)];
+    increaseGesture.direction=UISwipeGestureRecognizerDirectionUp;
+    [self addGestureRecognizer:increaseGesture];
+    //减小音量的手势
+    UISwipeGestureRecognizer *decreaseGesture=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(decreaseVolume:)];
+    decreaseGesture.direction=UISwipeGestureRecognizerDirectionDown;
+    [self addGestureRecognizer:decreaseGesture];
+    
+ 
 }
 - (void)swipeAction:(UISwipeGestureRecognizer *)swipeGesture{
     if (swipeGesture.direction == UISwipeGestureRecognizerDirectionLeft) {//左滑
@@ -277,6 +288,52 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
         [self swipeToPlusTime:YES];
     }
 }
+
+#pragma mark -- 向上滑动增加音量
+-(void)increaseVolume:(UISwipeGestureRecognizer *)sender
+{
+    if(sender.direction==UISwipeGestureRecognizerDirectionUp)
+    {
+        if(_player.volume>=1.0)
+            return;
+        _player.volume+=0.1;
+        
+        NSLog(@"+++++音量:%f++++++",10*_player.volume);
+//        weak PlayViewController *weakSelf=self;
+//        _volumeLabel.text=[NSString stringWithFormat:@"音量:%d",(int)ceilf(_player.volume*10)];
+//        [UIView animateWithDuration:0.2 animations:^{
+//            weakSelf.volumeLabel.alpha=1.0;
+//        } completion:^(BOOL finished) {
+//            [UIView animateWithDuration:0.2 animations:^{
+//                weakSelf.volumeLabel.alpha=0.0;
+//            }];
+//        }];
+    }
+}
+
+#pragma mark -- 向下滑动减小音量
+-(void)decreaseVolume:(UISwipeGestureRecognizer *)sender
+{
+    if(sender.direction==UISwipeGestureRecognizerDirectionDown)
+    {
+        if(_player.volume<=0.0)
+            return;
+        _player.volume-=0.1;
+        
+        NSLog(@"------音量:%f------",10*_player.volume);
+        
+//        weak PlayViewController *weakSelf=self;
+//        _volumeLabel.text=[NSString stringWithFormat:@"音量:%d",(int)ceilf(_player.volume*10)];
+//        [UIView animateWithDuration:0.3 animations:^{
+//            weakSelf.volumeLabel.alpha=1.0;
+//        } completion:^(BOOL finished) {
+//            [UIView animateWithDuration:0.3 animations:^{
+//                weakSelf.volumeLabel.alpha=0.0;
+//            }];
+//        }];
+    }
+}
+
 #pragma mark -- 滑动调整播放时间
 - (void)swipeToPlusTime:(BOOL)isPlus{
     // 获取当前播放的时间
@@ -298,7 +355,6 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     
     [self.player seekToTime:CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     
-
 }
 
 #pragma 添加通知
