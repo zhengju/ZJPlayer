@@ -35,7 +35,10 @@
  是否添加过监听 YES:已经监听 NO:无监听
  */
 @property(assign,nonatomic) BOOL  isAddObserverToPlayerItem;
-
+/**
+ 加载指示器
+ */
+@property(strong,nonatomic) ZJLoadingIndicator * loadingIndicator;
 @end
 
 @implementation ZJPlayer
@@ -83,12 +86,15 @@
     
     self.playerItem = nil;
     
-    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
-    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+//    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
+//    
+//    
+//    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
     
-  //  self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
     
     [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
+    
     if (self.isAddObserverToPlayerItem == NO) {
         self.isAddObserverToPlayerItem = YES;
         [self addObserverToPlayerItem:self.playerItem];
@@ -142,9 +148,9 @@
     self.isFullScreen = NO;
     self.isPlayAfterPause = NO;
     // 初始化播放器item
-   // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
-    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
-    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+    self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+//    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
+//    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
     
     self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
@@ -218,6 +224,18 @@
         make.left.mas_equalTo(self);
         make.right.mas_equalTo(self);
         
+    }];
+
+    
+    
+    self.loadingIndicator = [[ZJLoadingIndicator alloc]init];
+    self.loadingIndicator.backgroundColor = [UIColor redColor];
+    [self addSubview:self.loadingIndicator];
+    
+    [self.loadingIndicator mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self.mas_centerX);
+        make.centerY.mas_equalTo(self.mas_centerY);
+        make.height.width.mas_equalTo(35);
     }];
 
     if (_url.absoluteString.length > 0) {
@@ -334,9 +352,10 @@
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    if (self.player.rate == 0) {
+    //判断是否是手动暂停，若是手动暂停，不启动
+    if (self.player.rate == 0 && self.isPlayAfterPause) {
+
         [self.player play];
-       
         self.bottomView.isPlay  = YES;
     }
 }
@@ -528,6 +547,9 @@
                 // 最大值直接用sec，以前都是
                 // CMTimeMake(帧数（slider.value * timeScale）, 帧/sec)
                 self.bottomView.slider.maximumValue = CMTimeGetSeconds(self.playerItem.duration);
+                
+                [self.loadingIndicator dismiss];
+                
                 [self initTimer];
                 //                // 启动定时器 5秒自动隐藏
                 if (!self.autoDismissTimer)
@@ -609,6 +631,9 @@
         
         weakSelf.bottomView.remainingTime = [weakSelf convertToTime:(duration - nowTime)];
         
+        
+        //当已经开始播放之后，隐藏指示器
+        [weakSelf.loadingIndicator dismiss];
         
         // 获取当前播放的时间
         NSTimeInterval currentTime = CMTimeGetSeconds(weakSelf.player.currentItem.currentTime);
@@ -773,6 +798,9 @@
     if (time > 0 &&self.isPlayAfterPause == NO) {
         
         [self.player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    }
+    if (self.isPlayAfterPause == NO) {
+         [self.loadingIndicator show];//可以播放就隐藏
     }
 }
 #pragma 视频暂停

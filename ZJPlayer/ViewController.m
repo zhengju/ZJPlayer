@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "ZJPlayer.h"
 #import "Masonry.h"
+
 @interface ViewController ()
 
 @end
@@ -17,9 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-  
-    
+
     self.view.backgroundColor = [UIColor whiteColor];
 
     ZJPlayer * player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4"]];
