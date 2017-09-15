@@ -13,6 +13,7 @@
 #import "UIView+Player.h"
 #import "ZJCacheTask.h"
 #import "ZJLoadingIndicator.h"
+#import "ZJProgress.h"
 #import "UIViewController+Player.h"
 #import <Masonry/Masonry.h>
 #import <BlocksKit/BlocksKit.h>

@@ -22,8 +22,6 @@
     self.view.backgroundColor = [UIColor whiteColor];
 
     ZJPlayer * player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4"]];
-    player.tag = 1001;
-    player.isAutoPlay = YES;
     [self.view addSubview:player];
     
     [player mas_makeConstraints:^(MASConstraintMaker *make) {

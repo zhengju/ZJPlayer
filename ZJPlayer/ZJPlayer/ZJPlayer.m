@@ -12,6 +12,8 @@
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 
+#define MINDISTANCE 0.5
+
 @interface ZJPlayer()<ZJControlViewDelegate>
 
 @property(weak,nonatomic) UIView * fatherView;
@@ -48,6 +50,19 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
  加载指示器
  */
 @property(strong,nonatomic) ZJLoadingIndicator * loadingIndicator;
+/**
+ 滑动进度展示器
+ */
+@property(strong,nonatomic) ZJProgress * progress;
+/**
+ 开始活动的点
+ */
+@property(assign,nonatomic) CGPoint  gestureStartPoint;
+/**
+ 开始滑动时的播放时间
+ */
+@property(assign,nonatomic) NSTimeInterval  progressTime;
+
 @end
 
 @implementation ZJPlayer
@@ -132,7 +147,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
         
         
         self.playerLayer.frame = self.bounds;
-        
+        [self.progress resetFrameisFullScreen:NO];
     }
 }
 #pragma 实例化
@@ -247,6 +262,9 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
         make.height.width.mas_equalTo(35);
     }];
 
+    
+    self.progress = [[ZJProgress alloc]initWithSuperView:self];
+
     if (_url.absoluteString.length > 0) {
         self.url = _url;
     }
@@ -263,13 +281,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 }
 #pragma  mark -- 加滑动手势
 - (void)addSwipeGesture{
-    UISwipeGestureRecognizer * swipeGestureLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
-    [swipeGestureLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self addGestureRecognizer:swipeGestureLeft];
-    UISwipeGestureRecognizer * swipeGestureRight = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
-    [swipeGestureRight setDirection:UISwipeGestureRecognizerDirectionRight];
-    [self addGestureRecognizer:swipeGestureRight];
-    
+
     //增加音量的手势
     UISwipeGestureRecognizer *increaseGesture=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(increaseVolume:)];
     increaseGesture.direction=UISwipeGestureRecognizerDirectionUp;
@@ -280,13 +292,6 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     [self addGestureRecognizer:decreaseGesture];
     
  
-}
-- (void)swipeAction:(UISwipeGestureRecognizer *)swipeGesture{
-    if (swipeGesture.direction == UISwipeGestureRecognizerDirectionLeft) {//左滑
-        [self swipeToPlusTime:NO];
-    }else if (swipeGesture.direction == UISwipeGestureRecognizerDirectionRight){//右滑
-        [self swipeToPlusTime:YES];
-    }
 }
 
 #pragma mark -- 向上滑动增加音量
@@ -334,26 +339,97 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     }
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    UITouch* touch=[[event allTouches] anyObject];
+    self.gestureStartPoint=[touch locationInView:self.superview];
+    
+    // 获取当前播放的时间
+    self.progressTime = CMTimeGetSeconds(self.player.currentItem.currentTime);
+    
+    CGFloat duration = CMTimeGetSeconds(self.playerItem.duration);
+    
+    self.progress.allTime = [self convertToTime:duration];
+}
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    UITouch* touch=[[event allTouches] anyObject];
+    CGPoint currentPoint=[touch locationInView:self.superview];
+    CGFloat pointX=(self.gestureStartPoint.x-currentPoint.x);
+    CGFloat pointY=(self.gestureStartPoint.y-currentPoint.y);
+    //NSLog(@"x=%f y=%f",fabs(pointX),fabs(pointY));
+    
+    BOOL isPlusTime = YES;
+    
+     if (self.isFullScreen) {//大屏，x和y互换
+     
+         pointY=(self.gestureStartPoint.x-currentPoint.x);
+         pointX=(self.gestureStartPoint.y-currentPoint.y);
+         isPlusTime = NO;
+         
+     }
+        //上下滑动
+        if (fabs(pointY)>fabs(pointX)) {
+            //向上滑动
+            if (pointY>MINDISTANCE) {
+                // NSLog(@"第二种方式：向上滑动");
+            }else if(pointY<-MINDISTANCE){
+                // NSLog(@"第二种方式：向下滑动");
+            }
+        }else if(fabs(pointX)>fabs(pointY)){//左右滑动
+            //向右滑动
+            if (pointX<-MINDISTANCE) {
+                
+                NSLog(@"第二种方式：向右滑动");
+                [self swipeToPlusTime:isPlusTime];
+            }else if(pointX>MINDISTANCE){
+                [self swipeToPlusTime:!isPlusTime];
+                NSLog(@"第二种方式：向左滑动");
+            }
+        }
+    [self.progress show];
+    self.gestureStartPoint = currentPoint;
+    
+}
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+
+    [self.progress dismiss];
+    
+    [self.player seekToTime:CMTimeMakeWithSeconds(self.progressTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+}
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+
+    [self.progress dismiss];
+    
+    [self.player seekToTime:CMTimeMakeWithSeconds(self.progressTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    
+}
 #pragma mark -- 滑动调整播放时间
 - (void)swipeToPlusTime:(BOOL)isPlus{
-    // 获取当前播放的时间
-    NSTimeInterval currentTime = CMTimeGetSeconds(self.player.currentItem.currentTime);
-    
+
     if (isPlus) {
-        currentTime += 10;
+        self.progressTime += 1;
+       
     }else{
-    
-        currentTime -= 10;
-    }
-    
-    if (currentTime >= CMTimeGetSeconds(self.player.currentItem.duration)) {
         
-        currentTime = CMTimeGetSeconds(self.player.currentItem.duration) - 1;
-    } else if (currentTime <= 0) {
-        currentTime = 0;
+        self.progressTime -= 1;
+    }
+    self.progress.isForward = isPlus;
+    
+    if (self.progressTime >= CMTimeGetSeconds(self.player.currentItem.duration)) {
+        
+        self.progressTime = CMTimeGetSeconds(self.player.currentItem.duration) - 1;
+        
+    } else if (self.progressTime <= 0) {
+        
+        self.progressTime = 0;
+        
     }
     
-    [self.player seekToTime:CMTimeMakeWithSeconds(currentTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    CGFloat duration = CMTimeGetSeconds(self.playerItem.duration);
+    
+    self.progress.progress = self.progressTime / duration;
+    
+    
+    self.progress.currentTime = [self convertToTime:self.progressTime];
     
 }
 
@@ -378,7 +454,6 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 
     if ([self windowVisible] == YES) {//当前player即将不显示
         
-        
         self.isDisappear = YES;
         //player暂停
         if (self.player.rate != 0){
@@ -399,7 +474,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 
     if ([self windowVisible] == NO) {//当前player即将显示,此时还不显示
         //player暂停
-        if (self.player.rate == 0){
+        if (self.player.rate == 0 &&self.isAutoPlay){
             
             [UIView animateWithDuration:1 animations:^{
                 [self.player play];
@@ -566,7 +641,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 
         // 再添加到View上
         [weakSelf.fatherView addSubview:weakSelf];
-   
+       
         [weakSelf mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(weakSelf.fatherView).offset(self.frameOnFatherView.origin.y);
             make.left.mas_equalTo(weakSelf.fatherView).offset(self.frameOnFatherView.origin.x);
@@ -825,6 +900,9 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     UIViewController * controller = [self getCurrentViewController];
     [controller.view addSubview:self];
     self.frame = CGRectMake(0, 0, width, height);
+    
+    [self.progress resetFrameisFullScreen:YES];
+    
     // remark 约束
     [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(50);
