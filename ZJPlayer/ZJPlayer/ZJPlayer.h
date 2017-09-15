@@ -21,6 +21,7 @@
 
 @end
 
+extern NSString *const ZJViewControllerWillDisappear; // 一个控制器消失
 
 @interface ZJPlayer : UIView
 

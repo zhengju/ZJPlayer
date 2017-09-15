@@ -9,6 +9,8 @@
 #import "ZJPlayer.h"
 #import "ZJControlView.h"
 
+NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
+
 @interface ZJPlayer()<ZJControlViewDelegate>
 
 @property(weak,nonatomic) UIView * fatherView;
@@ -303,8 +305,21 @@
     
     //监听AVPlayer播放完成通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerWillDisappear) name:ZJViewControllerWillDisappear object:nil];
 }
+#pragma 监听有控制器消失
+- (void)viewControllerWillDisappear{
 
+    if ([self windowVisible] == YES) {//当前player即将不显示
+        //player暂停
+        if (self.player.rate != 0){
+            [self.player pause];
+            self.bottomView.isPlay  = NO;
+        }
+        
+    }
+    
+}
 #pragma 监听AVPlayer播放完成通知
 - (void)playerItemDidReachEnd:(NSNotification *)notification{
    //播放完毕
@@ -362,7 +377,7 @@
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
-    if (self.player.rate == 1){
+    if (self.player.rate != 0){
         [self.player pause];
         
         self.bottomView.isPlay  = NO;

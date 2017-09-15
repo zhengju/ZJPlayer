@@ -9,10 +9,11 @@
 #ifndef ZJCommonHeader_h
 #define ZJCommonHeader_h
 
-
+#import "ZJPlayer.h"
 #import "UIView+Player.h"
 #import "ZJCacheTask.h"
 #import "ZJLoadingIndicator.h"
+#import "UIViewController+Player.h"
 #import <Masonry/Masonry.h>
 #import <BlocksKit/BlocksKit.h>
 #import <BlocksKit/BlocksKit+UIKit.h>

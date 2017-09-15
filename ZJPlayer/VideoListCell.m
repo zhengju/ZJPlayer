@@ -71,7 +71,7 @@
 - (void)initPlayer{
 
     self.player = [ZJPlayer sharePlayer];
-
+    self.player.tag = 1002;
     self.player.indexPath = _indexPath;
     
     [self.player removeFromSuperview];
@@ -96,7 +96,7 @@
     _model = model;
 
     self.player = [ZJPlayer sharePlayer];
-    
+    self.player.tag = 1002;
     _bgView.image = [self.player getVideoPreViewImage:[NSURL URLWithString:_model.url]];
     
     [self initPlayer];
@@ -107,6 +107,7 @@
     
     self.player = [ZJPlayer sharePlayer];
 
+    self.player.tag = 1002;
     if (self.player.indexPath == _indexPath) {//当前播放的cell
         
         [self initPlayer];
