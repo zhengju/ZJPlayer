@@ -132,7 +132,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
     
     [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
-    
+
     if (self.isAddObserverToPlayerItem == NO) {
         self.isAddObserverToPlayerItem = YES;
         [self addObserverToPlayerItem:self.playerItem];
@@ -1012,6 +1012,8 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     
     [self.player play];
    
+    
+    
     ZJCacheTask * task =  [ZJCacheTask shareTask];
     
     NSTimeInterval time = [task queryToFileUrl:_url.absoluteString];
@@ -1021,6 +1023,12 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         
         [self.player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     }
+    if (self.isPlayAfterPause == NO) {
+        [self.topView resetRate];
+    }else{//暂停播放，倍速还原为之前的
+        self.player.rate = self.topView.rate;
+    }
+    
     if (self.isPlayAfterPause == NO) {
          [self.loadingIndicator show];//可以播放就隐藏
     }
@@ -1081,5 +1089,8 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     }
 }
 
+- (void)setRate:(float)rate{
+    self.player.rate = rate;
+}
 
 @end

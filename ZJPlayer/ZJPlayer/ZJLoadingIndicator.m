@@ -5,7 +5,7 @@
 //  Created by zhengju on 2017/9/15.
 //  Copyright © 2017年 郑俱. All rights reserved.
 //
-
+#warning 待完善.....
 #import "ZJLoadingIndicator.h"
 
 @implementation ZJLoadingIndicator
@@ -16,7 +16,6 @@
     }
     return self;
 }
-
 
 - (void)show{
     self.hidden = NO;

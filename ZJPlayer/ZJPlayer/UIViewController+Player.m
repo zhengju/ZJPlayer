@@ -23,9 +23,7 @@
     Method originalViewWillAppearM = class_getInstanceMethod([self class], @selector(viewWillAppear:));
     Method exchangeViewWillAppearM = class_getInstanceMethod([self class], @selector(zj_viewWillAppear:));
     method_exchangeImplementations(originalViewWillAppearM, exchangeViewWillAppearM);
-    
-    
-    
+
 }
 - (void)zj_viewWillDisappear:(BOOL)animated{
 

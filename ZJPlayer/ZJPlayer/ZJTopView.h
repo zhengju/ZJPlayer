@@ -11,15 +11,21 @@
 @protocol ZJTopViewDelegate <NSObject>
 
 /**
- 返回时间
+ 返回事件
  */
 - (void)back;
+- (void)setRate:(float)rate;
 
 @end
 @interface ZJTopView : UIView
 @property(weak,nonatomic) id<ZJTopViewDelegate> delegate;
+@property(assign,nonatomic) float  rate;
 /**
  标题
  */
 @property(copy,nonatomic) NSString * title;
+/**
+ 倍速归1.0X
+ */
+- (void)resetRate;
 @end

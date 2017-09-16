@@ -22,4 +22,12 @@
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
+#define WeakObj(o) __weak typeof(o) o##Weak = o;
+//LOG日志
+#ifdef DEBUG
+#define NSLog(FORMAT, ...) fprintf(stdout,"\n==========================START===========================\n😄😃😄 Class:%s\n🔴❤️😃 Line:%d\n😄😃😄 TimeStampe:%s\n===========================LOG============================\n%s\n===========================END============================\n",[[[[NSString stringWithUTF8String:__FILE__] lastPathComponent]componentsSeparatedByString:@"."].firstObject UTF8String], __LINE__, __TIMESTAMP__ ,[[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String])
+#else
+#define NSLog(format, ...)
+#endif
+
 #endif /* ZJCommonHeader_h */
