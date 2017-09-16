@@ -99,20 +99,21 @@
     _model = model;
 
     self.player = [ZJPlayer sharePlayer];
-
-    _bgView.image = [self.player getVideoPreViewImage:[NSURL URLWithString:_model.url]];
-
+  
+    
+    //放入异步线程中
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        UIImage * image = [self.player getVideoPreViewImage:[NSURL URLWithString:_model.url]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //回调或者说是通知主线程刷新，
+            self.bgView.image = image;
+        });
+    });
+    
 }
 - (void)setIndexPath:(NSIndexPath *)indexPath{
     _indexPath = indexPath;
-    
-   // self.player = [ZJPlayer sharePlayer];
 
-//    if (self.player.indexPath == _indexPath) {//当前播放的cell
-//        
-//        [self initPlayer];
-//        [self.player pause];
-//    }
 }
 #pragma ZJPlayerDelegate
 - (void)playFinishedPlayer:(ZJPlayer *)player{
