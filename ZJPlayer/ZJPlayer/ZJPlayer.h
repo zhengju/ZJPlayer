@@ -11,7 +11,7 @@
 #import "ZJCommonHeader.h"
 
 @class ZJControlView;
-
+@class ZJTopView;
 @class ZJPlayer;
 
 @protocol ZJPlayerDelegate <NSObject>
@@ -36,11 +36,11 @@ extern NSString *const ZJContinuousVideoPlayback; // 连续播放视频通知
 
 @property(strong,nonatomic) AVPlayerItem * playerItem;
 
-@property(strong,nonatomic) UIView * topView;
+@property(strong,nonatomic) ZJTopView * topView;
 
 @property(strong,nonatomic) ZJControlView * bottomView;
 
-@property(strong,nonatomic) UILabel * titleLabel;
+
 
 @property(assign,nonatomic) BOOL  isDragSlider;
 /**
@@ -76,10 +76,7 @@ extern NSString *const ZJContinuousVideoPlayback; // 连续播放视频通知
  是否隐藏bottomView
  */
 @property(assign,nonatomic) BOOL  isBottomViewHidden;
-/**
- 左上角关闭按钮
- */
-@property(strong,nonatomic) UIButton * closeButton;
+
 /**
  是否全屏 YES:全屏 ；NO:非全屏
  */

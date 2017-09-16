@@ -8,13 +8,14 @@
 
 #import "ZJPlayer.h"
 #import "ZJControlView.h"
+#import "ZJTopView.h"
 
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 #define MINDISTANCE 0.5
 
-@interface ZJPlayer()<ZJControlViewDelegate>
+@interface ZJPlayer()<ZJControlViewDelegate,ZJTopViewDelegate>
 
 /**
  父视图
@@ -140,7 +141,8 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 #pragma  当前播放视频的标题
 - (void)setTitle:(NSString *)title{
     _title = title;
-    self.titleLabel.text = _title;
+    self.topView.title = _title;
+    
 }
 
 - (void)layoutSubviews{
@@ -188,7 +190,6 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     self.isFullScreen = NO;
     self.isPlayAfterPause = NO;
     
-    
    
     // 初始化播放器item
    // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
@@ -218,49 +219,19 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     }
     
     //顶部栏
-    self.topView = [[UIView alloc]init];
-    
+    self.topView = [[ZJTopView alloc]init];
+    self.topView.delegate = self;
     self.topView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
-    
+    self.topView.hidden = YES;
     [self addSubview:self.topView];
+    
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).with.offset(0);
         make.right.equalTo(self).with.offset(0);
         make.top.equalTo(self).with.offset(0);
         make.height.mas_equalTo(50);
     }];
-    //顶部删除按钮
-    self.closeButton = [[UIButton alloc]init];
-    self.closeButton.showsTouchWhenHighlighted = YES;
-    [self.closeButton setImage:[UIImage imageNamed:@"关闭"] forState:UIControlStateNormal];
-    [self.closeButton bk_addEventHandler:^(id sender) {
-        //关闭
-        if (self.isFullScreen)
-        {
-            [self clickFullScreen:nil];
-        }
-    } forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.topView addSubview:self.closeButton];
-    [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.left.equalTo(self.topView).with.offset(5);
-        make.centerY.equalTo(self.topView);
-        make.size.mas_equalTo(CGSizeMake(35, 35));
-        
-        
-    }];
-    self.titleLabel = [[UILabel alloc]init];
-    self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [self.topView addSubview:self.titleLabel];
-    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self.topView.mas_centerY);
-        make.left.mas_equalTo(self.closeButton.mas_right).offset(5);
-        make.right.mas_equalTo(self.topView.mas_right).offset(-5);
-        
-    }];
-    
+
     //底部
     
     self.bottomView = [[ZJControlView alloc]init];
@@ -690,7 +661,8 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         
         return;
     }
-    
+    //小屏幕是隐藏top
+    self.topView.hidden = YES;
     
     __weak typeof(self)weakSelf = self;
     [UIView animateWithDuration:0.5f animations:^{
@@ -946,6 +918,8 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         
     }
     
+    self.topView.hidden = NO;
+    
     CGFloat width = kScreenWidth;
     CGFloat height = kScreenHeight;
     
@@ -1024,7 +998,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     CGImageRelease(image);
     return videoImage;
 }
-#pragma ZJControlViewDelegate
+#pragma mark -- ZJControlViewDelegate
 - (void)clickFullScreen{
 
     [self clickFullScreen:nil];
@@ -1063,7 +1037,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     }
 }
 
-#pragma 视频暂停
+#pragma mark -- 视频暂停
 - (void)pause{
 
     self.bottomView.isPlay  = NO;
@@ -1099,5 +1073,13 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         [self.player play];
     }
 }
+#pragma mark -- ZJTopViewDelegate
+- (void)back{
+    if (self.isFullScreen)
+     {
+        [self clickFullScreen:nil];
+    }
+}
+
 
 @end

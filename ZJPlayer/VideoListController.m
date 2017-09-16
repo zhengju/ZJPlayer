@@ -91,6 +91,29 @@
     
     [self.view addSubview:self.tableView];
 }
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSArray * cells = [self.tableView visibleCells];
+    
+    
+    if (cells.count == 3) {
+        
+        VideoListCell * cell = cells[1];
+        if (cell.indexPath != self.player.indexPath) {//
+            self.player.indexPath = cell.indexPath;
+            [cell initPlayer];
+        }
+    }else if (cells.count == 2) {
+        VideoListCell * cell = cells[0];
+        if (cell.indexPath.row == 0 && cell.indexPath != self.player.indexPath) {
+            self.player.indexPath = cell.indexPath;
+            [cell initPlayer];
+        }
+    }
+    
+    //NSLog(@"tabelView在滚... %@",cells);
+}
 #pragma UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
@@ -118,7 +141,7 @@
 
 #pragma UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 300;
+    return kScreenHeight / 2.0;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     

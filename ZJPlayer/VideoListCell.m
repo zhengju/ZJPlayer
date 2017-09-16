@@ -16,6 +16,9 @@
 @property(strong,nonatomic) UIButton * playBtn;
 
 
+@property(strong,nonatomic) UIView * topView;
+@property(strong,nonatomic) UIView * bottomView;
+
 @end
 
 
@@ -46,6 +49,30 @@
         
     }];
     
+    
+    
+    self.topView = [[UIView alloc]init];
+    self.topView.backgroundColor = [UIColor blackColor];
+    [self addSubview:self.topView];
+    self.bottomView = [[UIView alloc]init];
+    self.bottomView.backgroundColor = [UIColor blackColor];
+    [self addSubview:self.bottomView];
+    //frame
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self);
+        make.left.mas_equalTo(self);
+        make.right.mas_equalTo(self);
+        make.height.mas_equalTo(30);
+    }];
+    
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self);
+        make.left.mas_equalTo(self);
+        make.right.mas_equalTo(self);
+        make.height.mas_equalTo(30);
+    }];
+    
+    
     _playBtn = [[UIButton alloc]init];
     [_playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
     [_playBtn bk_addEventHandler:^(id sender) {
@@ -53,7 +80,6 @@
 
         [self initPlayer];
 
-        //[self.player play];
         
     } forControlEvents:UIControlEventTouchUpInside];
     
@@ -85,10 +111,10 @@
     [self addSubview:self.player];
 
     [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self);
+        make.top.mas_equalTo(self.topView.mas_bottom).offset(0);
         make.left.mas_equalTo(self);
         make.right.mas_equalTo(self);
-        make.bottom.mas_equalTo(self).offset(-10);
+        make.bottom.mas_equalTo(self.bottomView.mas_top).offset(0);
     }];
   
     
