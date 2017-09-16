@@ -65,7 +65,7 @@
     self.progressView.progressTintColor = [UIColor redColor];
     self.progressView.trackTintColor = [UIColor lightGrayColor];
     [self addSubview:self.progressView];
-    [self.progressView setProgress:0.5 animated:NO];
+    [self.progressView setProgress:0.0 animated:NO];
 
     //frame
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -123,9 +123,10 @@
     self.alpha = 1;
 }
 - (void)dismiss{
-    [UIView animateWithDuration:0.3 animations:^{
-        self.alpha = 0;
-    }];
+  
+    
+    self.alpha = 0;
+   
 }
 - (void)resetFrameisFullScreen:(BOOL)isFullScreen;{
     

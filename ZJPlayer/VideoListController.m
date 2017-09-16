@@ -13,6 +13,7 @@
 @interface VideoListController ()<UITableViewDelegate,UITableViewDataSource>
 @property(strong,nonatomic) UITableView * tableView;
 @property(strong,nonatomic) NSMutableArray * datas;
+@property(strong,nonatomic) ZJPlayer * player;
 @end
 
 @implementation VideoListController
@@ -32,8 +33,26 @@
     [self configDatas];
     
     [self.tableView reloadData];
-
+    
+    self.player = [ZJPlayer sharePlayer];
+    self.player.isPlayContinuously = YES;
+    //添加自动播放的通知
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(continuousVideoPlayback) name:ZJContinuousVideoPlayback object:self.player];
 }
+- (void)continuousVideoPlayback{
+
+    if (self.player.indexPath.row < self.datas.count - 1 ) {
+
+        self.player.indexPath = [NSIndexPath indexPathForRow:self.player.indexPath.row + 1 inSection:self.player.indexPath.section];
+        
+        [self.tableView scrollToRowAtIndexPath:self.player.indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        
+        VideoListCell * cell =  [self.tableView cellForRowAtIndexPath:self.player.indexPath];
+        
+        [cell initPlayer];
+    }
+}
+
 - (void)configDatas{
     
     NSArray * titles = @[
@@ -75,7 +94,7 @@
 #pragma UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return self.datas.count;
+    return [self.datas count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     

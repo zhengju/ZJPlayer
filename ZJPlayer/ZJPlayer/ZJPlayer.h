@@ -23,6 +23,8 @@
 
 extern NSString *const ZJViewControllerWillAppear;// 一个控制器即将出现
 extern NSString *const ZJViewControllerWillDisappear; // 一个控制器即将消失
+extern NSString *const ZJContinuousVideoPlayback; // 连续播放视频通知
+
 
 @interface ZJPlayer : UIView
 
@@ -64,6 +66,12 @@ extern NSString *const ZJViewControllerWillDisappear; // 一个控制器即将�
  是否自动播放,默认是NO
  */
 @property(assign,nonatomic) BOOL  isAutoPlay;
+
+/**
+ 是否连续播放,YES:连续播放，NO,不连续播放，默认是NO
+ */
+@property(assign,nonatomic) BOOL  isPlayContinuously;
+
 /**
  是否隐藏bottomView
  */
@@ -76,6 +84,11 @@ extern NSString *const ZJViewControllerWillDisappear; // 一个控制器即将�
  是否全屏 YES:全屏 ；NO:非全屏
  */
 @property (nonatomic,assign) BOOL isFullScreen;
+/**
+ 当大屏时，播放完视频是否自动旋转至小屏幕 YES:自动 ；NO:不自动
+ */
+@property (nonatomic,assign) BOOL isRotatingSmallScreen;
+
 /**
  单例生成player
  */

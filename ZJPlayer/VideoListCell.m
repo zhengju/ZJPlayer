@@ -53,7 +53,7 @@
 
         [self initPlayer];
 
-        [self.player play];
+        //[self.player play];
         
     } forControlEvents:UIControlEventTouchUpInside];
     
@@ -70,8 +70,13 @@
 #pragma 加载视频player
 - (void)initPlayer{
 
+  
     self.player = [ZJPlayer sharePlayer];
     self.player.indexPath = _indexPath;
+    
+    self.player.url = [NSURL URLWithString:self.model.url];
+    
+    self.player.title = self.model.title;
     
     [self.player removeFromSuperview];
     self.player.delegate = nil;
@@ -85,33 +90,29 @@
         make.right.mas_equalTo(self);
         make.bottom.mas_equalTo(self).offset(-10);
     }];
+  
     
-    self.player.url = [NSURL URLWithString:self.model.url];
+    [self.player play];
     
-    self.player.title = self.model.title;
-
 }
 - (void)setModel:(VideoList *)model{
     _model = model;
 
     self.player = [ZJPlayer sharePlayer];
-    
+
     _bgView.image = [self.player getVideoPreViewImage:[NSURL URLWithString:_model.url]];
-    
-    [self initPlayer];
-    [self.player pause];
+
 }
 - (void)setIndexPath:(NSIndexPath *)indexPath{
     _indexPath = indexPath;
     
-    self.player = [ZJPlayer sharePlayer];
+   // self.player = [ZJPlayer sharePlayer];
 
-    if (self.player.indexPath == _indexPath) {//当前播放的cell
-        
-        [self initPlayer];
-        [self.player pause];
-    }
-
+//    if (self.player.indexPath == _indexPath) {//当前播放的cell
+//        
+//        [self initPlayer];
+//        [self.player pause];
+//    }
 }
 #pragma ZJPlayerDelegate
 - (void)playFinishedPlayer:(ZJPlayer *)player{

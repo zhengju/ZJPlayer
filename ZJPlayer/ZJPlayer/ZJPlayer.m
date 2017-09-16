@@ -11,11 +11,14 @@
 
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
-
+NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 #define MINDISTANCE 0.5
 
 @interface ZJPlayer()<ZJControlViewDelegate>
 
+/**
+ 父视图
+ */
 @property(weak,nonatomic) UIView * fatherView;
 
 @property(nonatomic) CGRect  currentFrame;
@@ -41,6 +44,15 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
  当前player是否消失 YES:消失 NO:不消失 ，默认是NO
  */
 @property(assign,nonatomic) BOOL  isDisappear;
+/**
+ 当前点击屏幕是否有滑动 YES:滑动 NO:没有滑动，只是点击 ，默认是NO
+ */
+@property(assign,nonatomic) BOOL  isTouchesMoved;
+
+/**
+ 横屏状态 YES:电池栏在右 NO:电池栏在左 ，在全屏有效
+ */
+@property(assign,nonatomic) BOOL  isLandscapeLeft;
 
 /**
  是否添加过监听 YES:已经监听 NO:无监听
@@ -72,7 +84,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     static ZJPlayer *player = nil;
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
-        player = [[ZJPlayer alloc]init];
+        player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@""]];
         
     });
     return player;
@@ -106,6 +118,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
         self.isAddObserverToPlayerItem = NO;
         
         [self removeObserverFromPlayerItem:self.playerItem];
+  
     }
     
     self.playerItem = nil;
@@ -155,12 +168,15 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     self = [super init];
     if (self) {
         _url = url;
+        
         [self configureUI];
-         [self setupObservers];//监听应用状态
+        
+        [self setupObservers];//监听应用状态
     }
     return self;
 }
 - (instancetype)init{
+
     return [self initWithUrl:[NSURL URLWithString:@""]];
 }
 
@@ -171,12 +187,16 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 - (void)configureUI{
     self.isFullScreen = NO;
     self.isPlayAfterPause = NO;
+    
+    
+   
     // 初始化播放器item
-    self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+   // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
 //    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
 //    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
     
-    self.player = [[AVPlayer alloc] initWithPlayerItem:self.playerItem];
+    self.player = [[AVPlayer alloc] init];
+    
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     // 初始化播放器的Layer
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
@@ -187,10 +207,16 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
      * AVLayerVideoGravityResizeAspectFill // 等比例拉伸，会裁剪
      * AVLayerVideoGravityResize // 保持原有大小拉伸
      */
-    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
     // 把Layer加到底部View上 //放到最下面，防止遮挡
-    [self.layer insertSublayer:self.playerLayer atIndex:0];
-
+    [self.layer insertSublayer:self.playerLayer atIndex:1];
+    
+    self.layer.backgroundColor = [UIColor blackColor].CGColor;
+    
+    if (_url.absoluteString.length > 0) {
+        self.url = _url;
+    }
+    
     //顶部栏
     self.topView = [[UIView alloc]init];
     
@@ -265,9 +291,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     
     self.progress = [[ZJProgress alloc]initWithSuperView:self];
 
-    if (_url.absoluteString.length > 0) {
-        self.url = _url;
-    }
+   
 
     [self addNotificationCenter];
     
@@ -341,13 +365,14 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     UITouch* touch=[[event allTouches] anyObject];
+    
     self.gestureStartPoint=[touch locationInView:self.superview];
     
     // 获取当前播放的时间
     self.progressTime = CMTimeGetSeconds(self.player.currentItem.currentTime);
     
     CGFloat duration = CMTimeGetSeconds(self.playerItem.duration);
-    
+    self.isTouchesMoved = NO;
     self.progress.allTime = [self convertToTime:duration];
 }
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
@@ -356,7 +381,7 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     CGFloat pointX=(self.gestureStartPoint.x-currentPoint.x);
     CGFloat pointY=(self.gestureStartPoint.y-currentPoint.y);
     //NSLog(@"x=%f y=%f",fabs(pointX),fabs(pointY));
-    
+    self.isTouchesMoved = YES;
     BOOL isPlusTime = YES;
     
      if (self.isFullScreen) {//大屏，x和y互换
@@ -364,7 +389,9 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
          pointY=(self.gestureStartPoint.x-currentPoint.x);
          pointX=(self.gestureStartPoint.y-currentPoint.y);
          isPlusTime = NO;
-         
+         if (!self.isLandscapeLeft) {
+             isPlusTime = YES;
+         }
      }
         //上下滑动
         if (fabs(pointY)>fabs(pointX)) {
@@ -378,11 +405,11 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
             //向右滑动
             if (pointX<-MINDISTANCE) {
                 
-                NSLog(@"第二种方式：向右滑动");
+              //  NSLog(@"第二种方式：向右滑动");
                 [self swipeToPlusTime:isPlusTime];
             }else if(pointX>MINDISTANCE){
                 [self swipeToPlusTime:!isPlusTime];
-                NSLog(@"第二种方式：向左滑动");
+               // NSLog(@"第二种方式：向左滑动");
             }
         }
     [self.progress show];
@@ -392,14 +419,24 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
     [self.progress dismiss];
-    
-    [self.player seekToTime:CMTimeMakeWithSeconds(self.progressTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    if (self.isTouchesMoved) {
+        self.isTouchesMoved = NO;
+        [self.loadingIndicator show];
+        [self.player seekToTime:CMTimeMakeWithSeconds(self.progressTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    }
+  
 }
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
     [self.progress dismiss];
     
-    [self.player seekToTime:CMTimeMakeWithSeconds(self.progressTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    //判断是单击还是滑动
+    if (self.isTouchesMoved) {
+        self.isTouchesMoved = NO;
+        [self.loadingIndicator show];
+        [self.player seekToTime:CMTimeMakeWithSeconds(self.progressTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    }
+    
     
 }
 #pragma mark -- 滑动调整播放时间
@@ -490,15 +527,40 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
    //播放完毕
     
     __weak typeof(self) weakSelf = self;
-    [self.player seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {
-        [weakSelf initTimer];
-       
-    }];
+   
+   
     
+    
+ 
+    
+    if ([self.delegate respondsToSelector:@selector(playFinishedPlayer:)]) {
+        
+        [self.delegate playFinishedPlayer:self];
+       
+    }
+    
+    //连续播放视频
+    if (self.isPlayContinuously) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:ZJContinuousVideoPlayback object:self];
+    }else{
+        
+        //缓存清零
+        ZJCacheTask * task =  [ZJCacheTask shareTask];
+        [task clearCacheToFileUrl:self.url.absoluteString];
+      
+        [self.player seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {
+            [weakSelf initTimer];
+            
+        }];
+        
         self.bottomView.isPlay = NO;
-        if ([self.delegate respondsToSelector:@selector(playFinishedPlayer:)]) {
-            [self.delegate playFinishedPlayer:self];
-        }
+    }
+
+    //如果是大屏播放完毕，播放完毕自动回小平
+    if (self.isRotatingSmallScreen ) {
+        [self toCell];
+        [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"缩小"] forState:UIControlStateNormal];
+    }
 }
 /**
  *  给AVPlayerItem添加监控
@@ -578,15 +640,16 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
             break;
         case UIInterfaceOrientationLandscapeLeft:{
             NSLog(@"第2个旋转方向---电池栏在右");
-          self.isAutomaticHorizontal =  YES;
-            
+          
+            self.isAutomaticHorizontal =  YES;
+            self.isLandscapeLeft = YES;
             [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
         }
             break;
         case UIInterfaceOrientationLandscapeRight:{
             NSLog(@"第1个旋转方向---电池栏在左");
            self.isAutomaticHorizontal =  YES;
-            
+             self.isLandscapeLeft = NO;
             [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
             
         }
@@ -603,20 +666,14 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     {
         
         self.isAutomaticHorizontal = NO;
-        
+        self.isLandscapeLeft = YES;
         [self toFullScreenWithInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"放大"] forState:UIControlStateNormal];
     }
     else
     {
         
-        
-        if (self.isAutomaticHorizontal) {//自动横屏没有放小功能
-            
-            //横屏情况下，缩小cell
-            
-            return;
-        }
+
 
         [self toCell];
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"缩小"] forState:UIControlStateNormal];
@@ -779,6 +836,10 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     }else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]){
         //[self.viewLogin setHidden:NO];
         NSLog(@"playbackLikelyToKeepUp");
+        
+        [self.loadingIndicator dismiss];
+        
+        
     }
 }
 
@@ -989,7 +1050,19 @@ NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
     if (self.isPlayAfterPause == NO) {
          [self.loadingIndicator show];//可以播放就隐藏
     }
+    if (self.isPlayContinuously && self.isFullScreen) {//连续播放
+        //如果上个是全屏，连续播放也是全屏
+        
+        if (self.isLandscapeLeft) {
+            
+            [self toFullScreenWithInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+        }else{
+        
+            [self toFullScreenWithInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
+        }
+    }
 }
+
 #pragma 视频暂停
 - (void)pause{
 

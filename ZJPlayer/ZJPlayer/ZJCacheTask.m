@@ -20,7 +20,7 @@
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
         cachetask = [[ZJCacheTask alloc]init];
-        
+        [cachetask clearCache];//默认删除上次记录
     });
     return cachetask;
 }
@@ -44,13 +44,16 @@
     NSMutableArray *tasks = [[NSMutableArray alloc] initWithContentsOfFile:filepath];
 
     
+    if (tasks == nil) {
+        tasks = [NSMutableArray arrayWithCapacity:0];
+    }
+    
     BOOL isHave = NO;
     
     NSDate * date = [NSDate dateWithTimeIntervalSince1970:currentTime];
+    
     for (NSMutableDictionary * dic in tasks) {
 
-       
-        
         if ([dic[@"url"] isEqualToString:url]) {
 
             [dic setObject:date forKey:@"time"];
@@ -94,4 +97,27 @@
     }
     return time;
 }
+- (void)clearCacheToFileUrl:(NSString *)url{
+    [self writeToFileUrl:url time:0];
+}
+- (void)clearCache{
+ 
+    NSFileManager* fileManager=[NSFileManager defaultManager];
+    
+    NSString * filepath = [self path];
+      BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filepath];
+    if (!blHave) {
+        NSLog(@"no  have");
+        return ;
+    }else {
+        NSLog(@" have");
+        BOOL blDele= [fileManager removeItemAtPath:filepath error:nil];
+        if (blDele) {
+            NSLog(@"dele success");
+        }else {
+            NSLog(@"dele fail");
+        }
+    }
+}
+
 @end

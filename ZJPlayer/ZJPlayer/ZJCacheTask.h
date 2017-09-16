@@ -23,5 +23,9 @@
  url:当前视频url
  */
 - (NSTimeInterval)queryToFileUrl:(NSString *)url;
+/**
+ 针对已经播放完毕的视频从头开始播放，给清零
+ */
+- (void)clearCacheToFileUrl:(NSString *)url;
 
 @end
