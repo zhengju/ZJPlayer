@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface ZJLoadingIndicator : UIView
+
+@property(assign,nonatomic) CGFloat  progress;
+
 - (void)show;
 - (void)dismiss;
 

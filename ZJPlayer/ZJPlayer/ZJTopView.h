@@ -15,6 +15,7 @@
  */
 - (void)back;
 - (void)setRate:(float)rate;
+- (void)fetchScreen;
 
 @end
 @interface ZJTopView : UIView

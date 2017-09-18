@@ -51,4 +51,27 @@
     return self.window == nil ? NO : YES;
     
 }
+#pragma mark -- 截屏
+- (UIImage *)captureCurrentView:(UIView *)view {
+    CGRect frame = view.frame;
+    UIGraphicsBeginImageContext(frame.size);
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    [view.layer renderInContext:contextRef];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+- (UIImage *)fetchScreenshot:(CALayer *)layer {
+    UIImage *image = nil;
+    if (layer) {
+        CGSize imageSize = layer.bounds.size;
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [layer renderInContext:context];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    return image;
+}
+
 @end

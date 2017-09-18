@@ -247,10 +247,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         
     }];
 
-    
-    
     self.loadingIndicator = [[ZJLoadingIndicator alloc]init];
-    self.loadingIndicator.backgroundColor = [UIColor redColor];
     [self addSubview:self.loadingIndicator];
     
     [self.loadingIndicator mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -259,6 +256,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         make.height.width.mas_equalTo(35);
     }];
 
+    self.loadingIndicator.progress = 0.5;
     
     self.progress = [[ZJProgress alloc]initWithSuperView:self];
 
@@ -761,6 +759,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
                
                 [self initTimer];
                 
+                
                 if (self.isAutoPlay) {
                     [self play];
                 }
@@ -1044,6 +1043,16 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         }
     }
 }
+- (void)saveImageToPhotos:(UIImage *)image { UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:),nil);
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error == nil) {
+        NSLog(@"保存成功");
+    } else {
+        NSLog(@"失败");
+    }
+}
 
 #pragma mark -- 视频暂停
 - (void)pause{
@@ -1075,7 +1084,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     self.bottomView.sliderValue = CMTimeGetSeconds(self.playerItem.duration) * scale;
     [self.player seekToTime:CMTimeMakeWithSeconds(self.bottomView.sliderValue, self.playerItem.currentTime.timescale)];
     /* indicates the current rate of playback; 0.0 means "stopped", 1.0 means "play at the natural rate of the current item" */
-    if (self.player.rate != 1)
+    if (self.player.rate == 0)
     {
         self.bottomView.isPlay  = YES;
         [self.player play];
@@ -1093,4 +1102,10 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     self.player.rate = rate;
 }
 
+- (void)fetchScreen{
+    
+    UIImage *image = [self captureCurrentView:self];
+    
+    [self saveImageToPhotos:image];
+}
 @end

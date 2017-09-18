@@ -24,6 +24,14 @@
  播放倍速
  */
 @property(strong,nonatomic) UIButton * rateBtn;
+/**
+ 截屏
+ */
+@property(strong,nonatomic) UIButton * captureBtn;
+
+
+
+
 @property(strong,nonatomic) NSArray * rates;
 @end
 
@@ -107,7 +115,32 @@
         make.height.mas_equalTo(25);
         make.width.mas_equalTo(50);
     }];
+    //截屏
+    self.captureBtn = [[UIButton alloc]init];
+    [self.captureBtn setTitle:@"截屏" forState:UIControlStateNormal];
+    [self.captureBtn bk_addEventHandler:^(id sender) {
+        
+        if ([self.delegate respondsToSelector:@selector(fetchScreen)]) {
+            [self.delegate fetchScreen];
+            
+        }
+        
+        
+       
+       
+    } forControlEvents:UIControlEventTouchUpInside];
     
+    [self addSubview:self.captureBtn];
+
+    [self.captureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        make.right.equalTo(self.rateBtn.mas_left).offset(-5);
+        make.centerY.equalTo(self);
+        make.height.mas_equalTo(25);
+        make.width.mas_equalTo(50);
+        
+        
+    }];
     self.titleLabel = [[UILabel alloc]init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
@@ -115,11 +148,9 @@
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.mas_centerY);
         make.left.mas_equalTo(self.closeButton.mas_right).offset(5);
-        make.right.mas_equalTo(self.rateBtn.mas_left).offset(-5);
+        make.right.mas_equalTo(self.captureBtn.mas_left).offset(-5);
     }];
-    
 
-    
 }
 
 - (void)setTitle:(NSString *)title{
@@ -138,4 +169,7 @@
     _rateIndex = 0;
     [self.rateBtn setTitle:[NSString stringWithFormat:@"%@X",self.rates[_rateIndex]] forState:UIControlStateNormal];
 }
+
+
+
 @end
