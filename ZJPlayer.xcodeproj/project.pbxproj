@@ -32,6 +32,7 @@
 		18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5FE1F5FF025002430E4 /* LaunchScreen.storyboard */; };
 		18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */; };
 		18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */; };
+		18EE509B1F6FD82900A5C606 /* ZJBrightness.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509A1F6FD82900A5C606 /* ZJBrightness.m */; };
 		18FBE06D1F6F783400133732 /* VideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06C1F6F783400133732 /* VideoController.m */; };
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
@@ -88,6 +89,8 @@
 		18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJAlertView.m; sourceTree = "<group>"; };
 		18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJResourceLoaderManager.h; sourceTree = "<group>"; };
 		18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJResourceLoaderManager.m; sourceTree = "<group>"; };
+		18EE50991F6FD82900A5C606 /* ZJBrightness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJBrightness.h; sourceTree = "<group>"; };
+		18EE509A1F6FD82900A5C606 /* ZJBrightness.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJBrightness.m; sourceTree = "<group>"; };
 		18FBE06B1F6F783400133732 /* VideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoController.h; sourceTree = "<group>"; };
 		18FBE06C1F6F783400133732 /* VideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoController.m; sourceTree = "<group>"; };
 		18FBE06E1F6F7ABE00133732 /* UINavigationController+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Player.h"; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				18C205361F6B6B4C0043A18E /* ZJLoadingIndicator.m */,
 				18C2053B1F6BA30C0043A18E /* ZJProgress.h */,
 				18C2053C1F6BA30C0043A18E /* ZJProgress.m */,
+				18EE50991F6FD82900A5C606 /* ZJBrightness.h */,
+				18EE509A1F6FD82900A5C606 /* ZJBrightness.m */,
 				18C204EB1F692AC60043A18E /* UIView+Player.h */,
 				18C204EC1F692AC60043A18E /* UIView+Player.m */,
 				18C205381F6B71F30043A18E /* UIViewController+Player.h */,
@@ -368,6 +373,7 @@
 				1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */,
 				18FBE06D1F6F783400133732 /* VideoController.m in Sources */,
 				18C2053A1F6B71F30043A18E /* UIViewController+Player.m in Sources */,
+				18EE509B1F6FD82900A5C606 /* ZJBrightness.m in Sources */,
 				18C204E11F6900800043A18E /* VideoListController.m in Sources */,
 				18C2053D1F6BA30C0043A18E /* ZJProgress.m in Sources */,
 				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,

@@ -9,12 +9,12 @@
 #import "ZJPlayer.h"
 #import "ZJControlView.h"
 #import "ZJTopView.h"
-
+#import "ZJResourceLoaderManager.h"
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 #define MINDISTANCE 0.5
-
+#define kCustomVideoScheme @"http"
 @interface ZJPlayer()<ZJControlViewDelegate,ZJTopViewDelegate>
 
 /**
@@ -68,6 +68,10 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
  */
 @property(strong,nonatomic) ZJProgress * progress;
 /**
+ 滑动亮度展示器
+ */
+@property(strong,nonatomic) ZJBrightness * brightness;
+/**
  开始活动的点
  */
 @property(assign,nonatomic) CGPoint  gestureStartPoint;
@@ -75,7 +79,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
  开始滑动时的播放时间
  */
 @property(assign,nonatomic) NSTimeInterval  progressTime;
-
+@property(strong,nonatomic) ZJResourceLoaderManager *  resourceManager;
 @end
 
 @implementation ZJPlayer
@@ -123,12 +127,22 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     }
     
     self.playerItem = nil;
+    NSURLComponents *components = [[NSURLComponents alloc]initWithURL:_url resolvingAgainstBaseURL:NO];
+    ////注意，不加这一句不能执行到回调操作
+    components.scheme = kCustomVideoScheme;
     
-    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
+    self.asset=[[AVURLAsset alloc]initWithURL:components.URL options:nil];
+    
+    _resourceManager = [[ZJResourceLoaderManager alloc]init];
+    
+    [self.asset.resourceLoader setDelegate:_resourceManager queue:dispatch_get_main_queue()];
     
     self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+   
+   
     
-   // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
+  
     
     [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
 
@@ -162,6 +176,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         
         self.playerLayer.frame = self.bounds;
         [self.progress resetFrameisFullScreen:NO];
+        [self.brightness resetFrameisFullScreen:NO];
     }
 }
 #pragma 实例化
@@ -191,7 +206,6 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     
    
     // 初始化播放器item
-   // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
 //    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
 //    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
     
@@ -260,12 +274,10 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     self.loadingIndicator.progress = 0.5;
     
     self.progress = [[ZJProgress alloc]initWithSuperView:self];
-
-   
-
+    self.brightness = [[ZJBrightness alloc]initWithSuperView:self];
     [self addNotificationCenter];
     
-    [self addSwipeGesture];
+  //  [self addSwipeGesture];
     
     //给playView加手势
     [self bk_whenTapped:^{
@@ -292,7 +304,6 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     decreaseGesture.direction=UISwipeGestureRecognizerDirectionDown;
     [self addGestureRecognizer:decreaseGesture];
     
- 
 }
 - (void)swipeAction:(UISwipeGestureRecognizer *)swipeGesture{
     if (swipeGesture.direction == UISwipeGestureRecognizerDirectionLeft) {//左滑
@@ -301,16 +312,24 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         [self swipeToPlusTime:YES];
     }
 }
-#pragma mark -- 向上滑动增加音量
+#pragma mark -- 向上滑动增加屏幕亮度
 -(void)increaseVolume:(UISwipeGestureRecognizer *)sender
 {
     if(sender.direction==UISwipeGestureRecognizerDirectionUp)
     {
-        if(_player.volume>=1.0)
-            return;
-        _player.volume+=0.1;
         
-        NSLog(@"+++++音量:%f++++++",10*_player.volume);
+        CGFloat  currentLight = [[UIScreen mainScreen] brightness];
+        
+        
+        if(currentLight>=1.0)
+            return;
+        currentLight+=0.1;
+        
+      
+        NSLog(@"------音量:%f------",10*currentLight);
+        
+        [[UIScreen mainScreen] setBrightness: currentLight];
+        
 //        weak PlayViewController *weakSelf=self;
 //        _volumeLabel.text=[NSString stringWithFormat:@"音量:%d",(int)ceilf(_player.volume*10)];
 //        [UIView animateWithDuration:0.2 animations:^{
@@ -323,16 +342,21 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     }
 }
 
-#pragma mark -- 向下滑动减小音量
+#pragma mark -- 向下滑动减小屏幕亮度
 -(void)decreaseVolume:(UISwipeGestureRecognizer *)sender
 {
     if(sender.direction==UISwipeGestureRecognizerDirectionDown)
     {
-        if(_player.volume<=0.0)
-            return;
-        _player.volume-=0.1;
+        CGFloat  currentLight = [[UIScreen mainScreen] brightness];
         
-        NSLog(@"------音量:%f------",10*_player.volume);
+
+        
+        
+        if(currentLight<=0.0)
+            return;
+        currentLight-=0.1;
+        [[UIScreen mainScreen] setBrightness: currentLight];
+        NSLog(@"------音量:%f------",10*currentLight);
         
 //        weak PlayViewController *weakSelf=self;
 //        _volumeLabel.text=[NSString stringWithFormat:@"音量:%d",(int)ceilf(_player.volume*10)];
@@ -378,29 +402,35 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
      }
         //上下滑动
         if (fabs(pointY)>fabs(pointX)) {
+            
+            [self.brightness show];
+            
             //向上滑动
             if (pointY>MINDISTANCE) {
                 // NSLog(@"第二种方式：向上滑动");
+                [self swipeToPlusbrightness:YES];
             }else if(pointY<-MINDISTANCE){
                 // NSLog(@"第二种方式：向下滑动");
+                [self swipeToPlusbrightness:NO];
             }
         }else if(fabs(pointX)>fabs(pointY)){//左右滑动
+                [self.progress show];
             //向右滑动
             if (pointX<-MINDISTANCE) {
                 
-              //  NSLog(@"第二种方式：向右滑动");
+                //NSLog(@"第二种方式：向右滑动");
                 [self swipeToPlusTime:isPlusTime];
             }else if(pointX>MINDISTANCE){
                 [self swipeToPlusTime:!isPlusTime];
-               // NSLog(@"第二种方式：向左滑动");
+                //NSLog(@"第二种方式：向左滑动");
             }
         }
-    [self.progress show];
+
     self.gestureStartPoint = currentPoint;
     
 }
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-
+    [self.brightness dismiss];
     [self.progress dismiss];
     if (self.isTouchesMoved) {
         self.isTouchesMoved = NO;
@@ -412,15 +442,13 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
     [self.progress dismiss];
-    
+    [self.brightness dismiss];
     //判断是单击还是滑动
     if (self.isTouchesMoved) {
         self.isTouchesMoved = NO;
         [self.loadingIndicator show];
         [self.player seekToTime:CMTimeMakeWithSeconds(self.progressTime, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     }
-    
-    
 }
 #pragma mark -- 滑动调整播放时间
 - (void)swipeToPlusTime:(BOOL)isPlus{
@@ -452,7 +480,32 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     self.progress.currentTime = [self convertToTime:self.progressTime];
     
 }
+#pragma mark -- 滑动调整亮度
+- (void)swipeToPlusbrightness:(BOOL)isPlus{
+    
+    CGFloat  currentLight = [[UIScreen mainScreen] brightness];
+    
+    if (isPlus) {
+        
+        currentLight += 1/100.0;
+        
+    }else{
+        
+        currentLight -= 1/100.0;
+    }
+    
+    if (currentLight <= 0.0) {
+        currentLight = 0.0;
+    }
+    if (currentLight >= 1.0) {
+        currentLight = 1.0;
+    }
+    
+    self.brightness.progress = currentLight;
+    
+    [[UIScreen mainScreen] setBrightness: currentLight];
 
+}
 #pragma 添加通知
 - (void)addNotificationCenter{
     //旋转屏幕通知
@@ -691,6 +744,18 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         }];
         
         // remark 约束
+        
+        [self.loadingIndicator mas_remakeConstraints:^(MASConstraintMaker *make) {
+            
+            make.top.mas_equalTo(self).offset((self.frameOnFatherView.size.height -35)/2.0);
+            make.left.mas_equalTo(self).offset((self.frameOnFatherView.size.width -35)/2.0);
+            
+            make.width.mas_equalTo(35);
+            make.height.mas_equalTo(35);
+            
+        }];
+        
+        
         [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(50);
             make.bottom.mas_equalTo(self);
@@ -950,6 +1015,16 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     self.frame = CGRectMake(0, 0, width, height);
     
     [self.progress resetFrameisFullScreen:YES];
+    [self.brightness resetFrameisFullScreen:YES];
+    
+    [self.loadingIndicator mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self).offset((width -35)/2.0);
+        make.left.mas_equalTo(self).offset((height -35)/2.0);
+        
+        make.width.mas_equalTo(35);
+        make.height.mas_equalTo(35);
+        
+    }];
     
     // remark 约束
     [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -1062,9 +1137,12 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     if (error == nil) {
-        NSLog(@"保存成功");
+       
+        HUDNormal(@"保存成功");
+        NSLog(@"OK");
     } else {
-        NSLog(@"失败");
+        NSLog(@"false");
+         HUDNormal(@"保存失败");
     }
 }
 

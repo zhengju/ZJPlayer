@@ -15,6 +15,7 @@
 #import "ZJAlertView.h"
 #import "ZJLoadingIndicator.h"
 #import "ZJProgress.h"
+#import "ZJBrightness.h"
 #import "UIViewController+Player.h"
 #import <Masonry/Masonry.h>
 #import <BlocksKit/BlocksKit.h>
@@ -34,5 +35,7 @@
 #define HUDNormal(msg) { ZJAlertView *alert = [[ZJAlertView alloc]init];\
 [alert showAlertWith:msg];\
 }
+
+#define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
 #endif /* ZJCommonHeader_h */
