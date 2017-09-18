@@ -7,6 +7,8 @@
 //
 
 #import "VideoListController.h"
+#import "VideoController.h"
+
 #import "ZJCommonHeader.h"
 #import "VideoListCell.h"
 #import "VideoList.h"
@@ -144,7 +146,9 @@
     return kScreenHeight / 2.0;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    VideoController * controller = [[VideoController alloc]init];
     
+    [self.navigationController pushViewController:controller animated:YES];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return CGFLOAT_MIN;

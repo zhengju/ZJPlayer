@@ -34,7 +34,7 @@
 }
 - (void)zj_viewWillAppear:(BOOL)animated{
     //发送通知
-    [[NSNotificationCenter defaultCenter]postNotificationName:ZJViewControllerWillAppear object:nil];
+   [[NSNotificationCenter defaultCenter]postNotificationName:ZJViewControllerWillAppear object:nil];
     
     [self zj_viewWillAppear:animated];
 }

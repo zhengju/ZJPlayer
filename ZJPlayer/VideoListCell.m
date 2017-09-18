@@ -98,6 +98,7 @@
 
   
     self.player = [ZJPlayer sharePlayer];
+   // self.player.isPushOrPopPlpay = YES;
     self.player.indexPath = _indexPath;
     
     self.player.url = [NSURL URLWithString:self.model.url];

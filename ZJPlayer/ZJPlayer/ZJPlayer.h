@@ -5,7 +5,13 @@
 //  Created by zhengju on 2017/9/10.
 //  Copyright © 2017年 郑俱. All rights reserved.
 //
-
+/**
+ 任务：
+ 1.视屏截屏---已完成
+ 2.GIF动画截屏
+ 2.视频缓冲
+ 3.视屏下载
+ */
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ZJCommonHeader.h"
@@ -85,7 +91,10 @@ extern NSString *const ZJContinuousVideoPlayback; // 连续播放视频通知
  当大屏时，播放完视频是否自动旋转至小屏幕 YES:自动 ；NO:不自动
  */
 @property (nonatomic,assign) BOOL isRotatingSmallScreen;
-
+/**
+ 跳转之后是否播放 YES:播放 ；NO:不播放，默认是NO
+ */
+@property (nonatomic,assign) BOOL isPushOrPopPlpay;
 /**
  单例生成player
  */

@@ -124,12 +124,11 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     
     self.playerItem = nil;
     
-//    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
-//    
-//    
-//    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
     
-    self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+    
+   // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
     
     [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
 
@@ -195,6 +194,8 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
    // self.playerItem = [[AVPlayerItem alloc] initWithURL:_url];
 //    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
 //    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+    
+    
     
     self.player = [[AVPlayer alloc] init];
     
@@ -275,6 +276,13 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 #pragma  mark -- 加滑动手势
 - (void)addSwipeGesture{
 
+    UISwipeGestureRecognizer * swipeGestureLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
+    [swipeGestureLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self addGestureRecognizer:swipeGestureLeft];
+    UISwipeGestureRecognizer * swipeGestureRight = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction:)];
+    [swipeGestureRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self addGestureRecognizer:swipeGestureRight];
+    
     //增加音量的手势
     UISwipeGestureRecognizer *increaseGesture=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(increaseVolume:)];
     increaseGesture.direction=UISwipeGestureRecognizerDirectionUp;
@@ -286,7 +294,13 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
     
  
 }
-
+- (void)swipeAction:(UISwipeGestureRecognizer *)swipeGesture{
+    if (swipeGesture.direction == UISwipeGestureRecognizerDirectionLeft) {//左滑
+        [self swipeToPlusTime:NO];
+    }else if (swipeGesture.direction == UISwipeGestureRecognizerDirectionRight){//右滑
+        [self swipeToPlusTime:YES];
+    }
+}
 #pragma mark -- 向上滑动增加音量
 -(void)increaseVolume:(UISwipeGestureRecognizer *)sender
 {
@@ -462,7 +476,7 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
         
         self.isDisappear = YES;
         //player暂停
-        if (self.player.rate != 0){
+        if (self.player.rate != 0 && self.isPushOrPopPlpay == NO){
             [self.player pause];
             self.bottomView.isPlay  = NO;
         }
@@ -1104,7 +1118,9 @@ NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
 
 - (void)fetchScreen{
     
-    UIImage *image = [self captureCurrentView:self];
+    CGFloat nowTime = CMTimeGetSeconds(self.playerItem.currentTime);
+
+    UIImage *image = [self thumbnailImageRequest:nowTime url:_url.absoluteString];
     
     [self saveImageToPhotos:image];
 }
