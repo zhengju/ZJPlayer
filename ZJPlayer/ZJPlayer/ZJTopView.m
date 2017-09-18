@@ -117,17 +117,16 @@
     }];
     //截屏
     self.captureBtn = [[UIButton alloc]init];
-    [self.captureBtn setTitle:@"截屏" forState:UIControlStateNormal];
+    self.captureBtn.showsTouchWhenHighlighted = YES;
+    [self.captureBtn setImage:[UIImage imageNamed:@"一键截屏"] forState:UIControlStateNormal];
+    
     [self.captureBtn bk_addEventHandler:^(id sender) {
         
         if ([self.delegate respondsToSelector:@selector(fetchScreen)]) {
             [self.delegate fetchScreen];
             
         }
-        
-        
-       
-       
+
     } forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.captureBtn];

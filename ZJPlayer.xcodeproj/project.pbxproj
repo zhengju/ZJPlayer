@@ -30,6 +30,8 @@
 		18C4B5FB1F5FF025002430E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5F91F5FF025002430E4 /* Main.storyboard */; };
 		18C4B5FD1F5FF025002430E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5FC1F5FF025002430E4 /* Assets.xcassets */; };
 		18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5FE1F5FF025002430E4 /* LaunchScreen.storyboard */; };
+		18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */; };
+		18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */; };
 		18FBE06D1F6F783400133732 /* VideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06C1F6F783400133732 /* VideoController.m */; };
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
@@ -82,6 +84,10 @@
 		18C4B5FC1F5FF025002430E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18C4B5FF1F5FF025002430E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18C4B6011F5FF025002430E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18EE50931F6FAD5F00A5C606 /* ZJAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJAlertView.h; sourceTree = "<group>"; };
+		18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJAlertView.m; sourceTree = "<group>"; };
+		18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJResourceLoaderManager.h; sourceTree = "<group>"; };
+		18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJResourceLoaderManager.m; sourceTree = "<group>"; };
 		18FBE06B1F6F783400133732 /* VideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoController.h; sourceTree = "<group>"; };
 		18FBE06C1F6F783400133732 /* VideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoController.m; sourceTree = "<group>"; };
 		18FBE06E1F6F7ABE00133732 /* UINavigationController+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Player.h"; sourceTree = "<group>"; };
@@ -143,6 +149,10 @@
 				1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */,
 				18C204F61F6A74F30043A18E /* ZJCacheTask.h */,
 				18C204F71F6A74F30043A18E /* ZJCacheTask.m */,
+				18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */,
+				18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */,
+				18EE50931F6FAD5F00A5C606 /* ZJAlertView.h */,
+				18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */,
 			);
 			path = ZJPlayer;
 			sourceTree = "<group>";
@@ -348,8 +358,10 @@
 				18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */,
 				18C205401F6BE3030043A18E /* ZJTopView.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
+				18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */,
 				18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */,
 				18C205371F6B6B4C0043A18E /* ZJLoadingIndicator.m in Sources */,
+				18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */,
 				18C204DB1F68FFFD0043A18E /* ZJTabBarItem.m in Sources */,
 				18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */,
 				18C204E71F6911B00043A18E /* VideoList.m in Sources */,

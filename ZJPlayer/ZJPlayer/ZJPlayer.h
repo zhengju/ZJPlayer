@@ -11,6 +11,7 @@
  2.GIF动画截屏
  2.视频缓冲
  3.视屏下载
+ 4.上下滑动调节屏幕亮度
  */
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>

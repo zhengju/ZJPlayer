@@ -12,6 +12,7 @@
 #import "ZJPlayer.h"
 #import "UIView+Player.h"
 #import "ZJCacheTask.h"
+#import "ZJAlertView.h"
 #import "ZJLoadingIndicator.h"
 #import "ZJProgress.h"
 #import "UIViewController+Player.h"
@@ -29,5 +30,9 @@
 #else
 #define NSLog(format, ...)
 #endif
+
+#define HUDNormal(msg) { ZJAlertView *alert = [[ZJAlertView alloc]init];\
+[alert showAlertWith:msg];\
+}
 
 #endif /* ZJCommonHeader_h */
