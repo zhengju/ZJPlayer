@@ -29,8 +29,10 @@
  */
 @property(strong,nonatomic) UIButton * captureBtn;
 
-
-
+/**
+ GIF截屏
+ */
+@property(strong,nonatomic) UIButton * gifScreenshotBtn;
 
 @property(strong,nonatomic) NSArray * rates;
 @end
@@ -135,8 +137,33 @@
         
         make.right.equalTo(self.rateBtn.mas_left).offset(-5);
         make.centerY.equalTo(self);
-        make.height.mas_equalTo(25);
-        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(35);
+        make.width.mas_equalTo(35);
+        
+        
+    }];
+    //GIF截屏
+    self.gifScreenshotBtn = [[UIButton alloc]init];
+    self.gifScreenshotBtn.showsTouchWhenHighlighted = YES;
+    [self.gifScreenshotBtn setImage:[UIImage imageNamed:@"GIF"] forState:UIControlStateNormal];
+    
+    [self.gifScreenshotBtn bk_addEventHandler:^(id sender) {
+        
+        if ([self.delegate respondsToSelector:@selector(gifScreenshot)]) {
+            [self.delegate gifScreenshot];
+            
+        }
+        
+    } forControlEvents:UIControlEventTouchUpInside];
+    
+    [self addSubview:self.gifScreenshotBtn];
+    
+    [self.gifScreenshotBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        make.right.equalTo(self.captureBtn.mas_left).offset(-5);
+        make.centerY.equalTo(self);
+        make.height.mas_equalTo(35);
+        make.width.mas_equalTo(35);
         
         
     }];
@@ -147,7 +174,7 @@
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.mas_centerY);
         make.left.mas_equalTo(self.closeButton.mas_right).offset(5);
-        make.right.mas_equalTo(self.captureBtn.mas_left).offset(-5);
+        make.right.mas_equalTo(self.gifScreenshotBtn.mas_left).offset(-5);
     }];
 
 }

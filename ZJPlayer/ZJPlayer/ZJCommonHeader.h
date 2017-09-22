@@ -16,6 +16,7 @@
 #import "ZJLoadingIndicator.h"
 #import "ZJProgress.h"
 #import "ZJBrightness.h"
+#import "ZJVolume.h"
 #import "UIViewController+Player.h"
 #import <Masonry/Masonry.h>
 #import <BlocksKit/BlocksKit.h>

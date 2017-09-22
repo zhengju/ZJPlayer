@@ -5,16 +5,20 @@
 //  Created by zhengju on 2017/9/10.
 //  Copyright © 2017年 郑俱. All rights reserved.
 //
+
 /**
  任务：
  1.视屏截屏---已完成，有偶尔闪退的bug
  2.GIF动画截屏
+ 3.视频流的录屏(转成GIF)
  2.视频缓冲
  3.视屏下载
  4.上下滑动调节屏幕亮度，写调节亮度的视图---已完成
- 5.上下滑动调节声音大小，写调节声音的视图
- 6.上下，左半部分是调整亮度，右半部分是调整声音的。
+ 5.上下滑动调节声音大小，写调节声音的视图---已完成
+ 6.上下，左半部分是调整亮度，右半部分是调整声音的---已完成
+ 7.判断是否是插入耳机
  */
+
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ZJCommonHeader.h"

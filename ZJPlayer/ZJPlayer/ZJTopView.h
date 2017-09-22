@@ -16,7 +16,10 @@
 - (void)back;
 - (void)setRate:(float)rate;
 - (void)fetchScreen;
-
+/**
+ GIF视频截屏
+ */
+- (void)gifScreenshot;
 @end
 @interface ZJTopView : UIView
 @property(weak,nonatomic) id<ZJTopViewDelegate> delegate;
