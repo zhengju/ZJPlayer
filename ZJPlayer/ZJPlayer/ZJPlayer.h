@@ -16,7 +16,7 @@
  4.上下滑动调节屏幕亮度，写调节亮度的视图---已完成
  5.上下滑动调节声音大小，写调节声音的视图---已完成
  6.上下，左半部分是调整亮度，右半部分是调整声音的---已完成
- 7.判断是否是插入耳机
+ 7.监听插入耳机/耳机线控 --- 已完成
  */
 
 #import <UIKit/UIKit.h>
@@ -38,8 +38,9 @@ extern NSString *const ZJViewControllerWillAppear;// 一个控制器即将出现
 extern NSString *const ZJViewControllerWillDisappear; // 一个控制器即将消失
 extern NSString *const ZJContinuousVideoPlayback; // 连续播放视频通知
 
+extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 
-@interface ZJPlayer : UIView
+@interface ZJPlayer : UIView <UIApplicationDelegate>
 
 @property(weak,nonatomic) id<ZJPlayerDelegate> delegate;
 

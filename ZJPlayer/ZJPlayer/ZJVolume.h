@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ZJCommonHeader.h"
+#import <AVFoundation/AVFoundation.h>
 @interface ZJVolume : UIView
 /**
  声音大小

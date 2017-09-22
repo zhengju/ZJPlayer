@@ -13,6 +13,8 @@
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
+NSString *const ZJEventSubtypeRemoteControlTogglePlayPause = @"ZJEventSubtypeRemoteControlTogglePlayPause";
+
 #define MINDISTANCE 0.5
 #define kCustomVideoScheme @"http"
 
@@ -215,6 +217,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
 - (void)dealloc{
     NSLog(@"销毁......");
+     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)configureUI{
@@ -225,7 +228,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     // 初始化播放器item
 //    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
 //    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
-    
+  
+   
     
     
     self.player = [[AVPlayer alloc] init];
@@ -645,6 +649,71 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerWillDisappear) name:ZJViewControllerWillDisappear object:nil];
     //监听有控制器即将出现
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerWillAppear) name:ZJViewControllerWillAppear object:nil];
+    
+     //添加耳机状态监听
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventSubtypeRemoteControlTogglePlayPause) name:ZJEventSubtypeRemoteControlTogglePlayPause object:nil];
+    
+    //[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+     [[AVAudioSession sharedInstance] setActive:YES error:nil];//创建单例对象并且使其设置为活跃状态.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routeChange:) name:AVAudioSessionRouteChangeNotification object:nil];
+}
+
+#pragma mark -- 音频输出改变触发事件OK
+- (void)routeChange:(NSNotification *)notification{
+    NSDictionary *interuptionDict = notification.userInfo;
+    NSInteger routeChangeReason = [[interuptionDict valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
+    switch (routeChangeReason) {
+        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+            NSLog(@"AVAudioSessionRouteChangeReasonNewDeviceAvailable");
+            NSLog(@"耳机插入");
+            break;
+        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+            NSLog(@"AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
+            NSLog(@"耳机拔出，停止播放操作");
+            break;
+        case AVAudioSessionRouteChangeReasonCategoryChange:  // called at start - also when other audio wants to play
+            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+            break;
+    }
+    
+}
+-(BOOL)canBecomeFirstResponder{
+    return YES;
+}
+//received remote event
+-(void)remoteControlReceivedWithEvent:(UIEvent *)event{
+    NSLog(@"event tyipe:::%ld   subtype:::%ld",(long)event.type,(long)event.subtype);    //type==2  subtype==单击暂停键：103，双击暂停键104
+    if (event.type == UIEventTypeRemoteControl) {
+        switch (event.subtype) {
+            case UIEventSubtypeRemoteControlPlay:{
+                NSLog(@"play---------");
+            }break;
+            case UIEventSubtypeRemoteControlPause:{
+                NSLog(@"Pause---------");
+            }break;
+            case UIEventSubtypeRemoteControlStop:{
+                NSLog(@"Stop---------");
+            }break;
+            case UIEventSubtypeRemoteControlTogglePlayPause:{
+                //单击暂停键：103
+                NSLog(@"单击暂停键：103");
+            }break;
+            case UIEventSubtypeRemoteControlNextTrack:{                //双击暂停键：104
+                NSLog(@"双击暂停键：104");
+            }break;
+            case UIEventSubtypeRemoteControlPreviousTrack:{
+                NSLog(@"三击暂停键：105");
+            }break;
+            case UIEventSubtypeRemoteControlBeginSeekingForward:{
+                NSLog(@"单击，再按下不放：108");
+            }break;
+                
+            case UIEventSubtypeRemoteControlEndSeekingForward:{
+                NSLog(@"单击，再按下不放，松开时：109");                 }break;
+            default:
+                break;
+        }
+    }
 }
 #pragma  mark -- 监听有控制器即将消失
 - (void)viewControllerWillDisappear{
@@ -659,6 +728,11 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
     }
 }
+- (void)eventSubtypeRemoteControlTogglePlayPause{
+    [self pause];
+}
+
+
 #pragma mark -- 监听有控制器即将出现
 - (void)viewControllerWillAppear{
     
@@ -687,12 +761,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
    //播放完毕
     
     __weak typeof(self) weakSelf = self;
-   
-   
-    
-    
- 
-    
+
     if ([self.delegate respondsToSelector:@selector(playFinishedPlayer:)]) {
         
         [self.delegate playFinishedPlayer:self];
@@ -1330,4 +1399,5 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     NSLog(@"gif动画");
  
 }
+
 @end

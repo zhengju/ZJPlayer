@@ -35,7 +35,7 @@
     self.layer.cornerRadius = 8;
     
     
-#warning 判断是否是插入耳机
+
     
     self.volumeL = [[UILabel alloc]init];
     self.volumeL.text = @"耳机";
@@ -86,6 +86,12 @@
 }
 
 - (void)show{
+    if ([self isHeadsetPluggedIn]) {
+       self.volumeL.text =  @"耳机";
+    }else{
+    
+        self.volumeL.text =  @"声音";
+    }
     self.alpha = 1;
 }
 - (void)dismiss{
@@ -132,6 +138,14 @@
         
     }
 }
-
+#pragma mark -- 检测耳机是否插入
+- (BOOL)isHeadsetPluggedIn {
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones])
+            return YES;
+    }
+    return NO;
+}
 
 @end

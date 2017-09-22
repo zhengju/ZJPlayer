@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */; };
 		1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830FDA51F72566B00097115 /* CoreGraphics.framework */; };
 		1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */; };
 		1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */; };
@@ -41,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Player.h"; sourceTree = "<group>"; };
+		1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Player.m"; sourceTree = "<group>"; };
 		1830FDA51F72566B00097115 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayer.h; sourceTree = "<group>"; };
 		1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayer.m; sourceTree = "<group>"; };
@@ -154,6 +157,8 @@
 				18EE509A1F6FD82900A5C606 /* ZJBrightness.m */,
 				18EE509C1F70008200A5C606 /* ZJVolume.h */,
 				18EE509D1F70008200A5C606 /* ZJVolume.m */,
+				1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */,
+				1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */,
 				18C204EB1F692AC60043A18E /* UIView+Player.h */,
 				18C204EC1F692AC60043A18E /* UIView+Player.m */,
 				18C205381F6B71F30043A18E /* UIViewController+Player.h */,
@@ -372,6 +377,7 @@
 				18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */,
 				18C205401F6BE3030043A18E /* ZJTopView.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
+				1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */,
 				18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */,
 				18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */,
 				18C205371F6B6B4C0043A18E /* ZJLoadingIndicator.m in Sources */,
