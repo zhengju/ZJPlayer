@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "ZJPlayer.h"
 #import "Masonry.h"
-
+#import "ZJDownloadManager.h"
 @interface ViewController ()
 
 @end
@@ -20,7 +20,7 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
-
+/*
     ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4"]];
     
     player.isRotatingSmallScreen = YES;
@@ -33,16 +33,19 @@
         make.right.mas_equalTo(self.view);
         make.height.mas_equalTo(300);
     }];
+*/
 
+    
+    
     UIButton * button = [[UIButton alloc]init];
     
     [button setBackgroundColor:[UIColor redColor]];
     
     [button bk_addEventHandler:^(id sender) {
 
+       
    
-        [player play];
-        
+        button.selected = !button.selected;
     } forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:button];

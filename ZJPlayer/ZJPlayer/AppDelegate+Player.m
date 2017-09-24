@@ -24,6 +24,8 @@
     
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
+    [self zj_application:application didFinishLaunchingWithOptions:launchOptions];
+    
     return YES;
 }
 //received remote event

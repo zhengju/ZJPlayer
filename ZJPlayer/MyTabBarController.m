@@ -35,12 +35,14 @@
                                  @{kClassKey  : @"VideoListController",
                                    kTitleKey  : @"视频列表",
                                    kImgKey    : @"fuwu",
+                                   kSelImgKey : @"fuwuxuanzhong"},
+                                 
+                                 @{kClassKey  : @"DownloadListController",
+                                   kTitleKey  : @"下载列表",
+                                   kImgKey    : @"fuwu",
                                    kSelImgKey : @"fuwuxuanzhong"}
                                  ];
-    
-    
-    
-    
+
     self.itemNomalColor = RGBACOLOR(102, 102, 102, 1.0);
     
     self.itemSelectedColor =  RGBACOLOR(63, 101, 186, 1.0);

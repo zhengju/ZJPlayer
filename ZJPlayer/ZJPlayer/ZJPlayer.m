@@ -9,6 +9,7 @@
 #import "ZJPlayer.h"
 #import "ZJControlView.h"
 #import "ZJTopView.h"
+
 #import "ZJResourceLoaderManager.h"
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";

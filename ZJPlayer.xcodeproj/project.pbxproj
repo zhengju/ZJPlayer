@@ -8,7 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */; };
+		181C0DC71F761B6D00A5BEEB /* DownloadListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181C0DC51F761B6D00A5BEEB /* DownloadListController.m */; };
+		181C0DC81F761B6D00A5BEEB /* DownloadListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181C0DC61F761B6D00A5BEEB /* DownloadListController.xib */; };
+		182273C01F7752AD00156FDA /* DownloadList.m in Sources */ = {isa = PBXBuildFile; fileRef = 182273BF1F7752AD00156FDA /* DownloadList.m */; };
 		1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830FDA51F72566B00097115 /* CoreGraphics.framework */; };
+		1834B5CC1F750B5F00C426DF /* ZJDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834B5CB1F750B5F00C426DF /* ZJDownloadManager.m */; };
+		1834B5D61F76132600C426DF /* DownloadListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834B5D41F76132600C426DF /* DownloadListCell.m */; };
+		1834B5D71F76132600C426DF /* DownloadListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1834B5D51F76132600C426DF /* DownloadListCell.xib */; };
 		1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */; };
 		1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */; };
 		18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204CE1F68FFFD0043A18E /* ZJNavigationController.m */; };
@@ -44,7 +50,17 @@
 /* Begin PBXFileReference section */
 		1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Player.h"; sourceTree = "<group>"; };
 		1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Player.m"; sourceTree = "<group>"; };
+		181C0DC41F761B6D00A5BEEB /* DownloadListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadListController.h; sourceTree = "<group>"; };
+		181C0DC51F761B6D00A5BEEB /* DownloadListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadListController.m; sourceTree = "<group>"; };
+		181C0DC61F761B6D00A5BEEB /* DownloadListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadListController.xib; sourceTree = "<group>"; };
+		182273BE1F7752AD00156FDA /* DownloadList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadList.h; sourceTree = "<group>"; };
+		182273BF1F7752AD00156FDA /* DownloadList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadList.m; sourceTree = "<group>"; };
 		1830FDA51F72566B00097115 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1834B5CA1F750B5F00C426DF /* ZJDownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloadManager.h; sourceTree = "<group>"; };
+		1834B5CB1F750B5F00C426DF /* ZJDownloadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloadManager.m; sourceTree = "<group>"; };
+		1834B5D31F76132600C426DF /* DownloadListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadListCell.h; sourceTree = "<group>"; };
+		1834B5D41F76132600C426DF /* DownloadListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadListCell.m; sourceTree = "<group>"; };
+		1834B5D51F76132600C426DF /* DownloadListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadListCell.xib; sourceTree = "<group>"; };
 		1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayer.h; sourceTree = "<group>"; };
 		1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayer.m; sourceTree = "<group>"; };
 		1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCommonHeader.h; sourceTree = "<group>"; };
@@ -140,6 +156,21 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		1834B5D01F7612F400C426DF /* DownloadList */ = {
+			isa = PBXGroup;
+			children = (
+				1834B5D31F76132600C426DF /* DownloadListCell.h */,
+				1834B5D41F76132600C426DF /* DownloadListCell.m */,
+				1834B5D51F76132600C426DF /* DownloadListCell.xib */,
+				181C0DC41F761B6D00A5BEEB /* DownloadListController.h */,
+				181C0DC51F761B6D00A5BEEB /* DownloadListController.m */,
+				181C0DC61F761B6D00A5BEEB /* DownloadListController.xib */,
+				182273BE1F7752AD00156FDA /* DownloadList.h */,
+				182273BF1F7752AD00156FDA /* DownloadList.m */,
+			);
+			path = DownloadList;
+			sourceTree = "<group>";
+		};
 		1895D6CB1F64BCE200A3D3CD /* ZJPlayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +201,8 @@
 				18C204F71F6A74F30043A18E /* ZJCacheTask.m */,
 				18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */,
 				18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */,
+				1834B5CA1F750B5F00C426DF /* ZJDownloadManager.h */,
+				1834B5CB1F750B5F00C426DF /* ZJDownloadManager.m */,
 				18EE50931F6FAD5F00A5C606 /* ZJAlertView.h */,
 				18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */,
 			);
@@ -226,6 +259,7 @@
 				18C204E31F690A410043A18E /* VideoListCell.m */,
 				18C204E51F6911B00043A18E /* VideoList.h */,
 				18C204E61F6911B00043A18E /* VideoList.m */,
+				1834B5D01F7612F400C426DF /* DownloadList */,
 				18C204DC1F6900260043A18E /* MyTabBarController.h */,
 				18C204DD1F6900260043A18E /* MyTabBarController.m */,
 				18C204CC1F68FFFD0043A18E /* ZJTabBar */,
@@ -310,6 +344,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */,
+				1834B5D71F76132600C426DF /* DownloadListCell.xib in Resources */,
+				181C0DC81F761B6D00A5BEEB /* DownloadListController.xib in Resources */,
 				18C4B5FD1F5FF025002430E4 /* Assets.xcassets in Resources */,
 				18C4B5FB1F5FF025002430E4 /* Main.storyboard in Resources */,
 			);
@@ -371,10 +407,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				18C204DA1F68FFFD0043A18E /* ZJTabBarController.m in Sources */,
+				1834B5D61F76132600C426DF /* DownloadListCell.m in Sources */,
 				18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */,
 				18C204E41F690A410043A18E /* VideoListCell.m in Sources */,
 				18C204F81F6A74F30043A18E /* ZJCacheTask.m in Sources */,
+				181C0DC71F761B6D00A5BEEB /* DownloadListController.m in Sources */,
 				18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */,
+				1834B5CC1F750B5F00C426DF /* ZJDownloadManager.m in Sources */,
 				18C205401F6BE3030043A18E /* ZJTopView.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
 				1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */,
@@ -393,6 +432,7 @@
 				18C2053D1F6BA30C0043A18E /* ZJProgress.m in Sources */,
 				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,
 				18C204ED1F692AC60043A18E /* UIView+Player.m in Sources */,
+				182273C01F7752AD00156FDA /* DownloadList.m in Sources */,
 				18C4B5F21F5FF025002430E4 /* main.m in Sources */,
 				18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */,
 				18C204D91F68FFFD0043A18E /* ZJTabBarButton.m in Sources */,

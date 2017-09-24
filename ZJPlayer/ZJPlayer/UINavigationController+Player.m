@@ -13,8 +13,7 @@
 @implementation UINavigationController (Player)
 
 +(void)load{
-    
-    
+
     Method originalpushM = class_getInstanceMethod([self class], @selector(pushViewController:animated:));
     Method exchangepushM = class_getInstanceMethod([self class], @selector(zj_pushViewController:animated:));
     method_exchangeImplementations(originalpushM, exchangepushM);
