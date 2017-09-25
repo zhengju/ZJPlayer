@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "ZJCommonHeader.h"
+
 typedef enum {
     ZJDownloadStateRunning = 0,     /** 下载中 */
     ZJDownloadStateSuspended,     /** 下载暂停 */
@@ -15,32 +16,15 @@ typedef enum {
     ZJDownloadStateCanceled,     /** 取消下载 */
     ZJDownloadStateFailed         /** 下载失败 */
 }ZJDownloadState;
-@interface ZJDownload : NSObject<NSCopying>
+@interface ZJDownload : NSObject
+/** 流 */
 @property (nonatomic, strong) NSOutputStream *stream;
+/** 下载地址 */
 @property (nonatomic, copy) NSString *url;
-@property (nonatomic, assign) long long allLength;
-
-@property(strong,nonatomic) NSMutableData * fileData;
 /**
  *  文件的总长度
  */
 @property (nonatomic, assign) long long totalLength;
-/**
- *  文件的实时长度
- */
-@property (nonatomic, assign) long long currentLength;
-
-/**
- *  文件的实时长度
- */
-@property (nonatomic, assign) long long downloadLength;
-
-/**
- 保存上次的下载信息
- */
-@property(strong,nonatomic) NSData *resumeData;
-
-@property (nonatomic, strong) NSURLSessionDownloadTask *task;
 
 @property (nonatomic, copy) void(^progressBlock)( CGFloat progress);
 @property (nonatomic, copy) void(^stateBlock)(ZJDownloadState state);
@@ -59,49 +43,58 @@ typedef enum {
  *  添加下载任务
  *
  *  @param url           url
- *  @param tag           唯一标识
  *  @param resume        是否下载
  *  @param progressBlock 下载进度回调
  *  @param stateBlack    下载状态回调
  */
-- (void)downloadDataWithURL:(NSString *)url tag:(NSUInteger)tag resume:(BOOL)resume progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack;
-
-//- (void)download;
+- (void)downloadDataWithURL:(NSString *)url resume:(BOOL)resume progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack;
 /**
- 继续下载
- */
-- (void)continueDownloading;
-/**
- 取消或暂停
- */
-- (void)cancel;
-/**
- *  进度
+ *  查询该资源的下载进度值
  *
- *  @param tag 唯一标识
+ *  @param url 下载地址
+ *
+ *  @return 返回下载进度值
  */
-- (float)progressWithTag:(NSUInteger)tag;
+- (CGFloat)progress:(NSString *)url;
+/**
+ *  获取该资源总大小
+ *
+ *  @param url 下载地址
+ *
+ *  @return 资源总大小
+ */
+- (NSInteger)fileTotalLength:(NSString *)url;
 
 /**
- *  开始
+ *  判断该资源是否下载完成
  *
- *  @param tag 唯一标识
+ *  @param url 下载地址
+ *
+ *  @return YES: 完成
  */
-- (void)resumeWithTag:(NSUInteger)tag;
+- (BOOL)isCompletion:(NSString *)url;
 
 /**
- *  暂停
+ *  删除该资源
  *
- *  @param tag 唯一标识
+ *  @param url 下载地址
  */
-- (void)suspendWithTag:(NSUInteger)tag;
+- (void)deleteFile:(NSString *)url;
 
 /**
- *  取消
- *
- *  @param tag 唯一标识
+ *  清空所有下载资源
  */
-- (void)cancelWithTag:(NSUInteger)tag;
-
-- (void)continueDownloadingWithTag:(NSUInteger)tag;
+- (void)deleteAllFile;
+/**
+ *  本地路径
+ */
+- (NSString *)path:(NSString *)url;
+/**
+ *总大小，单位是M
+ */
+- (float)totalLength:(NSString *)url;
+/**
+ *已经下载的大小，单位是M
+ */
+- (float)downloadLength:(NSString *)url;
 @end

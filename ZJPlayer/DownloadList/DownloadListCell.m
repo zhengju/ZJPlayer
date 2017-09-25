@@ -34,6 +34,9 @@
     _model = model;
     _nameL.text = _model.name;
     _cacheProgress.progress = _model.progress;
+    _rightCacheL.text = _model.ratio;
+    _cacheL.text = [NSString stringWithFormat:@"已缓存%.0f%%",_model.progress * 100];
+    
 }
 
 

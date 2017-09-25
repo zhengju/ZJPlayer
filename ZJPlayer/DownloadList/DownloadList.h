@@ -16,4 +16,6 @@
 
 @property(copy,nonatomic) NSString * name;
 @property(copy,nonatomic) NSString * urlString;
+@property(copy,nonatomic) NSString * ratio;
+@property(copy,nonatomic) NSString * cacheRatio;
 @end

@@ -134,8 +134,28 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)setUrl:(NSURL *)url{
     
     _url = url;
-
+    NSLog(@"%@",_url.path);
+    
     self.isPlayAfterPause = NO;
+    
+    
+    if (![_url.path hasPrefix:@"http"])
+       {
+           
+            self.asset = [AVURLAsset URLAssetWithURL:url options:nil];
+           
+           self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+           
+           if (!self.player) {
+               self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
+           } else {
+               [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
+           }
+           
+           [self.player play];
+           
+           return;
+    }
     
     if (self.isAddObserverToPlayerItem) {
         
@@ -157,9 +177,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [self.asset.resourceLoader setDelegate:_resourceManager queue:dispatch_get_main_queue()];
     
     self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
-   
-   
-    
+ 
     self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
   
     

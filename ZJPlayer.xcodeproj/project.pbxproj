@@ -11,6 +11,8 @@
 		181C0DC71F761B6D00A5BEEB /* DownloadListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 181C0DC51F761B6D00A5BEEB /* DownloadListController.m */; };
 		181C0DC81F761B6D00A5BEEB /* DownloadListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181C0DC61F761B6D00A5BEEB /* DownloadListController.xib */; };
 		182273C01F7752AD00156FDA /* DownloadList.m in Sources */ = {isa = PBXBuildFile; fileRef = 182273BF1F7752AD00156FDA /* DownloadList.m */; };
+		182273C61F78E5AE00156FDA /* PlayerVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 182273C51F78E5AE00156FDA /* PlayerVideoController.m */; };
+		182273C71F78F3AB00156FDA /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 182273C31F78B7AC00156FDA /* NSString+Hash.m */; };
 		1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830FDA51F72566B00097115 /* CoreGraphics.framework */; };
 		1834B5CC1F750B5F00C426DF /* ZJDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834B5CB1F750B5F00C426DF /* ZJDownloadManager.m */; };
 		1834B5D61F76132600C426DF /* DownloadListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1834B5D41F76132600C426DF /* DownloadListCell.m */; };
@@ -55,6 +57,10 @@
 		181C0DC61F761B6D00A5BEEB /* DownloadListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadListController.xib; sourceTree = "<group>"; };
 		182273BE1F7752AD00156FDA /* DownloadList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadList.h; sourceTree = "<group>"; };
 		182273BF1F7752AD00156FDA /* DownloadList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadList.m; sourceTree = "<group>"; };
+		182273C21F78B7AC00156FDA /* NSString+Hash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Hash.h"; sourceTree = "<group>"; };
+		182273C31F78B7AC00156FDA /* NSString+Hash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hash.m"; sourceTree = "<group>"; };
+		182273C41F78E5AE00156FDA /* PlayerVideoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerVideoController.h; sourceTree = "<group>"; };
+		182273C51F78E5AE00156FDA /* PlayerVideoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerVideoController.m; sourceTree = "<group>"; };
 		1830FDA51F72566B00097115 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1834B5CA1F750B5F00C426DF /* ZJDownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloadManager.h; sourceTree = "<group>"; };
 		1834B5CB1F750B5F00C426DF /* ZJDownloadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloadManager.m; sourceTree = "<group>"; };
@@ -156,6 +162,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		182273C11F78B7AC00156FDA /* MD5 */ = {
+			isa = PBXGroup;
+			children = (
+				182273C21F78B7AC00156FDA /* NSString+Hash.h */,
+				182273C31F78B7AC00156FDA /* NSString+Hash.m */,
+			);
+			path = MD5;
+			sourceTree = "<group>";
+		};
 		1834B5D01F7612F400C426DF /* DownloadList */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,6 +180,8 @@
 				181C0DC41F761B6D00A5BEEB /* DownloadListController.h */,
 				181C0DC51F761B6D00A5BEEB /* DownloadListController.m */,
 				181C0DC61F761B6D00A5BEEB /* DownloadListController.xib */,
+				182273C41F78E5AE00156FDA /* PlayerVideoController.h */,
+				182273C51F78E5AE00156FDA /* PlayerVideoController.m */,
 				182273BE1F7752AD00156FDA /* DownloadList.h */,
 				182273BF1F7752AD00156FDA /* DownloadList.m */,
 			);
@@ -201,6 +218,7 @@
 				18C204F71F6A74F30043A18E /* ZJCacheTask.m */,
 				18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */,
 				18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */,
+				182273C11F78B7AC00156FDA /* MD5 */,
 				1834B5CA1F750B5F00C426DF /* ZJDownloadManager.h */,
 				1834B5CB1F750B5F00C426DF /* ZJDownloadManager.m */,
 				18EE50931F6FAD5F00A5C606 /* ZJAlertView.h */,
@@ -431,7 +449,9 @@
 				18C204E11F6900800043A18E /* VideoListController.m in Sources */,
 				18C2053D1F6BA30C0043A18E /* ZJProgress.m in Sources */,
 				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,
+				182273C71F78F3AB00156FDA /* NSString+Hash.m in Sources */,
 				18C204ED1F692AC60043A18E /* UIView+Player.m in Sources */,
+				182273C61F78E5AE00156FDA /* PlayerVideoController.m in Sources */,
 				182273C01F7752AD00156FDA /* DownloadList.m in Sources */,
 				18C4B5F21F5FF025002430E4 /* main.m in Sources */,
 				18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */,

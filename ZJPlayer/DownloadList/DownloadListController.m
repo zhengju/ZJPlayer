@@ -7,7 +7,7 @@
 //
 
 #import "DownloadListController.h"
-
+#import "PlayerVideoController.h"
 #import "DownloadListCell.h"
 #import "ZJDownloadManager.h"
 #import "DownloadList.h"
@@ -28,13 +28,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    self.downloadManager = [ZJDownloadManager sharedInstance];
     [self configDatas];
     [self configureTableView];
-    self.downloadManager = [ZJDownloadManager sharedInstance];
+    
 }
 - (void)configDatas{
     
     NSArray * titles = @[
+                         @"不知道",
                          @"为什么和我看的爱情公寓一点儿都不一样……",
                          @"人狗大战来了啊，目测主人已被逼疯…",
                          @"《选择》琼瑶女郎陈德容翩然而至，患失忆症情感何去何从！",
@@ -44,6 +46,7 @@
                          ];
     
     NSArray * urls = @[
+                       @"http://120.25.226.186:32812/resources/videos/minion_01.mp4",
                        @"http://mvideo.spriteapp.cn/video/2017/0912/84cd46ac-97d0-11e7-89c6-1866daeb0df1_wpcco.mp4",
                        @"http://mvideo.spriteapp.cn/video/2017/0912/59b77f1327619_wpcco.mp4",
                        @"http://mvideo.spriteapp.cn/video/2017/0911/59b5675ca92ee_wpcco.mp4",
@@ -56,11 +59,11 @@
         DownloadList * list = [[DownloadList alloc]init];
         list.name = titles[i];
         list.urlString = urls[i];
-        list.progress = [self.downloadManager progressWithTag:i];
+        list.progress = [self.downloadManager progress:urls[i]];
+        list.ratio = [NSString stringWithFormat:@"%.1fM/%.1fM",[self.downloadManager downloadLength:urls[i]],[self.downloadManager totalLength:urls[i]]];
         [self.datas addObject:list];
     }
 }
-
 
 - (void)configureTableView{
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0,kScreenWidth , kScreenHeight) style:UITableViewStylePlain];
@@ -80,11 +83,18 @@
     DownloadListCell * cell = [tableView dequeueReusableCellWithIdentifier:@"DownloadListCell" forIndexPath:indexPath];
     cell.model = self.datas[indexPath.row];
     cell.suspendBlock = ^(BOOL isSuspend){
-        if (isSuspend) {//下载
-            [self.downloadManager continueDownloadingWithTag:indexPath.row];
-        }else{//暂停
-            [self.downloadManager resumeWithTag:indexPath.row];
-        }
+        DownloadList * model = self.datas[indexPath.row];
+        [self.downloadManager downloadDataWithURL:model.urlString resume:YES progress:^(CGFloat progress) {
+            NSLog(@"controller:%ld->%f",(long)indexPath.row,progress);
+            model.progress = progress;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
+        } state:^(ZJDownloadState state) {
+            NSLog(@"controller:%u",state);
+        }];
     };
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
@@ -98,19 +108,16 @@
     return 100;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    DownloadList * model = self.datas[indexPath.row];
-    [self.downloadManager downloadDataWithURL:model.urlString tag:indexPath.row resume:YES progress:^(CGFloat progress) {
-        NSLog(@"controller:%ld->%f",(long)indexPath.row,progress);
-        model.progress = progress;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-        
-        
-    } state:^(ZJDownloadState state) {
-        NSLog(@"controller:%u",state);
-    }];
+
+    PlayerVideoController * controller = [[PlayerVideoController alloc]init];
+    DownloadList *  model = self.datas[indexPath.row];
+    
+    
+   //
+    controller.path = [self.downloadManager path:model.urlString];
+    
+    [self.navigationController pushViewController:controller animated:YES];
+    
 }
 @end
 

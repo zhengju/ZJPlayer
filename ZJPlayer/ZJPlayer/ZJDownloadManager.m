@@ -7,82 +7,71 @@
 //
 
 #import "ZJDownloadManager.h"
+#import "NSString+Hash.h"
 
-#define AllLengthKey(tag)  [NSString stringWithFormat:@"%lud",tag]
+// 缓存主目录
+#define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
+
+// 保存文件名
+#define ZJFileName(url)  [self md5String:url]
+
+// 文件的存放路径（caches）
+#define ZJFileFullpath(url) [ZJCachesDirectory stringByAppendingPathComponent:ZJFileName(url)]
+
+// 文件的已下载长度
+#define ZJDownloadLength(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:ZJFileFullpath(url) error:nil][NSFileSize] integerValue]
+
+// 存储文件总长度的文件路径（caches）
+#define ZJTotalLengthFullpath [ZJCachesDirectory stringByAppendingPathComponent:@"totalLength.plist"]
+
 
 @implementation ZJDownload : NSObject
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
-    [aCoder encodeDouble:self.totalLength forKey:@"totalLength"];
-    [aCoder encodeDouble:self.currentLength forKey:@"currentLength"];
-    [aCoder encodeDouble:self.downloadLength forKey:@"downloadLength"];
-    [aCoder encodeDataObject:self.resumeData];
-    [aCoder encodeObject:self.task forKey:@"task"];
-    //[aCoder encodeInteger:self. forKey:<#(nonnull NSString *)#>]
-   // [aCoder encodeBool:self.isVideo forKey:@""];
-    //[aCoder encodeObject:self.date forKey:@""];
-}
-- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super init]) {
-        self.resumeData = [aDecoder decodeDataObject];
-        self.task = [aDecoder decodeObjectForKey:@"task"];
-        self.totalLength = [aDecoder decodeDoubleForKey:@"totalLength"];
-        self.currentLength = [aDecoder decodeDoubleForKey:@"currentLength"];
-        self.downloadLength = [aDecoder decodeDoubleForKey:@"downloadLength"];
-    }
-    
-    return self;
-}
+
 @end
 
-@interface ZJDownloadManager()<NSURLSessionDownloadDelegate>
+@interface ZJDownloadManager()<NSURLSessionDelegate>
 
-@property(strong,nonatomic) NSMutableData * fileData;
-/**
- *  文件的总长度
- */
-@property (nonatomic, assign) long long totalLength;
-/**
- *  文件的实时长度
- */
-@property (nonatomic, assign) long long currentLength;
-
-@property(strong,nonatomic) NSFileHandle * writeHandle;
 /**
  *  下载
  */
 @property(strong,nonatomic) NSURLSession * urlSession;
-/**
- 下载任务
- */
-@property(strong,nonatomic) NSURLSessionDownloadTask * downloadTask;
-/**
- 保存上次的下载信息
- */
-@property(strong,nonatomic) NSData *resumeData;
+
 /**写文件的流对象 */
 @property (nonatomic, strong) NSOutputStream *stream;
-
-@property (nonatomic, strong) NSMutableDictionary *downloadDic;
-
+/** 保存所有任务(注：用下载地址md5后作为key) */
+@property (nonatomic, strong) NSMutableDictionary *tasks;
+/** 保存所有下载相关信息 */
+@property (nonatomic, strong) NSMutableDictionary *sessionModels;
 @end
 
 @implementation ZJDownloadManager
-
-- (NSMutableDictionary *)downloadDic {
-    if (!_downloadDic) {
-        _downloadDic = [[NSMutableDictionary alloc] initWithContentsOfFile:[self getCachDirectory]];
-        
-        if (_downloadDic == nil || _downloadDic.allKeys.count == 0) {
-            _downloadDic = [NSMutableDictionary dictionaryWithCapacity:0];
-        }
+- (NSMutableDictionary *)tasks
+{
+    if (!_tasks) {
+        _tasks = [NSMutableDictionary dictionary];
     }
-    return _downloadDic;
+    return _tasks;
 }
 
+- (NSMutableDictionary *)sessionModels
+{
+    if (!_sessionModels) {
+        _sessionModels = [NSMutableDictionary dictionary];
+    }
+    return _sessionModels;
+}
+
+- (NSString *)md5String:(NSString *)url
+{
+   
+    NSArray * arr = [url componentsSeparatedByString:@"."];
+
+    return   [NSString stringWithFormat:@"%@.%@",url.md5String,arr.lastObject];
+}
+
+static ZJDownloadManager *manager = nil;
 + (ZJDownloadManager *)sharedInstance{
-    static ZJDownloadManager *manager = nil;
+    
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
         manager = [[ZJDownloadManager alloc]init];
@@ -90,248 +79,300 @@
     });
     return manager;
 }
++ (instancetype)allocWithZone:(struct _NSZone *)zone{
+    
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        manager = [super allocWithZone:zone];
+        
+    });
+    return manager;
+}
+- (nonnull id)copyWithZone:(nullable NSZone *)zone
+{
+    return manager;
+}
+/**
+ *  创建缓存目录文件
+ */
+- (void)createCacheDirectory
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSLog(@"ZJCachesDirectory:%@",ZJCachesDirectory);
+    if (![fileManager fileExistsAtPath:ZJCachesDirectory]) {
+        [fileManager createDirectoryAtPath:ZJCachesDirectory withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+}
+/**
+ *  开启任务下载资源
+ */
+- (void)downloadDataWithURL:(NSString *)url resume:(BOOL)resume progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack{
 
-- (void)downloadDataWithURL:(NSString *)url tag:(NSUInteger)tag resume:(BOOL)resume progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack{
-    NSLog(@"%@",[self getCachDirectory]);
-    if (!url && !tag) {
+    if (!url) {
         return;
     }
-    //判断是否是已经下载过得了
-    if ([self getAllLength:tag] == [self getFileDownloadedLength:tag] && [self getFileDownloadedLength:tag] > 0) {
-        if (stateBlack) {
-            stateBlack(ZJDownloadStateCompleted);
-        }
-        if (progressBlock) {
-            progressBlock(1.0);
-        }
+
+    if ([self isCompletion:url]) {
+        stateBlack(ZJDownloadStateCompleted);
+        NSLog(@"----该资源已下载完成");
         return;
     }
-    //是否下载一部分
-    if ([self.downloadDic valueForKey:@(tag).stringValue]) {
-        ZJDownload *zj_D = [self.downloadDic valueForKey:@(tag).stringValue];
-        if (resume) {
-            [zj_D.task resume];//开始
-        }else {
-            [zj_D.task suspend];//暂停
-            if (zj_D.stateBlock) {
-                zj_D.stateBlock(ZJDownloadStateSuspended);
-            }
-            
-        }
+    
+    // 暂停
+    if ([self.tasks valueForKey:ZJFileName(url)]) {
+        [self handle:url];
         
         return;
     }
     
-    //新的下载任务哈...
-    self.urlSession= [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[[NSOperationQueue alloc] init]];
-
+    // 创建缓存目录文件
+    [self createCacheDirectory];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[[NSOperationQueue alloc] init]];
+    
+    // 创建流
+    NSOutputStream *stream = [NSOutputStream outputStreamToFileAtPath:ZJFileFullpath(url) append:YES];
+    
+    // 创建请求
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     
     // 设置请求头
-    NSString *range = [NSString stringWithFormat:@"bytes=%zd-", [self getFileDownloadedLength:tag]];//有下载
-    
+    NSString *range = [NSString stringWithFormat:@"bytes=%zd-", ZJDownloadLength(url)];
     [request setValue:range forHTTPHeaderField:@"Range"];
     
     // 创建一个Data任务
-    NSURLSessionDownloadTask *task = [self.urlSession downloadTaskWithRequest:request];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request];
+    NSUInteger taskIdentifier = arc4random() % ((arc4random() % 10000 + arc4random() % 10000));
+    [task setValue:@(taskIdentifier) forKeyPath:@"taskIdentifier"];
     
-    [task setValue:@(tag) forKeyPath:@"taskIdentifier"];
+    // 保存任务
+    [self.tasks setValue:task forKey:ZJFileName(url)];
     
-    ZJDownload *lc_download = [[ZJDownload alloc]init];
-    lc_download.task = task;
-    lc_download.progressBlock = progressBlock;
-    lc_download.stateBlock = stateBlack;
+    ZJDownload *sessionModel = [[ZJDownload alloc] init];
+    sessionModel.url = url;
+    sessionModel.progressBlock = progressBlock;
+    sessionModel.stateBlock = stateBlack;
+    sessionModel.stream = stream;
+    [self.sessionModels setValue:sessionModel forKey:@(task.taskIdentifier).stringValue];
     
-    [self.downloadDic setValue:lc_download forKey:@(tag).stringValue];
-    //[self archiver];
-    //写文件
- BOOL success =    [self.downloadDic writeToFile:[self getCachDirectory] atomically:YES];
-    if (success) {
-        NSLog(@"写入OK");
-    }else{
-
-        NSLog(@"写入失败");
-    }
-    if (resume) {
-        [task resume];
+    [self start:url];
+}
+- (void)handle:(NSString *)url
+{
+    NSURLSessionDataTask *task = [self getTask:url];
+    if (task.state == NSURLSessionTaskStateRunning) {
+        [self pause:url];
+    } else {
+        [self start:url];
     }
 }
 
-// 获取本地已经下载的大小
-- (NSUInteger)getFileDownloadedLength:(NSUInteger)tag {
-
-        ZJDownload * download = [self.downloadDic valueForKey:@(tag).stringValue];
-    if (download) {
-        return download.currentLength;
-    }
-
-    return 0;
-
-}
-
-- (NSUInteger)getAllLength:(NSUInteger)tag {
-
-        ZJDownload * download = [self.downloadDic valueForKey:@(tag).stringValue];
+/**
+ *  开始下载
+ */
+- (void)start:(NSString *)url
+{
+    NSURLSessionDataTask *task = [self getTask:url];
+    [task resume];
     
-    if (download) {
-        return download.totalLength;
+    [self getSessionModel:task.taskIdentifier].stateBlock(ZJDownloadStateRunning);
+}
+
+/**
+ *  暂停下载
+ */
+- (void)pause:(NSString *)url
+{
+    NSURLSessionDataTask *task = [self getTask:url];
+    [task suspend];
+    
+    [self getSessionModel:task.taskIdentifier].stateBlock(ZJDownloadStateSuspended);
+}
+
+/**
+ *  根据url获得对应的下载任务
+ */
+- (NSURLSessionDataTask *)getTask:(NSString *)url
+{
+    return (NSURLSessionDataTask *)[self.tasks valueForKey:ZJFileName(url)];
+}
+
+/**
+ *  根据url获取对应的下载信息模型
+ */
+- (ZJDownload *)getSessionModel:(NSUInteger)taskIdentifier
+{
+    return (ZJDownload *)[self.sessionModels valueForKey:@(taskIdentifier).stringValue];
+}
+
+/**
+ *  判断该文件是否下载完成
+ */
+- (BOOL)isCompletion:(NSString *)url
+{
+    if ([self fileTotalLength:url] && ZJDownloadLength(url) == [self fileTotalLength:url]) {
+        return YES;
     }
-
-    return 0;
-
+    return NO;
 }
-- (NSString *)getCachDirectory {
 
-    return [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"];
+/**
+ *  查询该资源的下载进度值
+ */
+- (CGFloat)progress:(NSString *)url
+{
+
+    return [self fileTotalLength:url] == 0 ? 0.0 : 1.0 * ZJDownloadLength(url) /  [self fileTotalLength:url];
 }
+
+/**
+ *  获取该资源总大小
+ */
+- (NSInteger)fileTotalLength:(NSString *)url
+{
+    return [[NSDictionary dictionaryWithContentsOfFile:ZJTotalLengthFullpath][ZJFileName(url)] integerValue];
+}
+
+#pragma mark - 删除
+/**
+ *  删除该资源
+ */
+- (void)deleteFile:(NSString *)url
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:ZJFileFullpath(url)]) {
+        
+        // 删除沙盒中的资源
+        [fileManager removeItemAtPath:ZJFileFullpath(url) error:nil];
+        // 删除任务
+        [self.tasks removeObjectForKey:ZJFileName(url)];
+        [self.sessionModels removeObjectForKey:@([self getTask:url].taskIdentifier).stringValue];
+        // 删除资源总长度
+        if ([fileManager fileExistsAtPath:ZJTotalLengthFullpath]) {
+            
+            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:ZJTotalLengthFullpath];
+            [dict removeObjectForKey:ZJFileName(url)];
+            [dict writeToFile:ZJTotalLengthFullpath atomically:YES];
+            
+        }
+    }
+}
+
+/**
+ *  清空所有下载资源
+ */
+- (void)deleteAllFile
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:ZJCachesDirectory]) {
+        // 删除沙盒中所有资源
+        [fileManager removeItemAtPath:ZJCachesDirectory error:nil];
+        // 删除任务
+        [[self.tasks allValues] makeObjectsPerformSelector:@selector(cancel)];
+        [self.tasks removeAllObjects];
+        
+        for (ZJDownload *sessionModel in [self.sessionModels allValues]) {
+            [sessionModel.stream close];
+        }
+        [self.sessionModels removeAllObjects];
+        
+        // 删除资源总长度
+        if ([fileManager fileExistsAtPath:ZJTotalLengthFullpath]) {
+            [fileManager removeItemAtPath:ZJTotalLengthFullpath error:nil];
+        }
+    }
+}
+
 
 #pragma mark -- NSURLSessionDownloadDelegate
-//didResumeAtOffset重新恢复下载时调用的代理方法
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes{
+/**
+ * 接收到响应
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSHTTPURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+{
     
-    NSLog(@"断点续传哈;;;;%s",__func__);
-}
-
-//1.当接收到下载数据的时候调用,可以在该方法中监听文件下载的进度,该方法会被调用多次
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
-
-     ZJDownload *lc_D = [self.downloadDic valueForKey:@(downloadTask.taskIdentifier).stringValue];
-    if (lc_D.stateBlock) {
-        lc_D.stateBlock(ZJDownloadStateRunning);
-    }
-    lc_D.downloadLength = lc_D.currentLength +totalBytesWritten;
-
-    if (lc_D.totalLength <  totalBytesExpectedToWrite) {
-        lc_D.totalLength = totalBytesExpectedToWrite;
-    }
+    ZJDownload *sessionModel = [self getSessionModel:dataTask.taskIdentifier];
     
-    // 可在这里通过已写入的长度和总长度算出下载进度
-    float progress = 1.0 * lc_D.downloadLength / lc_D.totalLength;
+    // 打开流
+    [sessionModel.stream open];
     
-    if (lc_D.progressBlock) {
-        lc_D.progressBlock(progress);
-    }
-  //  NSLog(@"%f",progress);
-
-    [self.downloadDic writeToFile:[self getCachDirectory] atomically:YES];
-   // [self archiver];
-}
-//下载完成调用
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location{
-   
-    NSString* ceches = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-//文件存放的真实路径
-    NSString* filepath = [ceches stringByAppendingPathComponent:downloadTask.response.suggestedFilename]; // 创
-            NSLog(@"%@",filepath);
-//
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-//剪切location的临时文件到真实路径
-    [fileManager moveItemAtURL:location toURL:[NSURL fileURLWithPath:filepath] error:nil];
-
-    NSLog(@"下载完成");
+    // 获得服务器这次请求 返回数据的总长度
+    NSInteger totalLength = [response.allHeaderFields[@"Content-Length"] integerValue] + ZJDownloadLength(sessionModel.url);
+    sessionModel.totalLength = totalLength;
     
-}
-
-// 3.请求成功或者失败（如果失败，error有值）
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error{
-
-    ZJDownload *lc_D = [self.downloadDic valueForKey:@(task.taskIdentifier).stringValue];
+    // 存储总长度
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:ZJTotalLengthFullpath];
+    if (dict == nil) dict = [NSMutableDictionary dictionary];
+    dict[ZJFileName(sessionModel.url)] = @(totalLength);
+    [dict writeToFile:ZJTotalLengthFullpath atomically:YES];
     
-    lc_D.resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData];
-//[self archiver];
-   [self.downloadDic writeToFile:[self getCachDirectory] atomically:YES];
-}
-#pragma mark -- 继续下载
-- (void)continueDownloadingWithTag:(NSUInteger)tag{
-    
-    ZJDownload *lc_D = [self.downloadDic valueForKey:@(tag).stringValue];
-    if (lc_D && lc_D.resumeData != nil) {
-        
-        lc_D.task = [self.urlSession downloadTaskWithResumeData:lc_D.resumeData];
-        [lc_D.task resume];
-        self.resumeData = nil;
-        
-    }else{
-        
-        HUDNormal(@"还未开始过下载呢");
-    }
-
-}
-
-- (void)resumeWithTag:(NSUInteger)tag {
-    ZJDownload *lc_D = [self.downloadDic valueForKey:@(tag).stringValue];
-    if (lc_D) {
-        [lc_D.task resume];
-    }
-}
-
-- (void)suspendWithTag:(NSUInteger)tag {
-   ZJDownload *lc_D = [self.downloadDic valueForKey:@(tag).stringValue];
-    if (lc_D) {
-        [lc_D.task suspend];//暂停
-        lc_D.stateBlock(ZJDownloadStateSuspended);
-    }
-}
-
-- (void)cancelWithTag:(NSUInteger)tag {
-    ZJDownload *lc_D = [self.downloadDic valueForKey:@(tag).stringValue];
-    if (lc_D) {
-        WeakObj(lc_D);
-        WeakObj(self);
-        // 一旦这个task被取消了，就无法再恢复
-
-        [lc_D.task cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-            
-            lc_DWeak.resumeData = resumeData;
-            lc_DWeak.task = nil;
-            [selfWeak.downloadDic writeToFile:[selfWeak getCachDirectory] atomically:YES];
-            //[selfWeak archiver];
-        }];
-
-        lc_D.stateBlock(ZJDownloadStateCanceled);
-    }
-   
+    // 接收这个请求，允许接收服务器的数据
+    completionHandler(NSURLSessionResponseAllow);
 }
 /**
- *  进度
- *
- *  @param tag 唯一标识
+ * 接收到服务器返回的数据
  */
-- (float)progressWithTag:(NSUInteger)tag{
-    ZJDownload *lc_D = [self.downloadDic valueForKey:@(tag).stringValue];
-    if (lc_D) {
-        if (lc_D.totalLength == 0) {
-            return 0;
-        }
-        return lc_D.currentLength / lc_D.totalLength;
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
+{
+    ZJDownload *sessionModel = [self getSessionModel:dataTask.taskIdentifier];
+    
+    // 写入数据
+    [sessionModel.stream write:data.bytes maxLength:data.length];
+    
+    // 下载进度
+    NSUInteger receivedSize = ZJDownloadLength(sessionModel.url);
+    NSUInteger expectedSize = sessionModel.totalLength;
+    CGFloat progress = 1.0 * receivedSize / expectedSize;
+    
+    sessionModel.progressBlock(progress);
+    NSLog(@"%f",progress);
+    //(receivedSize, expectedSize, progress);
+
+}
+
+/**
+ * 请求完毕（成功|失败）
+ */
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+    ZJDownload *sessionModel = [self getSessionModel:task.taskIdentifier];
+    if (!sessionModel) return;
+    
+    if ([self isCompletion:sessionModel.url]) {
+        // 下载完成
+        sessionModel.stateBlock(ZJDownloadStateCompleted);
+    } else if (error){
+        // 下载失败
+        sessionModel.stateBlock(ZJDownloadStateFailed);
     }
-    return 0;
+    
+    // 关闭流
+    [sessionModel.stream close];
+    sessionModel.stream = nil;
+    
+    // 清除任务
+    [self.tasks removeObjectForKey:ZJFileName(sessionModel.url)];
+    [self.sessionModels removeObjectForKey:@(task.taskIdentifier).stringValue];
+    
 }
-- (void)archiver{
+
+- (NSString *)path:(NSString *)url{
     
-    // 要归档的对象.
-   // ModelForWeather *model = self.arrayForChoosePlace[indexPath.row]; // 创建归档时所需的data 对象.
-    NSMutableData *data = [NSMutableData data]; // 归档类.
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data]; // 开始归档（@"model" 是key值，也就是通过这个标识来找到写入的对象）.
-    [archiver encodeObject:self.downloadDic forKey:@"model"]; // 归档结束.
-    [archiver finishEncoding]; // 写入本地（@"weather" 是写入的文件名）.
-   // NSString *file = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"weather"];
-    
-    [data writeToFile:[self getCachDirectory] atomically:YES];
-   
+    return ZJFileFullpath(url);
 }
-- (NSMutableDictionary *)unarchiver{
-    // 从本地（@"weather" 文件中）获取.
-  //  NSString *file = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"weather"]; // data.
-    NSData *data = [NSData dataWithContentsOfFile:[self getCachDirectory]]; // 反归档.
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data]; // 获取@"model" 所对应的数据
-    _downloadDic = [unarchiver decodeObjectForKey:@"model"]; // 反归档结束.
-//    if(self.downloadDic.allKeys.count == 0){
-//        self.downloadDic = [NSMutableDictionary dictionaryWithCapacity:0];
-//    }
-    
-    [unarchiver finishDecoding];
-    
-    return _downloadDic;
+/**
+ *大小，单位是M
+ */
+- (float)totalLength:(NSString *)url{
+    float all =   [self fileTotalLength:url];
+    return all/1024.0/1024.0;
 }
+/**
+ *已经下载的大小，单位是M
+ */
+- (float)downloadLength:(NSString *)url{
+    float downloadLength = ZJDownloadLength(url);
+    return downloadLength/1024.0/1024.0;
+}
+
 @end
