@@ -12,13 +12,14 @@
  2.GIF动画截屏
  3.视频流的录屏(转成GIF)
  2.视频缓冲
- 3.视屏下载---借鉴他人已完成功能
+ 3.视屏下载---借鉴他人已完成功能，差在ZJplayer中添加下载功能
  4.上下滑动调节屏幕亮度，写调节亮度的视图---已完成
  5.上下滑动调节声音大小，写调节声音的视图---已完成
  6.上下，左半部分是调整亮度，右半部分是调整声音的---已完成
  7.监听插入耳机/耳机线控 --- 已完成
  8.弹幕
- 9.播放本地视频---能播放下载的视频，ZJPlayer还有bug
+ 9.播放本地视频---已完成
+ 10.加载缓存环形加载指示器待优化...
  */
 
 #import <UIKit/UIKit.h>
@@ -54,8 +55,6 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 @property(strong,nonatomic) ZJTopView * topView;
 
 @property(strong,nonatomic) ZJControlView * bottomView;
-
-
 
 @property(assign,nonatomic) BOOL  isDragSlider;
 /**

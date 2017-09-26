@@ -27,6 +27,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>相册</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>是否允许截屏，并访问相册呢？</string>
 	<key>UILaunchStoryboardName</key>

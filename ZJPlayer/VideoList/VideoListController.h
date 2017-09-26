@@ -6,8 +6,8 @@
 //  Copyright © 2017年 郑俱. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ZJSuperViewController.h"
 
-@interface VideoListController : UIViewController
+@interface VideoListController : ZJSuperViewController
 
 @end

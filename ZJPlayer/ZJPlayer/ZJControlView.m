@@ -31,7 +31,11 @@
     
     self.slider.value = sliderValue;
 }
-
+- (void)setSliderMaximumValue:(float)sliderMaximumValue{
+    _sliderMaximumValue = sliderMaximumValue;
+    self.slider.maximumValue = _sliderMaximumValue;
+    
+}
 - (void)setProgress:(float)progress{
     _progress = progress;
      [self.progressView setProgress:_progress animated:NO];

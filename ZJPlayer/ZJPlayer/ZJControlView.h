@@ -65,6 +65,10 @@
  */
 @property(nonatomic,assign) float sliderValue;
 /**
+ slider的值
+ */
+@property(nonatomic,assign) float sliderMaximumValue;
+/**
  视频缓冲进度
  */
 @property(nonatomic,assign) float progress;

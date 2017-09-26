@@ -26,11 +26,11 @@
 
 
 - (void)zj_pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
-    NSLog(@"有推送...");
+   
     [self zj_pushViewController:viewController animated:animated];
 }
 - (UIViewController *)zj_popViewControllerAnimated:(BOOL)animated{
-    NSLog(@"pop。。。。");
+  
     
     UIViewController * controller = self.viewControllers.lastObject;
     

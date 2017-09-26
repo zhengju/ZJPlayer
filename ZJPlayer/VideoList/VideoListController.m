@@ -27,7 +27,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self configureTableView];

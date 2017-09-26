@@ -6,8 +6,8 @@
 //  Copyright © 2017年 郑俱. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ZJSuperViewController.h"
 
-@interface PlayerVideoController : UIViewController
+@interface PlayerVideoController : ZJSuperViewController
 @property(copy,nonatomic) NSString * path;
 @end

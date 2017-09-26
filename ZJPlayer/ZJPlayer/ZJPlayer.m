@@ -59,6 +59,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
  */
 @property(assign,nonatomic) BOOL  isDisappear;
 /**
+ 是否是本地视频 YES:本地视频 NO:网络视频 ，默认是NO网络视频
+ */
+@property(assign,nonatomic) BOOL  isLocalVideo;
+/**
  当前点击屏幕是否有滑动 YES:滑动 NO:没有滑动，只是点击 ，默认是NO
  */
 @property(assign,nonatomic) BOOL  isTouchesMoved;
@@ -68,10 +72,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
  */
 @property(assign,nonatomic) BOOL  isLandscapeLeft;
 
-/**
- 是否添加过监听 YES:已经监听 NO:无监听
- */
-@property(assign,nonatomic) BOOL  isAddObserverToPlayerItem;
 /**
  加载指示器
  */
@@ -134,13 +134,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)setUrl:(NSURL *)url{
     
     _url = url;
-    NSLog(@"%@",_url.path);
     
     self.isPlayAfterPause = NO;
     
     
-    if (![_url.path hasPrefix:@"http"])
+    if (![_url.absoluteString hasPrefix:@"http"])
        {
+           self.isLocalVideo = YES;
            
             self.asset = [AVURLAsset URLAssetWithURL:url options:nil];
            
@@ -151,42 +151,32 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
            } else {
                [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
            }
-           
-           [self.player play];
-           
-           return;
-    }
-    
-    if (self.isAddObserverToPlayerItem) {
-        
-        self.isAddObserverToPlayerItem = NO;
-        
-        [self removeObserverFromPlayerItem:self.playerItem];
-  
-    }
-    
-    self.playerItem = nil;
-    NSURLComponents *components = [[NSURLComponents alloc]initWithURL:_url resolvingAgainstBaseURL:NO];
-    ////注意，不加这一句不能执行到回调操作
-    components.scheme = kCustomVideoScheme;
-    
-    self.asset=[[AVURLAsset alloc]initWithURL:components.URL options:nil];
-    
-    _resourceManager = [[ZJResourceLoaderManager alloc]init];
-    
-    [self.asset.resourceLoader setDelegate:_resourceManager queue:dispatch_get_main_queue()];
-    
-    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
- 
-    self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
-  
-    
-    [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
 
-    if (self.isAddObserverToPlayerItem == NO) {
-        self.isAddObserverToPlayerItem = YES;
+           
+       }else{
+           self.isLocalVideo = NO;
+           self.playerItem = nil;
+           NSURLComponents *components = [[NSURLComponents alloc]initWithURL:_url resolvingAgainstBaseURL:NO];
+           ////注意，不加这一句不能执行到回调操作
+           components.scheme = kCustomVideoScheme;
+           
+           self.asset=[[AVURLAsset alloc]initWithURL:components.URL options:nil];
+           
+           _resourceManager = [[ZJResourceLoaderManager alloc]init];
+           
+           [self.asset.resourceLoader setDelegate:_resourceManager queue:dispatch_get_main_queue()];
+           
+           self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+           
+           if (!self.player) {
+               self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
+           } else {
+               [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
+           } self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
+
+       }
+
         [self addObserverToPlayerItem:self.playerItem];
-    }
 }
 #pragma  当前播放视频的标题
 - (void)setTitle:(NSString *)title{
@@ -204,13 +194,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         
         self.frame = self.currentFrame;
 
-        
         self.playerLayer.frame = CGRectMake(0, 0, kScreenHeight, kScreenWidth);
-      
- 
     }else{
-        
-        
         self.playerLayer.frame = self.bounds;
         [self.progress resetFrameisFullScreen:NO];
         [self.brightness resetFrameisFullScreen:NO];
@@ -252,7 +237,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     
     self.player = [[AVPlayer alloc] init];
-    
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     // 初始化播放器的Layer
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
@@ -360,18 +344,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     {
         
         CGFloat  currentLight = [[UIScreen mainScreen] brightness];
-        
-        
         if(currentLight>=1.0)
             return;
         currentLight+=0.1;
-        
-      
-        NSLog(@"------亮度:%f------",10*currentLight);
-        
         [[UIScreen mainScreen] setBrightness: currentLight];
-        
-
     }
 }
 
@@ -381,16 +357,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if(sender.direction==UISwipeGestureRecognizerDirectionDown)
     {
         CGFloat  currentLight = [[UIScreen mainScreen] brightness];
-        
-
-        
-        
         if(currentLight<=0.0)
             return;
         currentLight-=0.1;
         [[UIScreen mainScreen] setBrightness: currentLight];
-        NSLog(@"------亮度:%f------",10*currentLight);
-        
     }
 }
 
@@ -414,7 +384,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     CGPoint currentPoint=[touch locationInView:self.superview];
     CGFloat pointX=(self.gestureStartPoint.x-currentPoint.x);
     CGFloat pointY=(self.gestureStartPoint.y-currentPoint.y);
-    //NSLog(@"x=%f y=%f",fabs(pointX),fabs(pointY));
     self.isTouchesMoved = YES;
     BOOL isPlusTime = YES;
     
@@ -671,8 +640,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
      //添加耳机状态监听
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventSubtypeRemoteControlTogglePlayPause) name:ZJEventSubtypeRemoteControlTogglePlayPause object:nil];
-    
-    //[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+
      [[AVAudioSession sharedInstance] setActive:YES error:nil];//创建单例对象并且使其设置为活跃状态.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routeChange:) name:AVAudioSessionRouteChangeNotification object:nil];
 }
@@ -689,6 +657,11 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
             NSLog(@"AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
             NSLog(@"耳机拔出，停止播放操作");
+            //暂停播放
+           
+                [self pause];
+          
+           
             break;
         case AVAudioSessionRouteChangeReasonCategoryChange:  // called at start - also when other audio wants to play
             NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
@@ -699,41 +672,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 -(BOOL)canBecomeFirstResponder{
     return YES;
 }
-//received remote event
--(void)remoteControlReceivedWithEvent:(UIEvent *)event{
-    NSLog(@"event tyipe:::%ld   subtype:::%ld",(long)event.type,(long)event.subtype);    //type==2  subtype==单击暂停键：103，双击暂停键104
-    if (event.type == UIEventTypeRemoteControl) {
-        switch (event.subtype) {
-            case UIEventSubtypeRemoteControlPlay:{
-                NSLog(@"play---------");
-            }break;
-            case UIEventSubtypeRemoteControlPause:{
-                NSLog(@"Pause---------");
-            }break;
-            case UIEventSubtypeRemoteControlStop:{
-                NSLog(@"Stop---------");
-            }break;
-            case UIEventSubtypeRemoteControlTogglePlayPause:{
-                //单击暂停键：103
-                NSLog(@"单击暂停键：103");
-            }break;
-            case UIEventSubtypeRemoteControlNextTrack:{                //双击暂停键：104
-                NSLog(@"双击暂停键：104");
-            }break;
-            case UIEventSubtypeRemoteControlPreviousTrack:{
-                NSLog(@"三击暂停键：105");
-            }break;
-            case UIEventSubtypeRemoteControlBeginSeekingForward:{
-                NSLog(@"单击，再按下不放：108");
-            }break;
-                
-            case UIEventSubtypeRemoteControlEndSeekingForward:{
-                NSLog(@"单击，再按下不放，松开时：109");                 }break;
-            default:
-                break;
-        }
-    }
-}
+
 #pragma  mark -- 监听有控制器即将消失
 - (void)viewControllerWillDisappear{
 
@@ -1044,7 +983,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
                 
                 // 最大值直接用sec，以前都是
                 // CMTimeMake(帧数（slider.value * timeScale）, 帧/sec)
-                self.bottomView.slider.maximumValue = CMTimeGetSeconds(self.playerItem.duration);
+                self.bottomView.sliderMaximumValue = CMTimeGetSeconds(self.playerItem.duration);
                 
                 [self.loadingIndicator dismiss];
                
@@ -1081,16 +1020,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     }
     else if ([keyPath isEqualToString:@"loadedTimeRanges"]) // 监听缓存进度的属性
     {
-        //        // 计算缓存进度
-        NSTimeInterval timeInterval = [self availableDuration];
-        //        // 获取总长度
-        CMTime duration = self.playerItem.duration;
-        //
-        CGFloat durationTime = CMTimeGetSeconds(duration);
-        //        // 监听到了给进度条赋值
-        
-        self.bottomView.progress = timeInterval / durationTime;
-        
+       
+        [self loadedTimeRanges];
        
     }else if ([keyPath isEqualToString:@"playbackBufferEmpty"]){
         NSLog(@"playbackBufferEmpty");
@@ -1100,11 +1031,22 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         NSLog(@"playbackLikelyToKeepUp");
         
         [self.loadingIndicator dismiss];
-        
-        
+
     }
 }
-
+#pragma mark -- 监听缓存进度
+- (void)loadedTimeRanges{
+    //        // 计算缓存进度
+    NSTimeInterval timeInterval = [self availableDuration];
+    //        // 获取总长度
+    CMTime duration = self.playerItem.duration;
+    //
+    CGFloat durationTime = CMTimeGetSeconds(duration);
+    //        // 监听到了给进度条赋值
+    
+    self.bottomView.progress = timeInterval / durationTime;
+    
+}
 /**
  *  计算缓冲进度
  *
@@ -1119,7 +1061,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     return result;
 }
 
-// 调用plaer的对象进行UI更新
+#pragma mark -- 调用plaer的对象进行UI更新
 - (void)initTimer
 {
     // player的定时器
@@ -1146,14 +1088,15 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         NSTimeInterval currentTime = CMTimeGetSeconds(weakSelf.player.currentItem.currentTime);
         ZJCacheTask * task =  [ZJCacheTask shareTask];
         [task writeToFileUrl:weakSelf.url.absoluteString time:currentTime];
-
+    
         // 不是拖拽中的话更新UI
         if (!weakSelf.isDragSlider)
         {
+
             weakSelf.bottomView.sliderValue = CMTimeGetSeconds(weakSelf.playerItem.currentTime);
+            
         }
-        
-        
+
     }];
 }
 
@@ -1311,9 +1254,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     self.bottomView.isPlay  = YES;
     
     [self.player play];
-   
-    
-    
+
     ZJCacheTask * task =  [ZJCacheTask shareTask];
     
     NSTimeInterval time = [task queryToFileUrl:_url.absoluteString];
@@ -1351,20 +1292,18 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (error == nil) {
        
         HUDNormal(@"保存成功");
-        NSLog(@"OK");
     } else {
         NSLog(@"false");
-         HUDNormal(@"保存失败");
     }
 }
 
 #pragma mark -- 视频暂停
 - (void)pause{
-
-    self.bottomView.isPlay  = NO;
-    self.isPlayAfterPause = YES;
-    [self.player pause];
-   
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.bottomView.isPlay  = NO;
+        self.isPlayAfterPause = YES;
+        [self.player pause];
+    });
 }
 - (void)sliderDragValueChange:(UISlider *)slider
 {
@@ -1378,6 +1317,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     // CMTimeMake(帧数（slider.value * timeScale）, 帧/sec)
     // 直接用秒来获取CMTime
     [self.player seekToTime:CMTimeMakeWithSeconds(slider.value, self.playerItem.currentTime.timescale)];
+
 }
 // 点击事件的Slider
 - (void)touchSlider:(UITapGestureRecognizer *)tap

@@ -4,7 +4,7 @@
 //
 //  Created by zhengju on 2017/9/22.
 //  Copyright © 2017年 郑俱. All rights reserved.
-//
+//实现方法是借鉴他人
 
 #import "ZJDownloadManager.h"
 #import "NSString+Hash.h"
@@ -30,14 +30,6 @@
 @end
 
 @interface ZJDownloadManager()<NSURLSessionDelegate>
-
-/**
- *  下载
- */
-@property(strong,nonatomic) NSURLSession * urlSession;
-
-/**写文件的流对象 */
-@property (nonatomic, strong) NSOutputStream *stream;
 /** 保存所有任务(注：用下载地址md5后作为key) */
 @property (nonatomic, strong) NSMutableDictionary *tasks;
 /** 保存所有下载相关信息 */
