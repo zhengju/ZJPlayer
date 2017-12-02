@@ -22,7 +22,7 @@
  10.加载缓存环形加载指示器待优化...
  11.视频第一帧缓存到本地
  12.更新屏幕选中方式--已经更新，但是zjplayer添加到cell上有问题
- 13.缓存视频第一张截图的图片
+ 13.缓存视频第一张截图的图片--已完成
  */
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
