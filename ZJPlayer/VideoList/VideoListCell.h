@@ -11,7 +11,9 @@
 @interface VideoListCell : UITableViewCell
 @property(strong,nonatomic) VideoList * model;
 @property(strong,nonatomic) NSIndexPath *indexPath ;
-#pragma 加载视频player
-- (void)initPlayer;
-
+@property(copy,nonatomic) dispatch_block_t playBlock;
+@property(strong,nonatomic) UIView * topView;
+@property(strong,nonatomic) UIView * bottomView;
+@property(strong,nonatomic) UIImageView * bgView;
+@property(strong,nonatomic) UIView * playerView;
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <UIKit/UIKit.h>
 @interface DownloadList : NSObject
 /**
  下载程度
@@ -18,4 +18,6 @@
 @property(copy,nonatomic) NSString * urlString;
 @property(copy,nonatomic) NSString * ratio;
 @property(copy,nonatomic) NSString * cacheRatio;
+@property(strong,nonatomic) UIImage * img;
+@property(assign,nonatomic) BOOL isDownloading;
 @end

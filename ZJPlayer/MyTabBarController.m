@@ -52,5 +52,21 @@
     [super setUPAllChildViewController];
 
 }
-
+- (BOOL)shouldAutorotate{//是否支持旋转屏幕
+    //NSLog(@"主要的......................");
+    return [self.selectedViewController shouldAutorotate];
+}
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    //支持哪些方向
+    
+    
+    
+    return [self.selectedViewController supportedInterfaceOrientations];
+}
+-(UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向
+{
+    NSLog(@"Tab+preferredInterfaceOrientationForPresentation:%ld",(long)[self.selectedViewController preferredInterfaceOrientationForPresentation]);
+    return [self.selectedViewController preferredInterfaceOrientationForPresentation];;
+    
+}
 @end

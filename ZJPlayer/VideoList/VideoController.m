@@ -21,21 +21,43 @@
     self.view.backgroundColor = [UIColor whiteColor];
 
     [self.player removeFromSuperview];
+    
     self.player.delegate = nil;
     
     self.player.delegate = self;
     
     [self.view addSubview:self.player];
     
+    self.player.fatherView = self.view;
+    
     [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.view).offset(64);
+        make.top.mas_equalTo(self.view).offset(0);
         make.left.mas_equalTo(self.view);
         make.right.mas_equalTo(self.view);
         make.height.mas_equalTo(260);
     }];
 }
+
 #pragma mark -- ZJPlayerDelegate
 - (void)playFinishedPlayer:(ZJPlayer *)player{
 
+}
+- (BOOL)shouldAutorotate//是否支持旋转屏幕
+{
+    NSLog(@":YES");
+    return YES;
+    
+}
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations//支持哪些方向
+{
+    return UIInterfaceOrientationMaskAll;
+    
+}
+//由模态推出的视图控制器 优先支持的屏幕方向
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向
+{
+    
+    return UIInterfaceOrientationPortrait;
+    
 }
 @end

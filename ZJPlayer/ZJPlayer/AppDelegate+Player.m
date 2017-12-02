@@ -22,8 +22,10 @@
 
 - (BOOL)zj_application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+//    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self zj_application:application didFinishLaunchingWithOptions:launchOptions];
     
     return YES;

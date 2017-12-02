@@ -11,6 +11,7 @@
 #import "DownloadListCell.h"
 #import "ZJDownloadManager.h"
 #import "DownloadList.h"
+#import "ZJCustomTools.h"
 @interface DownloadListController ()<UITableViewDelegate,UITableViewDataSource>
 @property(strong,nonatomic) UITableView * tableView;
 @property(strong,nonatomic) ZJDownloadManager * downloadManager;
@@ -67,7 +68,7 @@
 }
 
 - (void)configureTableView{
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0,kScreenWidth , kScreenHeight) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0,kScreenWidth , kScreenHeight - 49 - 64) style:UITableViewStylePlain];
     [self.tableView registerNib:[UINib nibWithNibName:@"DownloadListCell" bundle:nil] forCellReuseIdentifier:@"DownloadListCell"];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -85,17 +86,23 @@
     cell.model = self.datas[indexPath.row];
     cell.suspendBlock = ^(BOOL isSuspend){
         DownloadList * model = self.datas[indexPath.row];
+        
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
         [self.downloadManager downloadDataWithURL:model.urlString resume:YES progress:^(CGFloat progress) {
             NSLog(@"controller:%ld->%f",(long)indexPath.row,progress);
             model.progress = progress;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             });
             
         } state:^(ZJDownloadState state) {
             NSLog(@"controller:%u",state);
         }];
+            
+        });
+                       
     };
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
@@ -110,14 +117,19 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
+        DownloadList *  model = self.datas[indexPath.row];
+    
+    if (![self.downloadManager isCompletion:model.urlString]) {
+        HUDNormal(@"该资源还未完成，请下载后观看");
+        return;
+    }
+
     PlayerVideoController * controller = [[PlayerVideoController alloc]init];
-    DownloadList *  model = self.datas[indexPath.row];
-    
-    
-   //
     controller.path = [self.downloadManager path:model.urlString];
     
     [self.navigationController pushViewController:controller animated:YES];
+    //[self.navigationController presentViewController:controller animated:YES completion:nil];
+    
     
 }
 @end

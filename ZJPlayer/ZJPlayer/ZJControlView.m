@@ -33,8 +33,10 @@
 }
 - (void)setSliderMaximumValue:(float)sliderMaximumValue{
     _sliderMaximumValue = sliderMaximumValue;
-    self.slider.maximumValue = _sliderMaximumValue;
-    
+    if (_sliderMaximumValue > 0) {
+        self.slider.maximumValue = _sliderMaximumValue;
+    }
+
 }
 - (void)setProgress:(float)progress{
     _progress = progress;

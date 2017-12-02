@@ -39,7 +39,9 @@
 
 
 @implementation ZJTopView
-
+/**
+ 倍速
+ */
 - (NSArray *)rates{
     if (_rates == nil) {
         _rates = @[@"1.0",@"1.25",@"1.5",@"2.0"];
@@ -57,7 +59,7 @@
     _rateIndex = 0;
     
     
-    //顶部删除按钮
+    //顶部关闭按钮
     self.closeButton = [[UIButton alloc]init];
     self.closeButton.showsTouchWhenHighlighted = YES;
     [self.closeButton setImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];

@@ -7,7 +7,7 @@
 //
 
 #import "ZJCacheTask.h"
-
+#import "NSString+Hash.h"
 @interface ZJCacheTask()
 
 @end
@@ -20,6 +20,7 @@
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
         cachetask = [[ZJCacheTask alloc]init];
+        
         [cachetask clearCache];//默认删除上次记录
     });
     return cachetask;
@@ -33,6 +34,18 @@
     
     // 3.文件路径
     NSString *filepath = [docPath stringByAppendingPathComponent:@"videoTask.plist"];
+    
+    return filepath;
+}
+- (NSString *)cacheImagePath{
+    // 1.获得沙盒根路径
+    NSString *home = NSHomeDirectory();
+    
+    // 2.document路径
+    NSString *docPath = [home stringByAppendingPathComponent:@"Documents"];
+    
+    // 3.文件路径
+    NSString *filepath = [docPath stringByAppendingPathComponent:@"cacheImage.plist"];
     
     return filepath;
 }
@@ -120,4 +133,45 @@
     }
 }
 
+- (void)cacheImageWith:(NSString *)url image:(UIImage *)image{
+    
+     NSString * md5Str = [url md5String];
+    
+    NSString * filepath = [self cacheImagePath];
+    
+    self.cacheImageDic = [[NSMutableDictionary alloc] initWithContentsOfFile:filepath];
+
+    if (self.cacheImageDic == nil) {
+        self.cacheImageDic = [NSMutableDictionary dictionaryWithCapacity:0];
+    }
+    
+    NSData *imageData = UIImagePNGRepresentation(image);
+   
+    [self.cacheImageDic setObject:imageData forKey:md5Str];
+
+ 
+    [self.cacheImageDic writeToFile:filepath atomically:YES];
+  
+}
+/**
+ 缓存图片
+ */
+- (UIImage *)imageWith:(NSString *)url{
+    
+    NSString * md5Str = [url md5String];
+    
+    NSData * data = [self.cacheImageDic valueForKey:md5Str];
+    
+    UIImage * image = [UIImage imageWithData:data];
+    
+    if (!image){
+        
+         self.cacheImageDic = [[NSMutableDictionary alloc] initWithContentsOfFile:[self cacheImagePath]];
+
+        data = [self.cacheImageDic valueForKey:md5Str];
+
+        image = [UIImage imageWithData:data];
+    }
+    return image;
+}
 @end

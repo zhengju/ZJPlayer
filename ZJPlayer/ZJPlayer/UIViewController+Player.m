@@ -38,4 +38,20 @@
     
     [self zj_viewWillAppear:animated];
 }
+- (BOOL)shouldAutorotate{//是否支持旋转屏幕
+   // NSLog(@"SuperController:NO");
+    return NO;
+}
+//该viewController中支持的所有方向；
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    //支持哪些方向
+    return UIInterfaceOrientationMaskPortrait;
+}
+//viewController初始显示时的方向
+-(UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向
+{
+    
+    return UIInterfaceOrientationPortrait ;
+    
+}
 @end

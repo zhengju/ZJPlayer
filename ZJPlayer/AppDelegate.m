@@ -17,6 +17,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     MyTabBarController * tab = [[MyTabBarController alloc]init];
+    
+   
+    
+
+    
     self.window.rootViewController = tab;
     [self.window makeKeyAndVisible];
    
@@ -49,6 +54,5 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
 
 @end

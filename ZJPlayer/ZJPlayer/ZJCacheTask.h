@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <UIKit/UIKit.h>
 @interface ZJCacheTask : NSObject
 
 + (instancetype)shareTask;
+
+@property(strong,nonatomic) NSMutableDictionary * cacheImageDic;
 
 /**
  缓存 
@@ -27,5 +29,14 @@
  针对已经播放完毕的视频从头开始播放，给清零
  */
 - (void)clearCacheToFileUrl:(NSString *)url;
+
+/**
+ 缓存图片
+ */
+- (void )cacheImageWith:(NSString *)url image:(UIImage *)image;
+/**
+ 查询缓存图片
+ */
+- (UIImage *)imageWith:(NSString *)url;
 
 @end

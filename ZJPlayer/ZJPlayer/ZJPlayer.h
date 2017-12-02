@@ -12,7 +12,7 @@
  2.GIF动画截屏
  3.视频流的录屏(转成GIF)
  2.视频缓冲
- 3.视屏下载---借鉴他人已完成功能，差在ZJplayer中添加下载功能
+ 3.视屏下载---借鉴他人已完成功能，差在ZJplayer中添加下载功能--下载还有些问题
  4.上下滑动调节屏幕亮度，写调节亮度的视图---已完成
  5.上下滑动调节声音大小，写调节声音的视图---已完成
  6.上下，左半部分是调整亮度，右半部分是调整声音的---已完成
@@ -20,8 +20,10 @@
  8.弹幕
  9.播放本地视频---已完成
  10.加载缓存环形加载指示器待优化...
+ 11.视频第一帧缓存到本地
+ 12.更新屏幕选中方式--已经更新，但是zjplayer添加到cell上有问题
+ 13.缓存视频第一张截图的图片
  */
-
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ZJCommonHeader.h"
@@ -103,6 +105,12 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
  跳转之后是否播放 YES:播放 ；NO:不播放，默认是NO
  */
 @property (nonatomic,assign) BOOL isPushOrPopPlpay;
+
+/**
+ 父视图
+ */
+@property(strong,nonatomic) UIView * fatherView;
+
 /**
  单例生成player
  */
@@ -110,7 +118,7 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 /**
  与url初始化
  */
--(instancetype)initWithUrl:(NSURL *)url;
+-(instancetype)initWithUrl:(NSURL *)url withSuperView:(UIView *)superView;
 /**
  视频播放
  */
@@ -119,9 +127,7 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
  视频暂停
  */
 - (void)pause;
-/**
- 获取视频第一帧 返回图片
- */
-- (UIImage*) getVideoPreViewImage:(NSURL *)path;
+
+- (void)deallocSelf;
 
 @end

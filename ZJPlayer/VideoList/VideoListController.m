@@ -12,7 +12,8 @@
 #import "ZJCommonHeader.h"
 #import "VideoListCell.h"
 #import "VideoList.h"
-@interface VideoListController ()<UITableViewDelegate,UITableViewDataSource>
+
+@interface VideoListController ()<UITableViewDelegate,UITableViewDataSource,ZJPlayerDelegate>
 @property(strong,nonatomic) UITableView * tableView;
 @property(strong,nonatomic) NSMutableArray * datas;
 @property(strong,nonatomic) ZJPlayer * player;
@@ -51,10 +52,9 @@
         
         VideoListCell * cell =  [self.tableView cellForRowAtIndexPath:self.player.indexPath];
         
-        [cell initPlayer];
+        [self initPlayer:self.player.indexPath cell:cell];
     }
 }
-
 - (void)configDatas{
     
     NSArray * titles = @[
@@ -82,9 +82,35 @@
         [self.datas addObject:list];
     }
 }
+#pragma 加载视频player
+- (void)initPlayer:(NSIndexPath *)indexPath cell:(VideoListCell*)cell{
+    
+    
+    self.player = [ZJPlayer sharePlayer];
+    
+    self.player.indexPath = indexPath;
+    
+    self.player.url = [NSURL URLWithString:cell.model.url];
+    
+    self.player.title = cell.model.title;
 
+    self.player.delegate = self;
+
+    [cell addSubview:self.player];
+    
+    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(cell.topView.mas_bottom).offset(0);
+        make.left.mas_equalTo(cell);
+        make.right.mas_equalTo(cell);
+        make.bottom.mas_equalTo(cell.bottomView.mas_top).offset(0);
+    }];
+    
+    [self.player play];
+    
+}
 - (void)configureTableView{
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight ) style:UITableViewStylePlain];
+    
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 64 - 49) style:UITableViewStylePlain];
 
     [self.tableView registerClass:[VideoListCell class] forCellReuseIdentifier:@"VideoListCell"];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -103,18 +129,14 @@
         
         VideoListCell * cell = cells[1];
         if (cell.indexPath != self.player.indexPath) {//
-            self.player.indexPath = cell.indexPath;
-            [cell initPlayer];
+            [self initPlayer:cell.indexPath cell:cell];
         }
     }else if (cells.count == 2) {
         VideoListCell * cell = cells[0];
         if (cell.indexPath.row == 0 && cell.indexPath != self.player.indexPath) {
-            self.player.indexPath = cell.indexPath;
-            [cell initPlayer];
+            [self initPlayer:cell.indexPath cell:cell];
         }
     }
-    
-    //NSLog(@"tabelView在滚... %@",cells);
 }
 #pragma UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -123,16 +145,20 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
     VideoListCell *cell = [tableView cellForRowAtIndexPath:indexPath]; //根据indexPath准确地取出一行，而不是从cell重用队列中取出
     if (cell == nil) {
         cell = [[VideoListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"VideoListCell"];
     }
 
     cell.model = self.datas[indexPath.row];
-    
+    WeakObj(cell);
+    WeakObj(self);
     cell.indexPath = indexPath;
-    
+    cell.playBlock = ^(){
+        
+        [selfWeak initPlayer:indexPath cell:cellWeak];
+        
+    };
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return  cell;
@@ -155,5 +181,25 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return CGFLOAT_MIN;
+}
+- (BOOL)shouldAutorotate//是否支持旋转屏幕
+{
+    return YES;
+}
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations//支持哪些方向
+{
+    return UIInterfaceOrientationMaskAll;
+    
+}
+//由模态推出的视图控制器 优先支持的屏幕方向
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向
+{
+    
+    return UIInterfaceOrientationPortrait;
+    
+}
+#pragma ZJPlayerDelegate
+- (void)playFinishedPlayer:(ZJPlayer *)player{
+    NSLog(@"播放完毕");
 }
 @end

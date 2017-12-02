@@ -38,5 +38,20 @@
     
     return controller;
 }
+- (BOOL)shouldAutorotate{//是否支持旋转自动屏幕
+    return [[self.viewControllers lastObject] shouldAutorotate];
+}
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    //支持哪些方向
+    return [[self.viewControllers lastObject] supportedInterfaceOrientations];
+}
+//放开之后不支持其他横屏
+-(UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向
+{
+    NSLog(@"Nav+preferredInterfaceOrientationForPresentation:%ld",(long)[[self.viewControllers lastObject] preferredInterfaceOrientationForPresentation]);
+    
 
+    return [[self.viewControllers lastObject] preferredInterfaceOrientationForPresentation];
+
+}
 @end

@@ -21,6 +21,7 @@
 		184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829B41F79E99200BF2BDB /* ZJSuperViewController.m */; };
 		184829BD1F79EE5500BF2BDB /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829BA1F79EE4500BF2BDB /* NSString+Hash.m */; };
 		184829BE1F79EE5900BF2BDB /* ZJDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829BC1F79EE4500BF2BDB /* ZJDownloadManager.m */; };
+		184829C11F7A05A600BF2BDB /* ZJCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829C01F7A05A600BF2BDB /* ZJCustomTools.m */; };
 		1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */; };
 		1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */; };
 		18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204CE1F68FFFD0043A18E /* ZJNavigationController.m */; };
@@ -41,6 +42,8 @@
 		18C4B5FB1F5FF025002430E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5F91F5FF025002430E4 /* Main.storyboard */; };
 		18C4B5FD1F5FF025002430E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5FC1F5FF025002430E4 /* Assets.xcassets */; };
 		18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5FE1F5FF025002430E4 /* LaunchScreen.storyboard */; };
+		18D574171F7DF15700E77007 /* UITabBarController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D574161F7DF15700E77007 /* UITabBarController+Player.m */; };
+		18D5741A1F7E2D2600E77007 /* ZJPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D574191F7E2D2600E77007 /* ZJPlayerController.m */; };
 		18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */; };
 		18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */; };
 		18EE509B1F6FD82900A5C606 /* ZJBrightness.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509A1F6FD82900A5C606 /* ZJBrightness.m */; };
@@ -76,6 +79,8 @@
 		184829BA1F79EE4500BF2BDB /* NSString+Hash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hash.m"; sourceTree = "<group>"; };
 		184829BB1F79EE4500BF2BDB /* ZJDownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloadManager.h; sourceTree = "<group>"; };
 		184829BC1F79EE4500BF2BDB /* ZJDownloadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloadManager.m; sourceTree = "<group>"; };
+		184829BF1F7A05A600BF2BDB /* ZJCustomTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJCustomTools.h; sourceTree = "<group>"; };
+		184829C01F7A05A600BF2BDB /* ZJCustomTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJCustomTools.m; sourceTree = "<group>"; };
 		1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayer.h; sourceTree = "<group>"; };
 		1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayer.m; sourceTree = "<group>"; };
 		1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCommonHeader.h; sourceTree = "<group>"; };
@@ -116,6 +121,10 @@
 		18C4B5FC1F5FF025002430E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18C4B5FF1F5FF025002430E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18C4B6011F5FF025002430E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18D574151F7DF15700E77007 /* UITabBarController+Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Player.h"; sourceTree = "<group>"; };
+		18D574161F7DF15700E77007 /* UITabBarController+Player.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+Player.m"; sourceTree = "<group>"; };
+		18D574181F7E2D2600E77007 /* ZJPlayerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayerController.h; sourceTree = "<group>"; };
+		18D574191F7E2D2600E77007 /* ZJPlayerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJPlayerController.m; sourceTree = "<group>"; };
 		18EE50931F6FAD5F00A5C606 /* ZJAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJAlertView.h; sourceTree = "<group>"; };
 		18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJAlertView.m; sourceTree = "<group>"; };
 		18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJResourceLoaderManager.h; sourceTree = "<group>"; };
@@ -218,6 +227,8 @@
 			children = (
 				1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */,
 				1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */,
+				18D574181F7E2D2600E77007 /* ZJPlayerController.h */,
+				18D574191F7E2D2600E77007 /* ZJPlayerController.m */,
 				1895D6D01F64E6BD00A3D3CD /* ZJControlView.h */,
 				1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */,
 				18C2053E1F6BE3030043A18E /* ZJTopView.h */,
@@ -232,12 +243,16 @@
 				18EE509D1F70008200A5C606 /* ZJVolume.m */,
 				1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */,
 				1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */,
+				184829BF1F7A05A600BF2BDB /* ZJCustomTools.h */,
+				184829C01F7A05A600BF2BDB /* ZJCustomTools.m */,
 				18C204EB1F692AC60043A18E /* UIView+Player.h */,
 				18C204EC1F692AC60043A18E /* UIView+Player.m */,
 				18C205381F6B71F30043A18E /* UIViewController+Player.h */,
 				18C205391F6B71F30043A18E /* UIViewController+Player.m */,
 				18FBE06E1F6F7ABE00133732 /* UINavigationController+Player.h */,
 				18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */,
+				18D574151F7DF15700E77007 /* UITabBarController+Player.h */,
+				18D574161F7DF15700E77007 /* UITabBarController+Player.m */,
 				1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */,
 				18C204F61F6A74F30043A18E /* ZJCacheTask.h */,
 				18C204F71F6A74F30043A18E /* ZJCacheTask.m */,
@@ -449,6 +464,7 @@
 				184829BE1F79EE5900BF2BDB /* ZJDownloadManager.m in Sources */,
 				18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */,
 				18C204F81F6A74F30043A18E /* ZJCacheTask.m in Sources */,
+				18D574171F7DF15700E77007 /* UITabBarController+Player.m in Sources */,
 				18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */,
 				18C205401F6BE3030043A18E /* ZJTopView.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
@@ -456,7 +472,9 @@
 				182273E51F7907D700156FDA /* DownloadList.m in Sources */,
 				182273E71F7907DB00156FDA /* DownloadListController.m in Sources */,
 				1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */,
+				18D5741A1F7E2D2600E77007 /* ZJPlayerController.m in Sources */,
 				18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */,
+				184829C11F7A05A600BF2BDB /* ZJCustomTools.m in Sources */,
 				18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */,
 				18C205371F6B6B4C0043A18E /* ZJLoadingIndicator.m in Sources */,
 				18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */,

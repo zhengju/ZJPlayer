@@ -9,8 +9,9 @@
 #import "ZJPlayer.h"
 #import "ZJControlView.h"
 #import "ZJTopView.h"
-
+#import "ZJCustomTools.h"
 #import "ZJResourceLoaderManager.h"
+#import "ZJPlayerController.h"
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
@@ -30,10 +31,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
 @interface ZJPlayer()<ZJControlViewDelegate,ZJTopViewDelegate>
 
-/**
- 父视图
- */
-@property(weak,nonatomic) UIView * fatherView;
+
 
 @property(nonatomic) CGRect  currentFrame;
 /**
@@ -99,6 +97,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
 @property(strong,nonatomic) ZJResourceLoaderManager *  resourceManager;
 @property(assign,nonatomic) ZJPlayerSliding  slidingStyle;
+
+@property(strong,nonatomic) ZJPlayerController * playerVC;
+
 @end
 
 @implementation ZJPlayer
@@ -108,7 +109,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     static ZJPlayer *player = nil;
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
-        player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@""]];
+        player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@""]  withSuperView:nil];
         
     });
     return player;
@@ -121,11 +122,19 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     UIViewController * currentController = [self getCurrentViewController];
     //隐藏状态栏
     [[UIApplication sharedApplication] setStatusBarHidden:_isTabNavigationHidden withAnimation:UIStatusBarAnimationNone];
-    //隐藏底航栏
-    currentController.tabBarController.tabBar.hidden = _isTabNavigationHidden;
+   
     //隐藏状态栏
     currentController.navigationController.navigationBar.hidden = _isTabNavigationHidden;
     
+    //当前controller是否是nav第一个
+    if ([currentController isEqual:currentController.navigationController.viewControllers.firstObject]) {
+        //隐藏底航栏
+        if (currentController.navigationController.viewControllers.count == 1) {
+            currentController.tabBarController.tabBar.hidden = _isTabNavigationHidden;
+        }else{
+            currentController.tabBarController.tabBar.hidden = NO;
+        }
+    }
 }
 /**
  因复用，移除监听，重新监听
@@ -133,10 +142,14 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 #pragma 设置当前url
 - (void)setUrl:(NSURL *)url{
     
+    //初始化
+
+
+    self.frameOnFatherView = CGRectZero;
+
     _url = url;
     
     self.isPlayAfterPause = NO;
-    
     
     if (![_url.absoluteString hasPrefix:@"http"])
        {
@@ -182,32 +195,37 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)setTitle:(NSString *)title{
     _title = title;
     self.topView.title = _title;
-    
 }
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-
-    self.isTabNavigationHidden = self.isFullScreen;
     
+    self.isTabNavigationHidden = self.isFullScreen;
+    if (self.frameOnFatherView.size.width == 0) {
+        self.fatherView = self.superview;
+        self.frameOnFatherView = self.bounds;
+    }
     if (self.isFullScreen) {
-        
         self.frame = self.currentFrame;
-
-        self.playerLayer.frame = CGRectMake(0, 0, kScreenHeight, kScreenWidth);
+        self.playerLayer.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+        
     }else{
-        self.playerLayer.frame = self.bounds;
+
+        self.playerLayer.frame = self.frameOnFatherView;
+
         [self.progress resetFrameisFullScreen:NO];
         [self.brightness resetFrameisFullScreen:NO];
         [self.volume resetFrameisFullScreen:NO];
     }
 }
 #pragma 实例化
--(instancetype)initWithUrl:(NSURL *)url{
+-(instancetype)initWithUrl:(NSURL *)url  withSuperView:(UIView *)superView{
     self = [super init];
     if (self) {
         _url = url;
-        
+        self.fatherView = nil;
+        self.fatherView = superView;
+   
         [self configureUI];
         
         [self setupObservers];//监听应用状态
@@ -216,11 +234,16 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 }
 - (instancetype)init{
 
-    return [self initWithUrl:[NSURL URLWithString:@""]];
+    return [self initWithUrl:[NSURL URLWithString:@""] withSuperView:nil];
 }
 
-- (void)dealloc{
-    NSLog(@"销毁......");
+- (void)deallocSelf{
+    self.fatherView = nil;
+    self.player = nil;
+    self.playerLayer  = nil;
+    self.playerItem = nil;
+    self.asset = nil;
+
      [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -232,11 +255,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     // 初始化播放器item
 //    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
 //    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
-  
-   
-    
-    
+
     self.player = [[AVPlayer alloc] init];
+    
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     // 初始化播放器的Layer
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
@@ -390,18 +411,18 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     CGFloat width = kScreenWidth;
     CGFloat x = self.gestureStartPoint.x;
     
-     if (self.isFullScreen) {//大屏，x和y互换
-     
-         pointY=(self.gestureStartPoint.x-currentPoint.x);
-         pointX=(self.gestureStartPoint.y-currentPoint.y);
-         isPlusTime = NO;
-         width = kScreenHeight;
-         x = self.gestureStartPoint.y;
-         if (!self.isLandscapeLeft) {
-             isPlusTime = YES;
-             x = width - x;
-         }
-     }
+//     if (self.isFullScreen) {//大屏，x和y互换
+//
+//         pointY=(self.gestureStartPoint.x-currentPoint.x);
+//         pointX=(self.gestureStartPoint.y-currentPoint.y);
+//         isPlusTime = NO;
+//         width = kScreenHeight;
+//         x = self.gestureStartPoint.y;
+//         if (!self.isLandscapeLeft) {
+//             isPlusTime = YES;
+//             x = width - x;
+//         }
+//     }
     
     switch (self.slidingStyle) {
         case slidingDefault:
@@ -432,7 +453,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
         //向上滑动
         if (pointY>MINDISTANCE) {
-            // NSLog(@"第二种方式：向上滑动");
             if (x < width / 2.0 ) {//右边
                 self.slidingStyle = slidingVolume;
                 [self.volume show];
@@ -444,7 +464,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             }
             
         }else if(pointY<-MINDISTANCE){
-            // NSLog(@"第二种方式：向下滑动");
             
             if (x < width / 2.0 ) {//右边
                  self.slidingStyle = slidingVolume;
@@ -461,12 +480,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         [self.progress show];
         //向右滑动
         if (pointX<-MINDISTANCE) {
-            
-            //NSLog(@"第二种方式：向右滑动");
             [self swipeToPlusTime:isPlusTime];
         }else if(pointX>MINDISTANCE){
             [self swipeToPlusTime:!isPlusTime];
-            //NSLog(@"第二种方式：向左滑动");
         }
     }
 }
@@ -506,13 +522,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         //向上滑动
         if (pointY>MINDISTANCE) {
 
-                [self.brightness show];
-                [self swipeToPlusbrightness:!isPlusTime];
+        [self.brightness show];
+        [self swipeToPlusbrightness:!isPlusTime];
 
         }else if(pointY<-MINDISTANCE){
 
-                [self.brightness show];
-                [self swipeToPlusbrightness:isPlusTime];
+        [self.brightness show];
+        [self swipeToPlusbrightness:isPlusTime];
        
         }
 }
@@ -651,11 +667,11 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     NSInteger routeChangeReason = [[interuptionDict valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
     switch (routeChangeReason) {
         case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
-            NSLog(@"AVAudioSessionRouteChangeReasonNewDeviceAvailable");
+            //NSLog(@"AVAudioSessionRouteChangeReasonNewDeviceAvailable");
             NSLog(@"耳机插入");
             break;
         case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
-            NSLog(@"AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
+            //NSLog(@"AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
             NSLog(@"耳机拔出，停止播放操作");
             //暂停播放
            
@@ -664,7 +680,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
            
             break;
         case AVAudioSessionRouteChangeReasonCategoryChange:  // called at start - also when other audio wants to play
-            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+            //NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
             break;
     }
     
@@ -849,43 +865,58 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 #pragma mark - 点击全屏
 - (void)clickFullScreen:(UIButton *)button
 {
+
     if (!self.isFullScreen)
-    {
+    {//点击全屏
         
         self.isAutomaticHorizontal = NO;
         self.isLandscapeLeft = YES;
-        [self toFullScreenWithInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"放大"] forState:UIControlStateNormal];
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationLandscapeRight] forKey:@"orientation"];
+//        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+//            SEL selector = NSSelectorFromString(@"setOrientation:");
+//            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+//            [invocation setSelector:selector];
+//            [invocation setTarget:[UIDevice currentDevice]];
+//            int val = UIInterfaceOrientationLandscapeRight;//这里可以改变旋转的方向
+//            [invocation setArgument:&val atIndex:2];
+//            [invocation invoke];
+//
+//        }
     }
     else
     {
-        
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:@"orientation"];
 
-
-        [self toCell];
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"缩小"] forState:UIControlStateNormal];
     }
    
 }
-// 缩小到cell
+#pragma mark -- 缩小到cell
 -(void)toCell{
 
     self.isFullScreen = NO;
-    
-    
-    if (self.fatherView == nil) {
-        
-        return;
-    }
+
     //小屏幕是隐藏top
     self.topView.hidden = YES;
     
     __weak typeof(self)weakSelf = self;
-    [UIView animateWithDuration:0.5f animations:^{
-        weakSelf.transform = CGAffineTransformIdentity;
 
-        // 再添加到View上
-        [weakSelf.fatherView addSubview:weakSelf];
+    [self removeFromSuperview];
+    
+    self.frame = self.frameOnFatherView;
+    
+    // 再添加到View上
+    [self.fatherView addSubview:self];
+    
+    
+    
+    [self.playerVC dismissViewControllerAnimated:NO completion:^{
+        
+//    }];
+//
+//    [UIView animateWithDuration:0.5f animations:^{
+       // weakSelf.transform = CGAffineTransformIdentity;
        
         [weakSelf mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(weakSelf.fatherView).offset(self.frameOnFatherView.origin.y);
@@ -921,9 +952,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             make.height.mas_equalTo(50);
         }];
 
-
-    }completion:^(BOOL finished) {
-        
     }];
 }
 
@@ -1024,11 +1052,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         [self loadedTimeRanges];
        
     }else if ([keyPath isEqualToString:@"playbackBufferEmpty"]){
-        NSLog(@"playbackBufferEmpty");
-       // [self.viewLogin setHidden:YES];
+       // NSLog(@"playbackBufferEmpty");
     }else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]){
-        //[self.viewLogin setHidden:NO];
-        NSLog(@"playbackLikelyToKeepUp");
+       // NSLog(@"playbackLikelyToKeepUp");
         
         [self.loadingIndicator dismiss];
 
@@ -1146,10 +1172,16 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     
     if ([self windowVisible] == NO) {//判断当前player是否显示在window上
+
+        return;
+    }
+    
+    if (self.isFullScreen) {
         
         return;
-        
     }
+    
+    
     
     self.topView.hidden = NO;
     
@@ -1158,20 +1190,20 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     self.currentFrame = CGRectMake(0, 0, width, height);
 
-    if (!self.isFullScreen) {//如果是第二次横屏就不执行此代码
-        _fatherView = self.superview;
-        self.frameOnFatherView = self.frame;
-    }
-    
     self.isFullScreen = YES;
-
+    [self removeFromSuperview];
     UIViewController * controller = [self getCurrentViewController];
-    [controller.view addSubview:self];
+    self.playerVC = [[ZJPlayerController alloc]init];
+    [self.playerVC.view addSubview:self];
     self.frame = CGRectMake(0, 0, width, height);
+    [controller presentViewController:self.playerVC animated:NO completion:^{
+        
+    }];
     
-    [self.progress resetFrameisFullScreen:YES];
-    [self.brightness resetFrameisFullScreen:YES];
-    [self.volume resetFrameisFullScreen:YES];
+    [self.progress resetFrameisFullScreen:NO];
+    [self.brightness resetFrameisFullScreen:NO];
+    [self.volume resetFrameisFullScreen:NO];
+    
     [self.loadingIndicator mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self).offset((width -35)/2.0);
         make.left.mas_equalTo(self).offset((height -35)/2.0);
@@ -1184,14 +1216,14 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     // remark 约束
     [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(50);
-        make.top.mas_equalTo(self).offset(width - 50);
+        make.top.mas_equalTo(self).offset(height - 50);
         make.left.mas_equalTo(self);
-        make.width.mas_equalTo(height);
+        make.width.mas_equalTo(width);
     }];
     
     [self.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).with.offset(0);
-        make.width.mas_equalTo(height);
+        make.width.mas_equalTo(width);
         make.top.equalTo(self).with.offset(0);
         make.height.mas_equalTo(50);
     }];
@@ -1202,50 +1234,20 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (currentOrientation == interfaceOrientation) {
         return;
     }
-
-//    // 初始化
-    self.transform = CGAffineTransformIdentity;
-    //UIInterfaceOrientationLandscapeLeft 横屏 Home键在左侧
-    if (interfaceOrientation==UIInterfaceOrientationLandscapeLeft) {
-        self.transform = CGAffineTransformMakeRotation(-M_PI_2);
-
-    }else if(interfaceOrientation==UIInterfaceOrientationLandscapeRight){
-        //UIInterfaceOrientationLandscapeRight 横屏 Home键在右侧
-        self.transform = CGAffineTransformMakeRotation(M_PI_2);
-    }
-
 }
-
 #pragma 其它App播放声音
 - (void)otherAudioPlay{
     //判断还有没有其它业务的声音在播放。
     if ([AVAudioSession sharedInstance].otherAudioPlaying) {
-        NSLog(@"有其他声音在播放");
+       // NSLog(@"有其他声音在播放");
         
     }
 }
-#pragma 获取视频第一帧 返回图片
-- (UIImage*) getVideoPreViewImage:(NSURL *)path
-{
-    
-    
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:path options:nil];
-    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    
-    assetGen.appliesPreferredTrackTransform = YES;
-    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
-    NSError *error = nil;
-    CMTime actualTime;
-    CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
-    UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
-    CGImageRelease(image);
-    return videoImage;
-}
+
 #pragma mark -- ZJControlViewDelegate
 - (void)clickFullScreen{
 
     [self clickFullScreen:nil];
-    
 }
 #pragma 视频播放
 - (void)play{
@@ -1350,13 +1352,12 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     CGFloat nowTime = CMTimeGetSeconds(self.playerItem.currentTime);
 
-    UIImage *image = [self thumbnailImageRequest:nowTime url:_url.absoluteString];
+    UIImage *image = [ZJCustomTools thumbnailImageRequest:nowTime url:_url.absoluteString];
     
     [self saveImageToPhotos:image];
 }
 - (void)gifScreenshot{
     NSLog(@"gif动画");
- 
 }
 
 @end

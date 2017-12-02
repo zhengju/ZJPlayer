@@ -90,7 +90,6 @@ static ZJDownloadManager *manager = nil;
 - (void)createCacheDirectory
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSLog(@"ZJCachesDirectory:%@",ZJCachesDirectory);
     if (![fileManager fileExistsAtPath:ZJCachesDirectory]) {
         [fileManager createDirectoryAtPath:ZJCachesDirectory withIntermediateDirectories:YES attributes:nil error:NULL];
     }
@@ -164,10 +163,16 @@ static ZJDownloadManager *manager = nil;
  */
 - (void)start:(NSString *)url
 {
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+ 
+    
     NSURLSessionDataTask *task = [self getTask:url];
     [task resume];
     
     [self getSessionModel:task.taskIdentifier].stateBlock(ZJDownloadStateRunning);
+        
+        });
 }
 
 /**
