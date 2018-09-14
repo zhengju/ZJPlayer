@@ -34,27 +34,33 @@
     [self configDatas];
     [self configureTableView];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]bk_initWithTitle:@"clean" style:UIBarButtonItemStylePlain handler:^(id sender) {
+        [self.downloadManager deleteAllFile];
+        [self.tableView reloadData];
+    }];
+    
+    
 }
 - (void)configDatas{
     
     NSArray * titles = @[
-                         @"不知道",
-                         @"为什么和我看的爱情公寓一点儿都不一样……",
-                         @"人狗大战来了啊，目测主人已被逼疯…",
-                         @"《选择》琼瑶女郎陈德容翩然而至，患失忆症情感何去何从！",
-                         @"动作片里都是骗人的，一个视频告诉你真实的啪啪啪是什么样子的",
-                         @"他用亲身经历告诉你——原来“老婆能吃才是福”！",
-                         @"涂磊告诉女人不要太省！否则会失去魅力又亏待自己！要爱自己！"
+                         @"许家印讲话",
+                         @"许家印讲话",
+                         @"许家印讲话",
+                         @"许家印讲话",
+                         @"许家印讲话",
+                         @"许家印讲话",
+                         @"许家印讲话"
                          ];
     
     NSArray * urls = @[
-                       @"http://120.25.226.186:32812/resources/videos/minion_01.mp4",
-                       @"http://mvideo.spriteapp.cn/video/2017/0912/84cd46ac-97d0-11e7-89c6-1866daeb0df1_wpcco.mp4",
-                       @"http://mvideo.spriteapp.cn/video/2017/0912/59b77f1327619_wpcco.mp4",
-                       @"http://mvideo.spriteapp.cn/video/2017/0911/59b5675ca92ee_wpcco.mp4",
-                       @"http://mvideo.spriteapp.cn/video/2017/0907/b3143e38-93d6-11e7-a4ca-1866daeb0df1_wpcco.mp4",
-                       @"http://mvideo.spriteapp.cn/video/2017/0526/812bd8ee41bb11e7b007842b2b4c75ab_wpcco.mp4",
-                       @"http://mvideo.spriteapp.cn/video/2017/0912/59b7d62d323e2_wpcco.mp4"
+                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4"
                        ];
     
     for (int i = 0; i < urls.count; i++) {

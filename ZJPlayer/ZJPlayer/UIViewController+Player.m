@@ -45,7 +45,7 @@
 //该viewController中支持的所有方向；
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
     //支持哪些方向
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAll;
 }
 //viewController初始显示时的方向
 -(UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向

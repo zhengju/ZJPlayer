@@ -172,7 +172,8 @@ static ZJDownloadManager *manager = nil;
     
     [self getSessionModel:task.taskIdentifier].stateBlock(ZJDownloadStateRunning);
         
-        });
+        
+    });
 }
 
 /**

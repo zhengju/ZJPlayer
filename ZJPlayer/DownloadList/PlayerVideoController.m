@@ -20,19 +20,12 @@
    
     self.view.backgroundColor = [UIColor  whiteColor];
    
-    self.player =   [[ZJPlayer alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view];
+    self.player =   [[ZJPlayer alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view frame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
    
     self.player.isRotatingSmallScreen = YES;
 
     [self.view addSubview:self.player];
 
-    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
-
-        make.top.mas_equalTo(self.view.mas_top).offset(0);
-        make.left.mas_equalTo(self.view);
-        make.right.mas_equalTo(self.view);
-        make.height.mas_equalTo(300);
-    }];
 }
 - (BOOL)shouldAutorotate//是否支持旋转屏幕
 {

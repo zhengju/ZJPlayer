@@ -135,6 +135,11 @@
 
 - (void)cacheImageWith:(NSString *)url image:(UIImage *)image{
     
+    
+    if (!image) {
+        return;
+    }
+    
      NSString * md5Str = [url md5String];
     
     NSString * filepath = [self cacheImagePath];

@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
 
 
-@property(nonatomic) CGRect  currentFrame;
+@property(nonatomic) CGRect  currentFrame;//遗弃
 /**
  在父类上的frame
  */
@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     static ZJPlayer *player = nil;
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
-        player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@""]  withSuperView:nil];
+        player = [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@""]  withSuperView:nil frame:CGRectZero];
         
     });
     return player;
@@ -143,9 +143,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)setUrl:(NSURL *)url{
     
     //初始化
-
-
-    self.frameOnFatherView = CGRectZero;
 
     _url = url;
     
@@ -201,31 +198,28 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [super layoutSubviews];
     
     self.isTabNavigationHidden = self.isFullScreen;
-    if (self.frameOnFatherView.size.width == 0) {
-        self.fatherView = self.superview;
-        self.frameOnFatherView = self.bounds;
-    }
+
     if (self.isFullScreen) {
-        self.frame = self.currentFrame;
+        self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
         self.playerLayer.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
         
     }else{
 
-        self.playerLayer.frame = self.frameOnFatherView;
-
+        self.playerLayer.frame = self.bounds;
+        self.frame = self.frameOnFatherView;
         [self.progress resetFrameisFullScreen:NO];
         [self.brightness resetFrameisFullScreen:NO];
         [self.volume resetFrameisFullScreen:NO];
     }
 }
 #pragma 实例化
--(instancetype)initWithUrl:(NSURL *)url  withSuperView:(UIView *)superView{
+-(instancetype)initWithUrl:(NSURL *)url  withSuperView:(UIView *)superView frame:(CGRect)frame{
     self = [super init];
     if (self) {
         _url = url;
-        self.fatherView = nil;
+
         self.fatherView = superView;
-   
+        self.frameOnFatherView = frame;
         [self configureUI];
         
         [self setupObservers];//监听应用状态
@@ -234,7 +228,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 }
 - (instancetype)init{
 
-    return [self initWithUrl:[NSURL URLWithString:@""] withSuperView:nil];
+    return [self initWithUrl:[NSURL URLWithString:@""] withSuperView:nil frame:CGRectZero];
 }
 
 - (void)deallocSelf{
@@ -846,14 +840,14 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
           
             self.isAutomaticHorizontal =  YES;
             self.isLandscapeLeft = YES;
-            [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
+//            [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
         }
             break;
         case UIInterfaceOrientationLandscapeRight:{
             NSLog(@"第1个旋转方向---电池栏在左");
            self.isAutomaticHorizontal =  YES;
              self.isLandscapeLeft = NO;
-            [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
+//            [self toFullScreenWithInterfaceOrientation:interfaceOrientation];
             
         }
             break;
@@ -868,29 +862,35 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     if (!self.isFullScreen)
     {//点击全屏
-        
+    
         self.isAutomaticHorizontal = NO;
         self.isLandscapeLeft = YES;
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"放大"] forState:UIControlStateNormal];
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationLandscapeRight] forKey:@"orientation"];
-//        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-//            SEL selector = NSSelectorFromString(@"setOrientation:");
-//            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
-//            [invocation setSelector:selector];
-//            [invocation setTarget:[UIDevice currentDevice]];
-//            int val = UIInterfaceOrientationLandscapeRight;//这里可以改变旋转的方向
-//            [invocation setArgument:&val atIndex:2];
-//            [invocation invoke];
-//
-//        }
     }
     else
     {
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:@"orientation"];
 
         [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"缩小"] forState:UIControlStateNormal];
     }
-   
+    
+    self.isFullScreen = !self.isFullScreen;
+    
+    
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        SEL selector = NSSelectorFromString(@"setOrientation:");
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        
+//        [self toFullScreenWithInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:!self.isFullScreen?UIInterfaceOrientationPortrait: UIInterfaceOrientationLandscapeRight] forKey:@"orientation"];
+        
+        int val = !self.isFullScreen?UIInterfaceOrientationPortrait: UIInterfaceOrientationLandscapeRight;//这里可以改变旋转的方向
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+        
+    }
+    
 }
 #pragma mark -- 缩小到cell
 -(void)toCell{
@@ -898,21 +898,21 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     self.isFullScreen = NO;
 
     //小屏幕是隐藏top
-    self.topView.hidden = YES;
+//    self.topView.hidden = YES;
     
     __weak typeof(self)weakSelf = self;
 
-    [self removeFromSuperview];
+//    [self removeFromSuperview];
     
     self.frame = self.frameOnFatherView;
     
     // 再添加到View上
-    [self.fatherView addSubview:self];
+//    [self.fatherView addSubview:self];
     
     
     
-    [self.playerVC dismissViewControllerAnimated:NO completion:^{
-        
+//    [self.playerVC dismissViewControllerAnimated:NO completion:^{
+    
 //    }];
 //
 //    [UIView animateWithDuration:0.5f animations:^{
@@ -952,7 +952,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             make.height.mas_equalTo(50);
         }];
 
-    }];
+//    }];
 }
 
 #pragma mark - 单击手势
@@ -1167,7 +1167,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
     }
 }
-#pragma 全屏显示
+#pragma mark -- 全屏显示
 -(void)toFullScreenWithInterfaceOrientation:(UIInterfaceOrientation )interfaceOrientation{
 
     
@@ -1187,18 +1187,16 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     CGFloat width = kScreenWidth;
     CGFloat height = kScreenHeight;
-    
-    self.currentFrame = CGRectMake(0, 0, width, height);
 
     self.isFullScreen = YES;
-    [self removeFromSuperview];
-    UIViewController * controller = [self getCurrentViewController];
-    self.playerVC = [[ZJPlayerController alloc]init];
-    [self.playerVC.view addSubview:self];
-    self.frame = CGRectMake(0, 0, width, height);
-    [controller presentViewController:self.playerVC animated:NO completion:^{
-        
-    }];
+//    [self removeFromSuperview];
+//    UIViewController * controller = [self getCurrentViewController];
+//    self.playerVC = [[ZJPlayerController alloc]init];
+//    [self.playerVC.view addSubview:self];
+//    self.frame = CGRectMake(0, 0, width, height);
+//    [controller presentViewController:self.playerVC animated:NO completion:^{
+//
+//    }];
     
     [self.progress resetFrameisFullScreen:NO];
     [self.brightness resetFrameisFullScreen:NO];
@@ -1233,6 +1231,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     //判断如果当前方向和要旋转的方向一致,那么不做任何操作
     if (currentOrientation == interfaceOrientation) {
         return;
+    }else{
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:self.isFullScreen?UIInterfaceOrientationPortrait: UIInterfaceOrientationLandscapeRight] forKey:@"orientation"];
     }
 }
 #pragma 其它App播放声音
