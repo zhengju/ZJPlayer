@@ -40,7 +40,7 @@
 }
 - (BOOL)shouldAutorotate{//是否支持旋转屏幕
    // NSLog(@"SuperController:NO");
-    return NO;
+    return YES;
 }
 //该viewController中支持的所有方向；
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{

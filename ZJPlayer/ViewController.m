@@ -23,9 +23,7 @@
     [super viewDidLoad];
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-
-    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/hdzxjh.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300)];
-
+    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/hdzxjh.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
     player.isRotatingSmallScreen = YES;
 
     [self.view addSubview:player];
@@ -40,10 +38,10 @@
 }
 ////返回直接支持的方向
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-    return UIInterfaceOrientationMaskAll;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 //返回最优先显示的屏幕方向
-//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-//    return UIInterfaceOrientationPortrait;
-//}
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
 @end

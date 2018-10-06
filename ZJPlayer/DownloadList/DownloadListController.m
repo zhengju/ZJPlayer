@@ -28,6 +28,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"下载";
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     self.downloadManager = [ZJDownloadManager sharedInstance];

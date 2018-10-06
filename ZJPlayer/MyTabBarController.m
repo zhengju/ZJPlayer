@@ -58,9 +58,7 @@
 }
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
     //支持哪些方向
-    
-    
-    
+
     return [self.selectedViewController supportedInterfaceOrientations];
 }
 -(UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向

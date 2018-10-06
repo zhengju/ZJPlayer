@@ -118,7 +118,7 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 /**
  与url初始化
  */
--(instancetype)initWithUrl:(NSURL *)url withSuperView:(UIView *)superView frame:(CGRect)frame;
+-(instancetype)initWithUrl:(NSURL *)url withSuperView:(UIView *)superView frame:(CGRect)frame controller:(UIViewController *)controller;
 /**
  视频播放
  */

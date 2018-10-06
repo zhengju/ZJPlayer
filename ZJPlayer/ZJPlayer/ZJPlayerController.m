@@ -33,7 +33,7 @@
 }
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations//支持哪些方向
 {
-    return UIInterfaceOrientationMaskAll;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 //由模态推出的视图控制器 优先支持的屏幕方向
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向

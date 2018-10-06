@@ -20,7 +20,7 @@
    
     self.view.backgroundColor = [UIColor  whiteColor];
    
-    self.player =   [[ZJPlayer alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view frame:CGRectMake(0, 0, self.view.frame.size.width, 300)];
+    self.player =   [[ZJPlayer alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view frame:CGRectMake(0, 0, self.view.frame.size.width, 300) controller:self];
    
     self.player.isRotatingSmallScreen = YES;
 
