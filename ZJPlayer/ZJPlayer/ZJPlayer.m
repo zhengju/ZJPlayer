@@ -13,7 +13,7 @@
 #import "ZJResourceLoaderManager.h"
 #import "ZJPlayerController.h"
 #import "NSGIF.h"
-
+#import <AssetsLibrary/AssetsLibrary.h>
 // 缓存主目录
 #define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
 
@@ -1279,7 +1279,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
     }
 }
-- (void)saveImageToPhotos:(UIImage *)image { UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:),nil);
+- (void)saveImageToPhotos:(UIImage *)image {
+    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:),nil);
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
@@ -1356,10 +1357,20 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             NSLog(@"error:%@",error);
             return ;
         }
-        NSLog(@"----++%@",url);
+        NSLog(@"----++%@",url);//本地视频记得删除
         [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
             
             NSLog(@"Finished generating GIF: %@", GifURL);
+            //保存到相册
+            NSData *data = [NSData dataWithContentsOfURL:GifURL];
+              
+            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
+                                                                                                                                            NSError *error) {
+                HUDNormal(@"保存成功");
+                            NSLog(@"Success at %@", [assetURL path] );
+                
+            }] ;
             
         }];
     }];
