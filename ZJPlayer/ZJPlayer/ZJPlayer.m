@@ -14,6 +14,7 @@
 #import "ZJPlayerController.h"
 #import "NSGIF.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "InterceptView.h"
 // 缓存主目录
 #define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
 
@@ -681,7 +682,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerWillAppear) name:ZJViewControllerWillAppear object:nil];
     
      //添加耳机状态监听
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventSubtypeRemoteControlTogglePlayPause) name:ZJEventSubtypeRemoteControlTogglePlayPause object:nil];
+  
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventSubtypeRemoteControlTogglePlayPause) name:ZJEventSubtypeRemoteControlTogglePlayPause object:nil];
 
      [[AVAudioSession sharedInstance] setActive:YES error:nil];//创建单例对象并且使其设置为活跃状态.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routeChange:) name:AVAudioSessionRouteChangeNotification object:nil];
@@ -806,7 +808,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     //缓存可以播放的时候调用 // 缓冲区有足够数据可以播放了
     [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
 }
-
 
 - (void)removeObserverFromPlayerItem:(AVPlayerItem *)playerItem{
     [playerItem removeObserver:self forKeyPath:@"status"];
@@ -1358,6 +1359,16 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [self saveImageToPhotos:image];
 }
 - (void)gifScreenshot{
+    
+    
+    [self.player pause];
+    
+    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    
+    [self addSubview:view];
+    
+    return;
+    
     NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
     NSRange range = NSMakeRange(10, 15);
     [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.url withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {

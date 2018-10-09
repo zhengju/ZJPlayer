@@ -27,6 +27,7 @@
     player.isRotatingSmallScreen = YES;
 
     [self.view addSubview:player];
+
 }
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

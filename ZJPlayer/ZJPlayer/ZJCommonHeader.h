@@ -11,6 +11,7 @@
 
 #import "ZJPlayer.h"
 #import "UIView+Player.h"
+#import "UIView+Frame.h"
 #import "ZJCacheTask.h"
 #import "ZJAlertView.h"
 #import "ZJLoadingIndicator.h"
@@ -21,7 +22,8 @@
 #import <Masonry/Masonry.h>
 #import <BlocksKit/BlocksKit.h>
 #import <BlocksKit/BlocksKit+UIKit.h>
-
+#import "ZJCustomTools.h"
+#import "NSGIF.h"
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
