@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
+typedef void (^InterceptBlock)(NSError* error,NSURL* url);
+typedef void (^CompleteBlock)(NSError* error,NSURL* url);
 @interface ZJCustomTools : NSObject
++(id)shareCustomTools;
 /**
  获取视频第一帧 返回图片
  */
@@ -25,4 +29,5 @@
  */
 + (UIImage *)thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr;
 
+- (void)interceptVideoAndVideoUrl:(NSURL *)videoUrl withOutPath:(NSString *)outPath outputFileType:(NSString *)outputFileType range:(NSRange)videoRange intercept:(InterceptBlock)interceptBlock;
 @end

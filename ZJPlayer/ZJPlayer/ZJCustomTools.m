@@ -9,7 +9,37 @@
 #import "ZJCustomTools.h"
 #import <AVFoundation/AVFoundation.h>
 #import "ZJCacheTask.h"
+#import <AVKit/AVKit.h>
+#import <MobileCoreServices/UTCoreTypes.h>
+
+typedef NS_ENUM(NSInteger, GIFSize) {
+    GIFSizeVeryLow = 1,
+    GIFSizeLow = 2,
+    GIFSizeMedium = 3,
+    GIFSizeHigh = 5,
+    GIFSizeOriginal = 10
+    
+};
+
+@interface ZJCustomTools()
+
+@property(copy,atomic)InterceptBlock interceptBlock;
+@property(copy,atomic)CompleteBlock completeBlock;
+@property (nonatomic,strong)NSError *error;
+@end
+
 @implementation ZJCustomTools
+
++(id)shareCustomTools{
+    static ZJCustomTools *customTool;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        customTool = [[self alloc] init];
+    });
+    return customTool;
+
+}
+
 #pragma 获取视频第一帧 返回图片
 + (UIImage*) getVideoPreViewImage:(NSURL *)path
 {
@@ -95,5 +125,122 @@
     urlStr=[urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url=[NSURL URLWithString:urlStr];
     return url;
+}
+
+
+#pragma mark -截取视频
+- (void)interceptVideoAndVideoUrl:(NSURL *)videoUrl withOutPath:(NSString *)outPath outputFileType:(NSString *)outputFileType range:(NSRange)videoRange intercept:(InterceptBlock)interceptBlock {
+    
+    _interceptBlock =interceptBlock;
+    
+    //不添加背景音乐
+    NSURL *audioUrl =nil;
+    //AVURLAsset此类主要用于获取媒体信息，包括视频、声音等
+    AVURLAsset* audioAsset = [[AVURLAsset alloc] initWithURL:audioUrl options:nil];
+    AVURLAsset* videoAsset = [[AVURLAsset alloc] initWithURL:videoUrl options:nil];
+    
+    //创建AVMutableComposition对象来添加视频音频资源的AVMutableCompositionTrack
+    AVMutableComposition* mixComposition = [AVMutableComposition composition];
+    
+    //CMTimeRangeMake(start, duration),start起始时间，duration时长，都是CMTime类型
+    //CMTimeMake(int64_t value, int32_t timescale)，返回CMTime，value视频的一个总帧数，timescale是指每秒视频播放的帧数，视频播放速率，（value / timescale）才是视频实际的秒数时长，timescale一般情况下不改变，截取视频长度通过改变value的值
+    //CMTimeMakeWithSeconds(Float64 seconds, int32_t preferredTimeScale)，返回CMTime，seconds截取时长（单位秒），preferredTimeScale每秒帧数
+    
+    //开始位置startTime
+    CMTime startTime = CMTimeMakeWithSeconds(videoRange.location, videoAsset.duration.timescale);
+    //截取长度videoDuration
+    CMTime videoDuration = CMTimeMakeWithSeconds(videoRange.length, videoAsset.duration.timescale);
+    
+    CMTimeRange videoTimeRange = CMTimeRangeMake(startTime, videoDuration);
+    
+    //视频采集compositionVideoTrack
+    AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    // 避免数组越界 tracksWithMediaType 找不到对应的文件时候返回空数组
+    //TimeRange截取的范围长度
+    //ofTrack来源
+    //atTime插放在视频的时间位置
+    [compositionVideoTrack insertTimeRange:videoTimeRange ofTrack:([videoAsset tracksWithMediaType:AVMediaTypeVideo].count>0) ? [videoAsset tracksWithMediaType:AVMediaTypeVideo].firstObject : nil atTime:kCMTimeZero error:nil];
+    
+    
+    //视频声音采集(也可不执行这段代码不采集视频音轨，合并后的视频文件将没有视频原来的声音)
+    
+    AVMutableCompositionTrack *compositionVoiceTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    [compositionVoiceTrack insertTimeRange:videoTimeRange ofTrack:([videoAsset tracksWithMediaType:AVMediaTypeAudio].count>0)?[videoAsset tracksWithMediaType:AVMediaTypeAudio].firstObject:nil atTime:kCMTimeZero error:nil];
+    
+    //声音长度截取范围==视频长度
+    CMTimeRange audioTimeRange = CMTimeRangeMake(kCMTimeZero, videoDuration);
+    
+    //音频采集compositionCommentaryTrack
+    AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    [compositionAudioTrack insertTimeRange:audioTimeRange ofTrack:([audioAsset tracksWithMediaType:AVMediaTypeAudio].count > 0) ? [audioAsset tracksWithMediaType:AVMediaTypeAudio].firstObject : nil atTime:kCMTimeZero error:nil];
+    
+    //AVAssetExportSession用于合并文件，导出合并后文件，presetName文件的输出类型
+    AVAssetExportSession *assetExportSession = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetPassthrough];
+    
+    
+    //混合后的视频输出路径
+    NSURL *outPutURL = [NSURL fileURLWithPath:outPath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:outPath])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:outPath error:nil];
+    }
+    
+    //输出视频格式
+    assetExportSession.outputFileType = outputFileType;
+    assetExportSession.outputURL = outPutURL;
+    //输出文件是否网络优化
+    assetExportSession.shouldOptimizeForNetworkUse = YES;
+    [assetExportSession exportAsynchronouslyWithCompletionHandler:^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            switch (assetExportSession.status) {
+                case AVAssetExportSessionStatusFailed:
+                    
+                    if (_interceptBlock) {
+                        
+                        _interceptBlock(assetExportSession.error,outPutURL);
+                    }
+                    
+                    
+                    break;
+                    
+                case AVAssetExportSessionStatusCancelled:{
+                    
+                    NSLog(@"Export Status: Cancell");
+                    
+                    break;
+                }
+                case AVAssetExportSessionStatusCompleted: {
+                    
+                    if (_interceptBlock) {
+                        
+                        _interceptBlock(nil,outPutURL);
+                    }
+                    
+                    break;
+                }
+                case AVAssetExportSessionStatusUnknown: {
+                    
+                    NSLog(@"Export Status: Unknown");
+                }
+                case AVAssetExportSessionStatusExporting : {
+                    
+                    NSLog(@"Export Status: Exporting");
+                }
+                case AVAssetExportSessionStatusWaiting: {
+                    
+                    NSLog(@"Export Status: Wating");
+                }
+                    
+            }
+            
+        });
+        
+    }];
 }
 @end

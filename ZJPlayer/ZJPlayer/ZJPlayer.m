@@ -12,6 +12,17 @@
 #import "ZJCustomTools.h"
 #import "ZJResourceLoaderManager.h"
 #import "ZJPlayerController.h"
+#import "NSGIF.h"
+
+// 缓存主目录
+#define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
+
+// 保存文件名
+#define ZJFileName(url)  [self md5String:url]
+
+// 文件的存放路径（caches）
+#define ZJFileFullpath(url) [ZJCachesDirectory stringByAppendingPathComponent:ZJFileName(url)]
+
 NSString *const ZJViewControllerWillDisappear = @"ZJViewControllerWillDisappear";
 NSString *const ZJViewControllerWillAppear = @"ZJViewControllerWillAppear";
 NSString *const ZJContinuousVideoPlayback = @"ZJContinuousVideoPlayback";
@@ -1338,7 +1349,19 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [self saveImageToPhotos:image];
 }
 - (void)gifScreenshot{
-    NSLog(@"gif动画");
+    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
+    NSRange range = NSMakeRange(10, 15);
+    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.url withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
+        if (error) {
+            NSLog(@"error:%@",error);
+            return ;
+        }
+        NSLog(@"----++%@",url);
+        [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
+            
+            NSLog(@"Finished generating GIF: %@", GifURL);
+            
+        }];
+    }];
 }
-
 @end

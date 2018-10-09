@@ -17,6 +17,53 @@
             endingLineNumber = "38"
             landmarkName = "-viewDidLoad"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[DownloadListController viewDidLoad]"
+                  moduleName = "ZJPlayer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/leeco/Documents/GitHub/ZJPlayer/ZJPlayer/DownloadList/DownloadListController.m"
+                  timestampString = "560745077.2013431"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "397">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__37-[DownloadListController viewDidLoad]_block_invoke"
+                  moduleName = "ZJPlayer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/leeco/Documents/GitHub/ZJPlayer/ZJPlayer/DownloadList/DownloadListController.m"
+                  timestampString = "560745077.204775"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__destroy_helper_block_"
+                  moduleName = "ZJPlayer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/leeco/Documents/GitHub/ZJPlayer/ZJPlayer/DownloadList/DownloadListController.m"
+                  timestampString = "560745077.207814"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,28 +73,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZJPlayer/ZJPlayer/ZJPlayer.m"
-            timestampString = "558615407.241406"
+            timestampString = "560745600.244599"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "758"
-            endingLineNumber = "758"
+            startingLineNumber = "769"
+            endingLineNumber = "769"
             landmarkName = "-playerItemDidReachEnd:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ZJPlayer/ZJPlayer/ZJPlayer.m"
-            timestampString = "558615407.2417901"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "988"
-            endingLineNumber = "988"
-            landmarkName = "-setIsBottomViewHidden:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

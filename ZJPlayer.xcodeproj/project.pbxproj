@@ -50,6 +50,9 @@
 		18EE509E1F70008200A5C606 /* ZJVolume.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509D1F70008200A5C606 /* ZJVolume.m */; };
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
+		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
+		7AA4F371216B7D870091094C /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F370216B7D870091094C /* libc++abi.tbd */; };
+		7AA4F374216C46C70091094C /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F373216C46C60091094C /* NSGIF.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,6 +140,10 @@
 		18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Player.m"; sourceTree = "<group>"; };
 		361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZJPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EB192BACD32CA54F2F1785 /* Pods-ZJPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		7AA4F36E216B6E590091094C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
+		7AA4F372216C46C60091094C /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
+		7AA4F373216C46C60091094C /* NSGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSGIF.m; sourceTree = "<group>"; };
 		D6246B24FA4627EE93BB656B /* Pods-ZJPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +152,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AA4F371216B7D870091094C /* libc++abi.tbd in Frameworks */,
+				7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */,
 				1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */,
 				3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */,
 			);
@@ -156,6 +165,8 @@
 		0740AE84A3A2CA100E9F6C30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7AA4F370216B7D870091094C /* libc++abi.tbd */,
+				7AA4F36E216B6E590091094C /* AVKit.framework */,
 				1830FDA51F72566B00097115 /* CoreGraphics.framework */,
 				18C205261F6A8CA80043A18E /* SystemConfiguration.framework */,
 				361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */,
@@ -225,6 +236,8 @@
 		1895D6CB1F64BCE200A3D3CD /* ZJPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				7AA4F372216C46C60091094C /* NSGIF.h */,
+				7AA4F373216C46C60091094C /* NSGIF.m */,
 				1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */,
 				1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */,
 				18D574181F7E2D2600E77007 /* ZJPlayerController.h */,
@@ -463,6 +476,7 @@
 				182273E81F7907DE00156FDA /* PlayerVideoController.m in Sources */,
 				184829BE1F79EE5900BF2BDB /* ZJDownloadManager.m in Sources */,
 				18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */,
+				7AA4F374216C46C70091094C /* NSGIF.m in Sources */,
 				18C204F81F6A74F30043A18E /* ZJCacheTask.m in Sources */,
 				18D574171F7DF15700E77007 /* UITabBarController+Player.m in Sources */,
 				18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */,
