@@ -62,7 +62,19 @@
 @end
 
 @implementation InterceptView
+- (void)setCurrentTtime:(CMTime)currentTtime{
+    _currentTtime = currentTtime;
+    
+    UIImage * bgImage = [ZJCustomTools thumbnailImageRequest:CMTimeGetSeconds(_currentTtime) url:self.videoUrlStr];
 
+    self.BGView.image = bgImage;
+    
+    [self.player seekToTime:_currentTtime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+        if (finished) {
+            [self.player pause];
+        }
+    }];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
@@ -87,8 +99,8 @@
     AVAsset *asset = [AVAsset assetWithURL:[NSURL URLWithString:self.videoUrlStr]];
     self.m_ftp = [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] nominalFrameRate];
     
-    self.startTime = 0.f;
-    self.endTime = 10.0f;
+    self.startTime = 0.0f;//
+    self.endTime = self.startTime + 10.0f;
     self.imgWidth = [UIImage imageNamed:@"resume_btn_control_r"].size.width;
     CGFloat totalWidth = kScreenWidth - 2*kLeftWidth;
     self.timeScale = 10.0f/totalWidth;

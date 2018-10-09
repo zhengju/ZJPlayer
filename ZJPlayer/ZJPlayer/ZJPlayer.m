@@ -1364,7 +1364,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [self.player pause];
     
     InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-    
+    view.currentTtime = self.playerItem.currentTime;
     [self addSubview:view];
     
     return;
