@@ -97,13 +97,13 @@
     self.player.delegate = self;
 
     [cell addSubview:self.player];
-    
-    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(cell.topView.mas_bottom).offset(0);
-        make.left.mas_equalTo(cell);
-        make.right.mas_equalTo(cell);
-        make.bottom.mas_equalTo(cell.bottomView.mas_top).offset(0);
-    }];
+    self.player.frame = CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height);
+//    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(cell.topView.mas_bottom).offset(0);
+//        make.left.mas_equalTo(cell);
+//        make.right.mas_equalTo(cell);
+//        make.bottom.mas_equalTo(cell.bottomView.mas_top).offset(0);
+//    }];
     
     [self.player play];
     

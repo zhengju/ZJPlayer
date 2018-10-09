@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
     AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
     
     assetGen.appliesPreferredTrackTransform = YES;
-    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    CMTime time = CMTimeMakeWithSeconds(13.0, 600);
     NSError *error = nil;
     CMTime actualTime;
     CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];

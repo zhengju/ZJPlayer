@@ -300,6 +300,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         self.url = _url;
     }
     
+    self.BGImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height)];
+    self.BGImgView.image = [ZJCustomTools thumbnailImageRequest:10.5 url:self.url.absoluteString];
+    [self addSubview:self.BGImgView];
+    
     //顶部栏
     self.topView = [[ZJTopView alloc]init];
     self.topView.delegate = self;
@@ -929,7 +933,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     self.topView.hidden = YES;
 
     self.frame = CGRectMake(0, 0, kScreenWidth, self.frameOnFatherView.size.height);
-
+    if (self.BGImgView.hidden == NO) {
+        self.BGImgView.frame = CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height);
+    }
         // remark 约束
         
         [self.loadingIndicator mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -1191,8 +1197,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     
     self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
-//    self.playerLayer.frame = self.bounds;
-    
+    if (self.BGImgView.hidden == NO) {
+        self.BGImgView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    }
     [self.loadingIndicator mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self).offset((height -35)/2.0);
         make.left.mas_equalTo(self).offset((width -35)/2.0);
@@ -1244,6 +1251,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 #pragma 视频播放
 - (void)play{
 
+    self.BGImgView.hidden = YES;
     
     self.bottomView.isPlay  = YES;
     

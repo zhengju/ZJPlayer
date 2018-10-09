@@ -57,6 +57,10 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 @property(strong,nonatomic) ZJTopView * topView;
 
 @property(strong,nonatomic) ZJControlView * bottomView;
+/**
+ 默认背景图
+ */
+@property(strong,nonatomic) UIImageView * BGImgView;
 
 @property(assign,nonatomic) BOOL  isDragSlider;
 /**

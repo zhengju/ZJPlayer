@@ -48,7 +48,8 @@
     _cacheL.text = [NSString stringWithFormat:@"已缓存%.0f%%",_model.progress * 100];
     //放入异步线程中
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        UIImage * image = [ZJCustomTools getVideoPreViewImage:[NSURL URLWithString:_model.urlString]];
+//        UIImage * image = [ZJCustomTools getVideoPreViewImage:[NSURL URLWithString:_model.urlString]];
+       UIImage * image = [ZJCustomTools thumbnailImageRequest:5.0 url:_model.urlString];
         dispatch_async(dispatch_get_main_queue(), ^{
             //回调或者说是通知主线程刷新，
             self.icon.image = image;

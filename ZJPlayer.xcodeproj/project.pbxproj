@@ -53,6 +53,7 @@
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
 		7AA4F371216B7D870091094C /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F370216B7D870091094C /* libc++abi.tbd */; };
 		7AA4F374216C46C70091094C /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F373216C46C60091094C /* NSGIF.m */; };
+		7AA4F377216C646A0091094C /* InterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F376216C646A0091094C /* InterceptView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -144,6 +145,8 @@
 		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		7AA4F372216C46C60091094C /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
 		7AA4F373216C46C60091094C /* NSGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSGIF.m; sourceTree = "<group>"; };
+		7AA4F375216C646A0091094C /* InterceptView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterceptView.h; sourceTree = "<group>"; };
+		7AA4F376216C646A0091094C /* InterceptView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterceptView.m; sourceTree = "<group>"; };
 		D6246B24FA4627EE93BB656B /* Pods-ZJPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -246,6 +249,8 @@
 				1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */,
 				18C2053E1F6BE3030043A18E /* ZJTopView.h */,
 				18C2053F1F6BE3030043A18E /* ZJTopView.m */,
+				7AA4F375216C646A0091094C /* InterceptView.h */,
+				7AA4F376216C646A0091094C /* InterceptView.m */,
 				18C205351F6B6B4C0043A18E /* ZJLoadingIndicator.h */,
 				18C205361F6B6B4C0043A18E /* ZJLoadingIndicator.m */,
 				18C2053B1F6BA30C0043A18E /* ZJProgress.h */,
@@ -484,6 +489,7 @@
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
 				184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */,
 				182273E51F7907D700156FDA /* DownloadList.m in Sources */,
+				7AA4F377216C646A0091094C /* InterceptView.m in Sources */,
 				182273E71F7907DB00156FDA /* DownloadListController.m in Sources */,
 				1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */,
 				18D5741A1F7E2D2600E77007 /* ZJPlayerController.m in Sources */,
