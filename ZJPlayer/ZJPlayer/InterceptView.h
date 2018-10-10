@@ -8,11 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
 @interface InterceptView : UIView
+
+@property(strong,nonatomic) AVPlayerItem * playerItem;
+
 /**
  当前观看时间
  */
 @property(assign) CMTime  currentTtime;
+/**
+ 视频链接资源
+ */
+@property (nonatomic,strong) NSURL * videoUrl;
+
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem;
 
 @end
 

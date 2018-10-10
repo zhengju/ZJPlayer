@@ -103,7 +103,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
      * actualTime:缩略图实际生成的时间
      */
     NSError *error=nil;
-    CMTime time=CMTimeMakeWithSeconds(timeBySecond, 10);//CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要活的某一秒的第几帧可以使用CMTimeMake方法)
+    CMTime time=CMTimeMakeWithSeconds(timeBySecond, 1000);//CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要活的某一秒的第几帧可以使用CMTimeMake方法)
     CMTime actualTime;
     CGImageRef cgImage= [imageGenerator copyCGImageAtTime:time actualTime:&actualTime error:&error];
     if(error){

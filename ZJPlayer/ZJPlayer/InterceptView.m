@@ -21,7 +21,7 @@
 //#define kScreenWidth   200
 #define ZJHeight 150
 @interface InterceptView()<UIScrollViewDelegate>
-@property (nonatomic, strong) NSString *videoUrlStr;
+
 @property (nonatomic, strong) UIImage *cover;
 @property (nonatomic, strong) PHAsset *asset;
 @property (nonatomic, strong) UIImageView *BGView;
@@ -65,7 +65,7 @@
 - (void)setCurrentTtime:(CMTime)currentTtime{
     _currentTtime = currentTtime;
     
-    UIImage * bgImage = [ZJCustomTools thumbnailImageRequest:CMTimeGetSeconds(_currentTtime) url:self.videoUrlStr];
+    UIImage * bgImage = [ZJCustomTools thumbnailImageRequest:CMTimeGetSeconds(_currentTtime) url:self.videoUrl.absoluteString];
 
     self.BGView.image = bgImage;
     
@@ -75,7 +75,19 @@
         }
     }];
 }
-
+- (void)setPlayerItem:(AVPlayerItem *)playerItem{
+    _playerItem = playerItem;
+    
+}
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem{
+    
+    if (self = [super initWithFrame:frame]) {
+        self.videoUrl = videoUrl;
+        self.playerItem = playerItem;
+        [self loadData];
+    }
+    return self;
+}
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         [self loadData];
@@ -92,11 +104,12 @@
     return self;
 }
 - (void)loadData{
-    self.videoUrlStr = @"http://img.house.china.com.cn/voice/hdzxjh.mp4";
-   // [NSURL URLWithString:@"http://img.house.china.com.cn/voice/hdzxjh.mp4"]
     //获取截图和视频时长
+    if (self.videoUrl == nil) {
+        return;
+    }
     [self getCoverImgs];
-    AVAsset *asset = [AVAsset assetWithURL:[NSURL URLWithString:self.videoUrlStr]];
+    AVAsset *asset = [AVAsset assetWithURL:self.videoUrl];
     self.m_ftp = [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] nominalFrameRate];
     
     self.startTime = 0.0f;//
@@ -122,9 +135,11 @@
 #pragma mark -
 #pragma mark - Private method
 -(void)initPlayerView{
-    NSURL *sourceMovieUrl = [NSURL URLWithString:self.videoUrlStr];
-    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:sourceMovieUrl];
+    
+    //AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:self.videoUrl];
     //通过playerItem创建AVPlayer
+    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:self.playerItem.asset];
+    
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
     //或者直接使用URL创建AVPlayer
     //self.playss = [AVPlayer playerWithURL:sourceMovieUrl];
@@ -134,36 +149,48 @@
     [self.coverImgView.layer addSublayer:layer];
     [self.player pause];
 }
-
+//截帧逻辑可以优化，比较多时可以放在子线程中去完成
 - (void)getCoverImgs {
     NSMutableArray *imageArrays = [NSMutableArray array];
-    self.videoDuration = [self durationWithVideo:self.videoUrlStr];
+    self.videoDuration = [self durationWithVideo:self.videoUrl.absoluteString];
     self.videoDuration = 20;
     //大于11s
+    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     if (self.videoDuration>11.0) {
         //每隔1s截取一张图片
         for (int i = 0; i < self.videoDuration-1; i++) {
-            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrlStr withAtTime:i+0.1];
-            [imageArrays addObject:image];
+            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:i+0.01];
+            if (image) {
+                [imageArrays addObject:image];
+            
+            }
+            
         }
     }
     else{
         //截取11张
         for (int i = 0; i < 11; i++) {
-            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrlStr withAtTime:self.videoDuration*i/12.0+0.1];
-            [imageArrays addObject:image];
+            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:self.videoDuration*i/12.0+0.01];
+            if (image) {
+                [imageArrays addObject:image];
+            }
+            
         }
     }
     
     self.coverImgs = [NSArray arrayWithArray:imageArrays];
     self.cover = [imageArrays objectAtIndex:0];
+    
+    CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+    NSLog(@"截屏耗时：-----%f", end - start);
+    
 }
 
 - (void)createUI {
     self.backgroundColor = UIColorFromRGB(0x2f2f2f);
     
     
-    UIImage * bgImage = [ZJCustomTools thumbnailImageRequest:5.0 url:self.videoUrlStr];
+    UIImage * bgImage = [ZJCustomTools thumbnailImageRequest:5.0 url:self.videoUrl.absoluteString];
     self.BGView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     self.BGView.image = bgImage;
     [self addSubview:self.BGView];
@@ -360,6 +387,8 @@
 }
 
 - (void)cancel {
+    [self.player pause];
+    self.player  = nil;
     [self removeFromSuperview];
 }
 
@@ -367,24 +396,29 @@
     //裁剪视频可以看这篇文章：http://www.hudongdong.com/ios/550.html
     NSLog(@"开始裁剪:开始时间:%f,结束时间:%f,裁剪区域W:%f,H:%f",self.startTime,self.endTime,self.clipPoint.x,self.clipPoint.y);
     NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
-    NSRange range = NSMakeRange(self.startTime, self.endTime - self.startTime);
-    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:[NSURL URLWithString:self.videoUrlStr] withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
+    NSRange range = NSMakeRange(self.startTime, 30);
+    CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
+    // dosomething
+    
+    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.videoUrl withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
         if (error) {
             NSLog(@"error:%@",error);
             return ;
         }
+        CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
+        NSLog(@"%f", end- start);
         NSLog(@"----++%@",url);//本地视频记得删除
         [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
             
             NSLog(@"Finished generating GIF: %@", GifURL);
             //保存到相册
             NSData *data = [NSData dataWithContentsOfURL:GifURL];
-              
+             
             ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
             [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
                                                                                           NSError *error) {
                 HUDNormal(@"保存成功");
-                            NSLog(@"Success at %@", [assetURL path] );
+                NSLog(@"Success at %@", [assetURL path] );
                 
             }] ;
             
@@ -648,8 +682,6 @@
         self.endTime = self.tempEndTime;
     }
 }
-
-
 ///获取本地视频的时长
 - (NSUInteger)durationWithVideo:(NSString *)videoPath {
     NSDictionary *opts = [NSDictionary dictionaryWithObject:@(NO) forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
@@ -660,28 +692,42 @@
 }
 
 //截图
-- (UIImage*)getVideoPreViewImageFromVideoPath:(NSString*)videoPath withAtTime:(float)atTime {
+- (UIImage*)getVideoPreViewImageFromVideoPath:(NSURL *)videoPath withAtTime:(float)atTime {
+    
     if (!videoPath) {
         return nil;
     }
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL URLWithString:self.videoUrlStr] options:nil];
+   // AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoPath options:nil];
+    AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
     if ([asset tracksWithMediaType:AVMediaTypeVideo].count == 0) {
         return nil;
     }
+
     AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
+    
     gen.appliesPreferredTrackTransform = YES;
-    gen.requestedTimeToleranceAfter = kCMTimeZero;
-    gen.requestedTimeToleranceBefore = kCMTimeZero;
-    CMTime time = CMTimeMakeWithSeconds(atTime, 600);
+    
+    //防止时间出现偏差 当你指定要获取time时刻的帧，如果不设置这两个属性，系统会默认如果在指定time段内有缓存，就从缓存中直接返回结果，但并不准确，这是为了优化性能
+//    gen.requestedTimeToleranceAfter = kCMTimeZero;
+//    gen.requestedTimeToleranceBefore = kCMTimeZero;
+    
+    CMTime time = CMTimeMakeWithSeconds(atTime, 1000);//atTime  第几秒的截图,是当前视频播放到的帧数的具体时间; 1000 首选的时间尺度 "每秒的帧数"
+    
     NSError *error = nil;
     CMTime actualTime;
-    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];//线上视频比较耗时(新创建的AVURLAsset比较耗时)，用上一个AVURLAsset,或等player缓冲可以看了的时候，再截屏耗时短
+    CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+    NSLog(@"一张图片耗时：====--%f", end - start);
+    
     UIImage *img = [[UIImage alloc] initWithCGImage:image];
     UIGraphicsBeginImageContext(CGSizeMake([[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].width, [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].height));//asset.naturalSize.width, asset.naturalSize.height)
     [img drawInRect:CGRectMake(0, 0, [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].width, [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].height)];
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     CGImageRelease(image);
+   
     return scaledImage;
 }
 

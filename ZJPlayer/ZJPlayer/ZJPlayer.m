@@ -1321,7 +1321,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     // CMTimeMake(帧数（slider.value * timeScale）, 帧/sec)
     // 直接用秒来获取CMTime
     [self.player seekToTime:CMTimeMakeWithSeconds(slider.value, self.playerItem.currentTime.timescale)];
-
+    NSLog(@"%d,%lld",self.player.currentItem.asset.duration.timescale,self.player.currentItem.asset.duration.value);
 }
 // 点击事件的Slider
 - (void)touchSlider:(UITapGestureRecognizer *)tap
@@ -1363,8 +1363,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     [self.player pause];
     
-    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem];
     view.currentTtime = self.playerItem.currentTime;
+    view.playerItem = self.player.currentItem;
     [self addSubview:view];
     
     return;

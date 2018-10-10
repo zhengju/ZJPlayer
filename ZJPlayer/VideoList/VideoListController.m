@@ -59,8 +59,8 @@
     
     NSArray * titles = @[
                          @"共享新时代 共赢新发展",
-                         @"共享新时代 共赢新发展",
-                         @"共享新时代 共赢新发展",
+                         @"兴隆。国际城",
+                         @"海妖宝藏",
                          @"共享新时代 共赢新发展",
                          @"共享新时代 共赢新发展",
                          @"共享新时代 共赢新发展"
@@ -68,8 +68,8 @@
 
     NSArray * urls = @[
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
-                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
-                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/rongch.mp4",
+                       @"http://vf1.mtime.cn/Video/2012/04/23/mp4/120423212602431929.mp4",
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4"
