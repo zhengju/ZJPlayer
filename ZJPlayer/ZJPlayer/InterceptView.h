@@ -16,13 +16,13 @@
 /**
  当前观看时间
  */
-@property(assign) CMTime  currentTtime;
+@property(assign,nonatomic) CMTime  currentTtime;
 /**
  视频链接资源
  */
 @property (nonatomic,strong) NSURL * videoUrl;
 
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem;
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime;
 
 @end
 

@@ -1361,9 +1361,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)gifScreenshot{
     
     
-    [self.player pause];
+    [self pause];
     
-    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem];
+    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem currentTime:self.playerItem.currentTime];
     view.currentTtime = self.playerItem.currentTime;
     view.playerItem = self.player.currentItem;
     [self addSubview:view];

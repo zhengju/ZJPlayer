@@ -64,26 +64,28 @@
 @implementation InterceptView
 - (void)setCurrentTtime:(CMTime)currentTtime{
     _currentTtime = currentTtime;
-    
-    UIImage * bgImage = [ZJCustomTools thumbnailImageRequest:CMTimeGetSeconds(_currentTtime) url:self.videoUrl.absoluteString];
+    UIImage * bgImage = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:CMTimeGetSeconds(_currentTtime)+0.01];
 
     self.BGView.image = bgImage;
     
-    [self.player seekToTime:_currentTtime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+    CMTime time = CMTimeMakeWithSeconds(CMTimeGetSeconds(_currentTtime), self.m_ftp);
+    [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
         if (finished) {
             [self.player pause];
         }
     }];
 }
+
 - (void)setPlayerItem:(AVPlayerItem *)playerItem{
     _playerItem = playerItem;
     
 }
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem{
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime{
     
     if (self = [super initWithFrame:frame]) {
         self.videoUrl = videoUrl;
         self.playerItem = playerItem;
+        self.currentTtime = currentTime;
         [self loadData];
     }
     return self;
@@ -109,10 +111,12 @@
         return;
     }
     [self getCoverImgs];
-    AVAsset *asset = [AVAsset assetWithURL:self.videoUrl];
+//    AVAsset *asset = [AVAsset assetWithURL:self.videoUrl];
+    AVAsset *asset = self.playerItem.asset;
     self.m_ftp = [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] nominalFrameRate];
-    
-    self.startTime = 0.0f;//
+    CMTimeShow(self.currentTtime);
+    CMTimeShow(asset.duration);
+    self.startTime = 0.0f + CMTimeGetSeconds(self.currentTtime);//
     self.endTime = self.startTime + 10.0f;
     self.imgWidth = [UIImage imageNamed:@"resume_btn_control_r"].size.width;
     CGFloat totalWidth = kScreenWidth - 2*kLeftWidth;
@@ -154,17 +158,21 @@
     NSMutableArray *imageArrays = [NSMutableArray array];
     self.videoDuration = [self durationWithVideo:self.videoUrl.absoluteString];
     self.videoDuration = 20;
+    
+    
+    float second = CMTimeGetSeconds(self.currentTtime);
+    
+    //要判断seconds是否会超出总的时间区间
+
     //大于11s
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     if (self.videoDuration>11.0) {
         //每隔1s截取一张图片
-        for (int i = 0; i < self.videoDuration-1; i++) {
-            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:i+0.01];
+        for (int i = 0; i <  self.videoDuration-1; i++) {
+            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime: second + i +0.01];
             if (image) {
                 [imageArrays addObject:image];
-            
             }
-            
         }
     }
     else{
@@ -190,11 +198,12 @@
     self.backgroundColor = UIColorFromRGB(0x2f2f2f);
     
     
-    UIImage * bgImage = [ZJCustomTools thumbnailImageRequest:5.0 url:self.videoUrl.absoluteString];
+    UIImage * bgImage =  [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:5+0.01];
+    
     self.BGView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    self.BGView.backgroundColor = [UIColor redColor];
     self.BGView.image = bgImage;
     [self addSubview:self.BGView];
-    
     
     //头部确定和取消按钮
     UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 72)];
@@ -694,9 +703,6 @@
 //截图
 - (UIImage*)getVideoPreViewImageFromVideoPath:(NSURL *)videoPath withAtTime:(float)atTime {
     
-    if (!videoPath) {
-        return nil;
-    }
    // AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoPath options:nil];
     AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
     if ([asset tracksWithMediaType:AVMediaTypeVideo].count == 0) {
@@ -712,7 +718,7 @@
 //    gen.requestedTimeToleranceAfter = kCMTimeZero;
 //    gen.requestedTimeToleranceBefore = kCMTimeZero;
     
-    CMTime time = CMTimeMakeWithSeconds(atTime, 1000);//atTime  第几秒的截图,是当前视频播放到的帧数的具体时间; 1000 首选的时间尺度 "每秒的帧数"
+    CMTime time = CMTimeMakeWithSeconds(atTime, 600);//atTime  第几秒的截图,是当前视频播放到的帧数的具体时间; 600 首选的时间尺度 "每秒的帧数"
     
     NSError *error = nil;
     CMTime actualTime;
