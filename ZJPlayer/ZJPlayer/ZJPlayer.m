@@ -751,6 +751,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             
             [UIView animateWithDuration:1 animations:^{
                 [self.player play];
+                self.BGImgView.hidden = YES;
                 self.bottomView.isPlay  = YES;
             }];
 
@@ -828,6 +829,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (self.player.rate == 0 && self.isPlayAfterPause) {
 
         [self.player play];
+        self.BGImgView.hidden = YES;
         self.bottomView.isPlay  = YES;
     }
 }
@@ -1317,6 +1319,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
 - (void)sliderTapValueChange:(UISlider *)slider
 {
+    self.BGImgView.hidden = YES;
     self.isDragSlider = NO;
     // CMTimeMake(帧数（slider.value * timeScale）, 帧/sec)
     // 直接用秒来获取CMTime
@@ -1335,6 +1338,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (self.player.rate == 0)
     {
         self.bottomView.isPlay  = YES;
+        self.BGImgView.hidden = YES;
         [self.player play];
     }
 }

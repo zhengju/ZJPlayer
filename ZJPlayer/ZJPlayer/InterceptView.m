@@ -270,7 +270,7 @@
     [self addSubview:self.playBtn];
     
     //下面的小图
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kLeftWidth, CGRectGetMaxY(clipView.frame) + 12, kScreenWidth-2*kLeftWidth, 50)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 20, kScreenWidth-2*kLeftWidth, 50)];
     [self.scrollView setTag:kClipTimeScrollTag];
     self.scrollView.delegate = self;
     [self.scrollView setAlwaysBounceHorizontal:NO];
