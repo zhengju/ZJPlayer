@@ -18,6 +18,7 @@
 		182273E81F7907DE00156FDA /* PlayerVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 182273D61F79077E00156FDA /* PlayerVideoController.m */; };
 		182273E91F790BFB00156FDA /* DownloadListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 182273D51F79077E00156FDA /* DownloadListCell.xib */; };
 		1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830FDA51F72566B00097115 /* CoreGraphics.framework */; };
+		18318B65216E45D4006507B6 /* InterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18318B63216E45D4006507B6 /* InterceptView.m */; };
 		184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829B41F79E99200BF2BDB /* ZJSuperViewController.m */; };
 		184829BD1F79EE5500BF2BDB /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829BA1F79EE4500BF2BDB /* NSString+Hash.m */; };
 		184829BE1F79EE5900BF2BDB /* ZJDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829BC1F79EE4500BF2BDB /* ZJDownloadManager.m */; };
@@ -53,7 +54,6 @@
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
 		7AA4F371216B7D870091094C /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F370216B7D870091094C /* libc++abi.tbd */; };
 		7AA4F374216C46C70091094C /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F373216C46C60091094C /* NSGIF.m */; };
-		7AA4F377216C646A0091094C /* InterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F376216C646A0091094C /* InterceptView.m */; };
 		7AA4F37C216C8AA30091094C /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F37B216C8AA30091094C /* UIView+Frame.m */; };
 		7AA4F37F216CA8590091094C /* UIImage+Crop.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F37E216CA8590091094C /* UIImage+Crop.m */; };
 /* End PBXBuildFile section */
@@ -79,6 +79,8 @@
 		182273DF1F79079500156FDA /* VideoListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoListController.h; sourceTree = "<group>"; };
 		182273E01F79079500156FDA /* VideoListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoListCell.h; sourceTree = "<group>"; };
 		1830FDA51F72566B00097115 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		18318B63216E45D4006507B6 /* InterceptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptView.m; sourceTree = "<group>"; };
+		18318B64216E45D4006507B6 /* InterceptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptView.h; sourceTree = "<group>"; };
 		184829B41F79E99200BF2BDB /* ZJSuperViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJSuperViewController.m; sourceTree = "<group>"; };
 		184829B61F79EA6B00BF2BDB /* ZJSuperViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJSuperViewController.h; sourceTree = "<group>"; };
 		184829B91F79EE4500BF2BDB /* NSString+Hash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Hash.h"; sourceTree = "<group>"; };
@@ -147,8 +149,6 @@
 		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		7AA4F372216C46C60091094C /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
 		7AA4F373216C46C60091094C /* NSGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSGIF.m; sourceTree = "<group>"; };
-		7AA4F375216C646A0091094C /* InterceptView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterceptView.h; sourceTree = "<group>"; };
-		7AA4F376216C646A0091094C /* InterceptView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterceptView.m; sourceTree = "<group>"; };
 		7AA4F37A216C8AA30091094C /* UIView+Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
 		7AA4F37B216C8AA30091094C /* UIView+Frame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
 		7AA4F37D216CA8590091094C /* UIImage+Crop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Crop.h"; sourceTree = "<group>"; };
@@ -208,6 +208,59 @@
 			path = VideoList;
 			sourceTree = "<group>";
 		};
+		18318B62216E45D4006507B6 /* VideoScreenshot */ = {
+			isa = PBXGroup;
+			children = (
+				7AA4F372216C46C60091094C /* NSGIF.h */,
+				7AA4F373216C46C60091094C /* NSGIF.m */,
+				18318B63216E45D4006507B6 /* InterceptView.m */,
+				18318B64216E45D4006507B6 /* InterceptView.h */,
+				7AA4F37D216CA8590091094C /* UIImage+Crop.h */,
+				7AA4F37E216CA8590091094C /* UIImage+Crop.m */,
+			);
+			path = VideoScreenshot;
+			sourceTree = "<group>";
+		};
+		18318B66216E4671006507B6 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */,
+				1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */,
+				18D574181F7E2D2600E77007 /* ZJPlayerController.h */,
+				18D574191F7E2D2600E77007 /* ZJPlayerController.m */,
+				1895D6D01F64E6BD00A3D3CD /* ZJControlView.h */,
+				1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */,
+				18C2053E1F6BE3030043A18E /* ZJTopView.h */,
+				18C2053F1F6BE3030043A18E /* ZJTopView.m */,
+				18C2053B1F6BA30C0043A18E /* ZJProgress.h */,
+				18C2053C1F6BA30C0043A18E /* ZJProgress.m */,
+				18EE50991F6FD82900A5C606 /* ZJBrightness.h */,
+				18EE509A1F6FD82900A5C606 /* ZJBrightness.m */,
+				18EE509C1F70008200A5C606 /* ZJVolume.h */,
+				18EE509D1F70008200A5C606 /* ZJVolume.m */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		18318B67216E4751006507B6 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				7AA4F37A216C8AA30091094C /* UIView+Frame.h */,
+				7AA4F37B216C8AA30091094C /* UIView+Frame.m */,
+				18C205381F6B71F30043A18E /* UIViewController+Player.h */,
+				18C205391F6B71F30043A18E /* UIViewController+Player.m */,
+				18FBE06E1F6F7ABE00133732 /* UINavigationController+Player.h */,
+				18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */,
+				18D574151F7DF15700E77007 /* UITabBarController+Player.h */,
+				18D574161F7DF15700E77007 /* UITabBarController+Player.m */,
+				18C204EB1F692AC60043A18E /* UIView+Player.h */,
+				18C204EC1F692AC60043A18E /* UIView+Player.m */,
+				1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */,
+				1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		1834B5D01F7612F400C426DF /* DownloadList */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,42 +299,13 @@
 		1895D6CB1F64BCE200A3D3CD /* ZJPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				7AA4F372216C46C60091094C /* NSGIF.h */,
-				7AA4F373216C46C60091094C /* NSGIF.m */,
-				1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */,
-				1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */,
-				18D574181F7E2D2600E77007 /* ZJPlayerController.h */,
-				18D574191F7E2D2600E77007 /* ZJPlayerController.m */,
-				1895D6D01F64E6BD00A3D3CD /* ZJControlView.h */,
-				1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */,
-				18C2053E1F6BE3030043A18E /* ZJTopView.h */,
-				18C2053F1F6BE3030043A18E /* ZJTopView.m */,
-				7AA4F375216C646A0091094C /* InterceptView.h */,
-				7AA4F376216C646A0091094C /* InterceptView.m */,
-				7AA4F37D216CA8590091094C /* UIImage+Crop.h */,
-				7AA4F37E216CA8590091094C /* UIImage+Crop.m */,
+				18318B67216E4751006507B6 /* Category */,
+				18318B66216E4671006507B6 /* Player */,
+				18318B62216E45D4006507B6 /* VideoScreenshot */,
 				18C205351F6B6B4C0043A18E /* ZJLoadingIndicator.h */,
 				18C205361F6B6B4C0043A18E /* ZJLoadingIndicator.m */,
-				18C2053B1F6BA30C0043A18E /* ZJProgress.h */,
-				18C2053C1F6BA30C0043A18E /* ZJProgress.m */,
-				18EE50991F6FD82900A5C606 /* ZJBrightness.h */,
-				18EE509A1F6FD82900A5C606 /* ZJBrightness.m */,
-				18EE509C1F70008200A5C606 /* ZJVolume.h */,
-				18EE509D1F70008200A5C606 /* ZJVolume.m */,
-				1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */,
-				1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */,
 				184829BF1F7A05A600BF2BDB /* ZJCustomTools.h */,
 				184829C01F7A05A600BF2BDB /* ZJCustomTools.m */,
-				18C204EB1F692AC60043A18E /* UIView+Player.h */,
-				18C204EC1F692AC60043A18E /* UIView+Player.m */,
-				7AA4F37A216C8AA30091094C /* UIView+Frame.h */,
-				7AA4F37B216C8AA30091094C /* UIView+Frame.m */,
-				18C205381F6B71F30043A18E /* UIViewController+Player.h */,
-				18C205391F6B71F30043A18E /* UIViewController+Player.m */,
-				18FBE06E1F6F7ABE00133732 /* UINavigationController+Player.h */,
-				18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */,
-				18D574151F7DF15700E77007 /* UITabBarController+Player.h */,
-				18D574161F7DF15700E77007 /* UITabBarController+Player.m */,
 				1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */,
 				18C204F61F6A74F30043A18E /* ZJCacheTask.h */,
 				18C204F71F6A74F30043A18E /* ZJCacheTask.m */,
@@ -509,8 +533,8 @@
 				18C205401F6BE3030043A18E /* ZJTopView.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
 				184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */,
+				18318B65216E45D4006507B6 /* InterceptView.m in Sources */,
 				182273E51F7907D700156FDA /* DownloadList.m in Sources */,
-				7AA4F377216C646A0091094C /* InterceptView.m in Sources */,
 				182273E71F7907DB00156FDA /* DownloadListController.m in Sources */,
 				1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */,
 				18D5741A1F7E2D2600E77007 /* ZJPlayerController.m in Sources */,
