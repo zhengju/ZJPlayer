@@ -52,6 +52,7 @@
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
 		7A6DA088216EE12D008C02CB /* ZJInterceptTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */; };
+		7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */; };
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
 		7AA4F371216B7D870091094C /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F370216B7D870091094C /* libc++abi.tbd */; };
 		7AA4F374216C46C70091094C /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F373216C46C60091094C /* NSGIF.m */; };
@@ -148,6 +149,8 @@
 		69EB192BACD32CA54F2F1785 /* Pods-ZJPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		7A6DA086216EE12D008C02CB /* ZJInterceptTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptTopView.h; sourceTree = "<group>"; };
 		7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptTopView.m; sourceTree = "<group>"; };
+		7A6DA089216F2071008C02CB /* ZJSelectFrameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJSelectFrameView.h; sourceTree = "<group>"; };
+		7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJSelectFrameView.m; sourceTree = "<group>"; };
 		7AA4F36E216B6E590091094C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		7AA4F372216C46C60091094C /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
@@ -220,6 +223,8 @@
 				18318B63216E45D4006507B6 /* InterceptView.m */,
 				7A6DA086216EE12D008C02CB /* ZJInterceptTopView.h */,
 				7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */,
+				7A6DA089216F2071008C02CB /* ZJSelectFrameView.h */,
+				7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */,
 				7AA4F37D216CA8590091094C /* UIImage+Crop.h */,
 				7AA4F37E216CA8590091094C /* UIImage+Crop.m */,
 			);
@@ -557,6 +562,7 @@
 				18EE509B1F6FD82900A5C606 /* ZJBrightness.m in Sources */,
 				18C2053D1F6BA30C0043A18E /* ZJProgress.m in Sources */,
 				7AA4F37F216CA8590091094C /* UIImage+Crop.m in Sources */,
+				7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */,
 				184829BD1F79EE5500BF2BDB /* NSString+Hash.m in Sources */,
 				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,
 				182273E31F7907B500156FDA /* VideoList.m in Sources */,

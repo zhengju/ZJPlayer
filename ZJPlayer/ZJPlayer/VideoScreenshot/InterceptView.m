@@ -20,7 +20,7 @@
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define kColorWithRGBA(_R,_G,_B,_A)    ((UIColor *)[UIColor colorWithRed:_R/255.0 green:_G/255.0 blue:_B/255.0 alpha:_A])
 //#define kScreenWidth   200
-#define ZJHeight 150
+#define ZJHeight 200
 @interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate>
 
 @property (nonatomic, strong) UIImage *cover;
@@ -734,7 +734,6 @@
         CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
         NSLog(@"%f", end- start);
         NSLog(@"----++%@",url);//本地视频记得删除
-        
         NSString * urlpath = url.absoluteString;
         if ([url.absoluteString hasPrefix:@"file://"]) {
             urlpath = [url.absoluteString substringFromIndex:7];
@@ -766,6 +765,7 @@
         CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
         NSLog(@"%f", end- start);
         NSLog(@"----++%@",url);//本地视频记得删除
+        
         [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
             
             NSLog(@"Finished generating GIF: %@", GifURL);
@@ -778,7 +778,7 @@
                 HUDNormal(@"保存成功");
                 NSLog(@"Success at %@", [assetURL path] );
                 
-            }] ;
+            }];
             
         }];
     }];
