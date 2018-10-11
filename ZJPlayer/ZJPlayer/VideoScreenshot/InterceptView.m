@@ -13,6 +13,7 @@
 #import <Photos/Photos.h>
 #import "ZJCommonHeader.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "ZJInterceptTopView.h"
 #define kLeftWidth   50 //scrollview的左边距
 #define kCoverImageScrollTag 10
 #define kClipTimeScrollTag  20
@@ -20,10 +21,11 @@
 #define kColorWithRGBA(_R,_G,_B,_A)    ((UIColor *)[UIColor colorWithRed:_R/255.0 green:_G/255.0 blue:_B/255.0 alpha:_A])
 //#define kScreenWidth   200
 #define ZJHeight 150
-@interface InterceptView()<UIScrollViewDelegate>
+@interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate>
 
 @property (nonatomic, strong) UIImage *cover;
 @property (nonatomic, strong) PHAsset *asset;
+@property (nonatomic, strong) ZJInterceptTopView * topView;
 @property (nonatomic, strong) UIImageView *BGView;
 @property (nonatomic, strong) UIScrollView *scrollView;         //视频封面的滚动
 @property (nonatomic, strong) UIImageView *coverImgView;        //封面imgview
@@ -206,29 +208,29 @@
     [self addSubview:self.BGView];
     
     //头部确定和取消按钮
-    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 72)];
-    topView.backgroundColor = [UIColor clearColor];
-    [self addSubview:topView];
+    self.topView = [[ZJInterceptTopView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 72)];
+    self.topView.delegate = self;
+    [self addSubview:self.topView];
     
-    UILabel *titleLabel = [[UILabel alloc] init];
-    [titleLabel setText:NSLocalizedString(@"裁剪", nil)];
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
-    [titleLabel sizeToFit];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [topView addSubview:titleLabel];
-    
-    //取消
-    UIButton *cancelButton = [[UIButton alloc]init];
-    [cancelButton setImage:[UIImage imageNamed:@"resume_icon_return"] forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-    [topView addSubview:cancelButton];
-    
-    //确定
-    UIButton *confirmButton = [[UIButton alloc]init];
-    [confirmButton setImage:[UIImage imageNamed:@"resume_btn_complete"] forState:UIControlStateNormal];
-    [confirmButton addTarget:self action:@selector(confirm) forControlEvents:UIControlEventTouchUpInside];
-    [topView addSubview:confirmButton];
-    
+//    UILabel *titleLabel = [[UILabel alloc] init];
+//    [titleLabel setText:NSLocalizedString(@"裁剪", nil)];
+//    [titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
+//    [titleLabel sizeToFit];
+//    [titleLabel setTextColor:[UIColor whiteColor]];
+//    [topView addSubview:titleLabel];
+//
+//    //取消
+//    UIButton *cancelButton = [[UIButton alloc]init];
+//    [cancelButton setImage:[UIImage imageNamed:@"resume_icon_return"] forState:UIControlStateNormal];
+//    [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
+//    [topView addSubview:cancelButton];
+//
+//    //确定
+//    UIButton *confirmButton = [[UIButton alloc]init];
+//    [confirmButton setImage:[UIImage imageNamed:@"resume_btn_complete"] forState:UIControlStateNormal];
+//    [confirmButton addTarget:self action:@selector(confirm) forControlEvents:UIControlEventTouchUpInside];
+//    [topView addSubview:confirmButton];
+//
     //主预览图
     UIScrollView *clipView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 72, kScreenWidth, ZJHeight)];
     clipView.delegate = self;
@@ -379,61 +381,23 @@
         make.top.equalTo(self.scrollView.mas_bottom).with.offset(8);
     }];
     
-    [cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).with.offset(35);
-        make.left.equalTo(self).with.offset(8);
-    }];
-    
-    [confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(cancelButton);
-        make.right.equalTo(self).with.offset(-14);
-    }];
-    
-    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self);
-        make.centerY.equalTo(cancelButton);
-    }];
+//    [cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self).with.offset(35);
+//        make.left.equalTo(self).with.offset(8);
+//    }];
+//
+//    [confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(cancelButton);
+//        make.right.equalTo(self).with.offset(-14);
+//    }];
+//
+//    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(self);
+//        make.centerY.equalTo(cancelButton);
+//    }];
 }
 
-- (void)cancel {
-    [self.player pause];
-    self.player  = nil;
-    [self removeFromSuperview];
-}
 
-- (void)confirm {
-    //裁剪视频可以看这篇文章：http://www.hudongdong.com/ios/550.html
-    NSLog(@"开始裁剪:开始时间:%f,结束时间:%f,裁剪区域W:%f,H:%f",self.startTime,self.endTime,self.clipPoint.x,self.clipPoint.y);
-    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
-    NSRange range = NSMakeRange(self.startTime, 30);
-    CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
-    // dosomething
-    
-    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.videoUrl withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
-        if (error) {
-            NSLog(@"error:%@",error);
-            return ;
-        }
-        CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
-        NSLog(@"%f", end- start);
-        NSLog(@"----++%@",url);//本地视频记得删除
-        [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
-            
-            NSLog(@"Finished generating GIF: %@", GifURL);
-            //保存到相册
-            NSData *data = [NSData dataWithContentsOfURL:GifURL];
-             
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
-                                                                                          NSError *error) {
-                HUDNormal(@"保存成功");
-                NSLog(@"Success at %@", [assetURL path] );
-                
-            }] ;
-            
-        }];
-    }];
-}
 
 - (void)playVideo {
     self.playBtn.hidden = YES;
@@ -736,5 +700,96 @@
    
     return scaledImage;
 }
+#pragma mark - ZJInterceptTopViewDelegate
+- (void)back{
+    [self.player pause];
+    self.player  = nil;
+    [self removeFromSuperview];
+}
+- (void)finishWithAction:(float)action{
+    
+    if (action == 0) {//截视频
+        [self videoCapture];
+    }else{//截GIF
+        [self gifScreenshot];
+    }
+}
+- (void)setAction:(float)action{
+    if (action == 0) {//截视频
+        NSLog(@"视频");
+    }else{//截GIF
+        NSLog(@"GIF");
+    }
+}
+
+- (void)videoCapture{
+    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
+    NSRange range = NSMakeRange(self.startTime, self.endTime - self.startTime);
+    CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
+    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.videoUrl withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
+        if (error) {
+            NSLog(@"error:%@",error);
+            return ;
+        }
+        CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
+        NSLog(@"%f", end- start);
+        NSLog(@"----++%@",url);//本地视频记得删除
+        
+        NSString * urlpath = url.absoluteString;
+        if ([url.absoluteString hasPrefix:@"file://"]) {
+            urlpath = [url.absoluteString substringFromIndex:7];
+        }
+
+        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(urlpath);
+        if(compatible)
+        {
+            //保存相册核心代码
+            UISaveVideoAtPathToSavedPhotosAlbum(urlpath,self,@selector(savedVideoPhotoImage:didFinishSavingWithError:contextInfo:),nil);
+        }else{
+            HUDNormal(@"路径失败");
+        }
+    }];
+}
+- (void)gifScreenshot{
+    //裁剪视频可以看这篇文章：http://www.hudongdong.com/ios/550.html
+    NSLog(@"开始裁剪:开始时间:%f,结束时间:%f,裁剪区域W:%f,H:%f",self.startTime,self.endTime,self.clipPoint.x,self.clipPoint.y);
+    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
+    NSRange range = NSMakeRange(self.startTime, self.endTime - self.startTime);
+    CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
+    // dosomething
+    
+    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.videoUrl withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
+        if (error) {
+            NSLog(@"error:%@",error);
+            return ;
+        }
+        CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
+        NSLog(@"%f", end- start);
+        NSLog(@"----++%@",url);//本地视频记得删除
+        [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
+            
+            NSLog(@"Finished generating GIF: %@", GifURL);
+            //保存到相册
+            NSData *data = [NSData dataWithContentsOfURL:GifURL];
+             
+            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
+                                                                                          NSError *error) {
+                HUDNormal(@"保存成功");
+                NSLog(@"Success at %@", [assetURL path] );
+                
+            }] ;
+            
+        }];
+    }];
+}
+- (void)savedVideoPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError*)error contextInfo: (void*)contextInfo {
+    if(error) {
+        NSLog(@"保存视频失败%@", error.localizedDescription);
+    }else{
+        HUDNormal(@"保存视频成功");
+    }
+}
 
 @end
+
