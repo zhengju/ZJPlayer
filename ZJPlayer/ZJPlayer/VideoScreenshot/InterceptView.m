@@ -723,6 +723,11 @@
 }
 
 - (void)videoCapture{
+    
+    [self videoCropping];
+    
+    return;
+
     NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
     NSRange range = NSMakeRange(self.startTime, self.endTime - self.startTime);
     CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
@@ -735,19 +740,24 @@
         NSLog(@"%f", end- start);
         NSLog(@"----++%@",url);//本地视频记得删除
         NSString * urlpath = url.absoluteString;
-        if ([url.absoluteString hasPrefix:@"file://"]) {
-            urlpath = [url.absoluteString substringFromIndex:7];
-        }
-
-        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(urlpath);
-        if(compatible)
-        {
-            //保存相册核心代码
-            UISaveVideoAtPathToSavedPhotosAlbum(urlpath,self,@selector(savedVideoPhotoImage:didFinishSavingWithError:contextInfo:),nil);
-        }else{
-            HUDNormal(@"路径失败");
-        }
+        [self saveVideoToAlbumWithUrlPath:urlpath];
     }];
+}
+- (void)saveVideoToAlbumWithUrlPath:(NSString *)urlPath{
+    
+    
+    if ([urlPath hasPrefix:@"file://"]) {
+        urlPath = [urlPath substringFromIndex:7];
+    }
+    
+    BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(urlPath);
+    if(compatible)
+    {
+        //保存相册核心代码
+        UISaveVideoAtPathToSavedPhotosAlbum(urlPath,self,@selector(savedVideoPhotoImage:didFinishSavingWithError:contextInfo:),nil);
+    }else{
+        HUDNormal(@"路径失败");
+    }
 }
 - (void)gifScreenshot{
     //裁剪视频可以看这篇文章：http://www.hudongdong.com/ios/550.html
@@ -790,6 +800,129 @@
         HUDNormal(@"保存视频成功");
     }
 }
+#pragma mark - 视频裁剪
+- (void)videoCropping{
+    
+    //1 — 采集
+    
+    //不添加背景音乐
+    NSURL *audioUrl =nil;
+    //AVURLAsset此类主要用于获取媒体信息，包括视频、声音等
+    AVURLAsset* audioAsset = [[AVURLAsset alloc] initWithURL:audioUrl options:nil];
+    
+    AVAsset *videoAsset = self.playerItem.asset;
+    
+    // 2 创建AVMutableComposition实例. apple developer 里边的解释 【AVMutableComposition is a mutable subclass of AVComposition you use when you want to create a new composition from existing assets. You can add and remove tracks, and you can add, remove, and scale time ranges.】
+    AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
+    
+    // 3 - 视频通道  工程文件中的轨道，有音频轨、视频轨等，里面可以插入各种对应的素材
+    
+    // 这块是裁剪,rangtime .前面的是开始时间,后面是裁剪多长
+    CMTimeRange videoTimeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(self.startTime, self.m_ftp),CMTimeMakeWithSeconds(self.endTime - self.startTime, self.m_ftp));
 
+   //音频轨道
+
+  //视频声音采集(也可不执行这段代码不采集视频音轨，合并后的视频文件将没有视频原来的声音)
+
+    AVMutableCompositionTrack *compositionVoiceTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+
+    [compositionVoiceTrack insertTimeRange:videoTimeRange ofTrack:([videoAsset tracksWithMediaType:AVMediaTypeAudio].count>0)?[videoAsset tracksWithMediaType:AVMediaTypeAudio].firstObject:nil atTime:kCMTimeZero error:nil];
+
+    AVMutableCompositionTrack *videoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo
+                                                                preferredTrackID:kCMPersistentTrackID_Invalid];
+    NSError *error = nil;
+    // 这块是裁剪,rangtime .前面的是开始时间,后面是裁剪多长 (我这裁剪的是从第二秒开始裁剪，裁剪2.55秒时长.)
+    [videoTrack insertTimeRange:videoTimeRange
+                        ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0]
+                         atTime:kCMTimeZero
+                          error:&error];
+    
+    // 3.1 AVMutableVideoCompositionInstruction 视频轨道中的一个视频，可以缩放、旋转等
+    AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    mainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration);
+    
+    // 3.2 AVMutableVideoCompositionLayerInstruction 一个视频轨道，包含了这个轨道上的所有视频素材
+    AVMutableVideoCompositionLayerInstruction *videolayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+    AVAssetTrack *videoAssetTrack = [[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    UIImageOrientation videoAssetOrientation_  = UIImageOrientationUp;
+    
+    BOOL isVideoAssetPortrait_  = NO;
+    
+    CGAffineTransform videoTransform = videoAssetTrack.preferredTransform;
+    
+    if (videoTransform.a == 0 && videoTransform.b == 1.0 && videoTransform.c == -1.0 && videoTransform.d == 0) {
+        videoAssetOrientation_ = UIImageOrientationRight;
+        isVideoAssetPortrait_ = YES;
+    }
+    if (videoTransform.a == 0 && videoTransform.b == -1.0 && videoTransform.c == 1.0 && videoTransform.d == 0) {
+        videoAssetOrientation_ =  UIImageOrientationLeft;
+        isVideoAssetPortrait_ = YES;
+    }
+    if (videoTransform.a == 1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == 1.0) {
+        videoAssetOrientation_ =  UIImageOrientationUp;
+    }
+    if (videoTransform.a == -1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == -1.0) {
+        videoAssetOrientation_ = UIImageOrientationDown;
+    }
+    [videolayerInstruction setTransform:videoAssetTrack.preferredTransform atTime:kCMTimeZero];
+    [videolayerInstruction setOpacity:0.0 atTime:videoAsset.duration];
+    
+    // 3.3 - Add instructions
+    mainInstruction.layerInstructions = [NSArray arrayWithObjects:videolayerInstruction,nil];
+    // AVMutableVideoComposition：管理所有视频轨道，可以决定最终视频的尺寸，裁剪需要在这里进行
+    AVMutableVideoComposition *mainCompositionInst = [AVMutableVideoComposition videoComposition];
+    
+    CGSize naturalSize;
+    if(isVideoAssetPortrait_){
+        naturalSize = CGSizeMake(videoAssetTrack.naturalSize.height, videoAssetTrack.naturalSize.width);
+    } else {
+        naturalSize = videoAssetTrack.naturalSize;
+    }
+    
+    float renderWidth, renderHeight;
+    
+    renderWidth = naturalSize.width;
+    
+    renderHeight = naturalSize.height;
+    mainCompositionInst.accessibilityFrame = CGRectMake(100, 0, 200, renderHeight);
+    mainCompositionInst.renderSize = CGSizeMake(200, renderHeight);//裁剪的视频size
+    mainCompositionInst.instructions = [NSArray arrayWithObject:mainInstruction];
+    mainCompositionInst.frameDuration = CMTimeMake(1, 30);
+    // 4 - Get path
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:
+                             [NSString stringWithFormat:@"FinalVideo-%d.mov",arc4random() % 1000]];
+    NSURL * videoUrl = [NSURL fileURLWithPath:myPathDocs];
+    
+    
+    //声音长度截取范围==视频长度
+    CMTimeRange audioTimeRange = videoTimeRange;
+    
+    //音频采集compositionCommentaryTrack
+    AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    [compositionAudioTrack insertTimeRange:audioTimeRange ofTrack:([audioAsset tracksWithMediaType:AVMediaTypeAudio].count > 0) ? [audioAsset tracksWithMediaType:AVMediaTypeAudio].firstObject : nil atTime:kCMTimeZero error:nil];
+    
+    
+    // 5 - Create exporter
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition
+                                                                      presetName:AVAssetExportPresetHighestQuality];
+    exporter.outputURL = videoUrl;
+    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    exporter.shouldOptimizeForNetworkUse = YES;
+    exporter.videoComposition = mainCompositionInst;
+    [exporter exportAsynchronouslyWithCompletionHandler:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSLog(@"视频剪裁成功：%@",videoUrl);
+            
+            NSString * urlpath = videoUrl.absoluteString;
+            
+            [self saveVideoToAlbumWithUrlPath:urlpath];
+            
+        });
+    }];
+}
 @end
 

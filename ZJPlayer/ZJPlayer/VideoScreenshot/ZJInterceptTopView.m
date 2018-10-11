@@ -127,7 +127,7 @@
     [self.finishBtn setTitle:@"完成" forState:UIControlStateNormal];
     
     [self.finishBtn bk_addEventHandler:^(id sender) {
-        
+      
         if ([self.delegate respondsToSelector:@selector(finishWithAction:)]) {
             [self.delegate finishWithAction:_action];
             
@@ -146,4 +146,5 @@
         
     }];
 }
+
 @end
