@@ -36,7 +36,7 @@
 @property (nonatomic, strong) UIImageView *upOpacityImgView;    //上边白色
 @property (nonatomic, strong) UIImageView *downOpacityImgView;  //下班白色
 @property (nonatomic, strong) UILabel *selDurationLabel;        //显示时间label
-@property (nonatomic, strong) UIButton *playBtn;                //播放按钮
+//@property (nonatomic, strong) UIButton *playBtn;                //播放按钮
 @property (nonatomic, strong) NSArray *coverImgs;               //封面图片
 
 @property (nonatomic, strong) UIView *rangeView;   //裁剪范围的rang
@@ -73,7 +73,7 @@
     CMTime time = CMTimeMakeWithSeconds(CMTimeGetSeconds(_currentTtime), self.m_ftp);
     [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
         if (finished) {
-            [self.player pause];
+            [self playVideo];
         }
     }];
 }
@@ -132,7 +132,7 @@
     }
     [self createUI];
     
-    [self.player pause];
+    [self.player play];
     //设置视频视图
     [self initPlayerView];
     
@@ -153,7 +153,7 @@
     layer.frame = CGRectMake(0, 0, self.coverImgView.frameW, self.coverImgView.frameH);
     layer.videoGravity =AVLayerVideoGravityResizeAspect;
     [self.coverImgView.layer addSublayer:layer];
-    [self.player pause];
+    [self.player play];
 }
 //截帧逻辑可以优化，比较多时可以放在子线程中去完成
 - (void)getCoverImgs {
@@ -211,26 +211,7 @@
     self.topView = [[ZJInterceptTopView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 72)];
     self.topView.delegate = self;
     [self addSubview:self.topView];
-    
-//    UILabel *titleLabel = [[UILabel alloc] init];
-//    [titleLabel setText:NSLocalizedString(@"裁剪", nil)];
-//    [titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
-//    [titleLabel sizeToFit];
-//    [titleLabel setTextColor:[UIColor whiteColor]];
-//    [topView addSubview:titleLabel];
-//
-//    //取消
-//    UIButton *cancelButton = [[UIButton alloc]init];
-//    [cancelButton setImage:[UIImage imageNamed:@"resume_icon_return"] forState:UIControlStateNormal];
-//    [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-//    [topView addSubview:cancelButton];
-//
-//    //确定
-//    UIButton *confirmButton = [[UIButton alloc]init];
-//    [confirmButton setImage:[UIImage imageNamed:@"resume_btn_complete"] forState:UIControlStateNormal];
-//    [confirmButton addTarget:self action:@selector(confirm) forControlEvents:UIControlEventTouchUpInside];
-//    [topView addSubview:confirmButton];
-//
+
     //主预览图
     UIScrollView *clipView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 72, kScreenWidth, ZJHeight)];
     clipView.delegate = self;
@@ -264,12 +245,6 @@
     [clipView addSubview:self.coverImgView];
     self.coverImgView.frame = CGRectMake((kScreenWidth - imgW)/2.0, (ZJHeight-imgH)/2.0, imgW, imgH);
     clipView.contentSize = CGSizeMake(imgW, imgH);
-    
-    self.playBtn = [[UIButton alloc] init];
-    UIImage *playImg = [UIImage imageNamed:@"resume_icon_play"];
-    [self.playBtn setImage:playImg forState:UIControlStateNormal];
-    [self.playBtn addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.playBtn];
     
     //下面的小图
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 20, kScreenWidth-2*kLeftWidth, 50)];
@@ -368,53 +343,22 @@
         
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kYZCropVideoFirstTime"];
     }
-    
-    [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@(playImg.size.width));
-        make.height.equalTo(@(playImg.size.height));
-        make.centerX.equalTo(self);
-        make.top.equalTo(self).with.offset(72+ZJHeight/2-playImg.size.height/2);
-    }];
+
     
     [self.selDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.mas_right).with.offset(-14);
         make.top.equalTo(self.scrollView.mas_bottom).with.offset(8);
     }];
-    
-//    [cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self).with.offset(35);
-//        make.left.equalTo(self).with.offset(8);
-//    }];
-//
-//    [confirmButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerY.equalTo(cancelButton);
-//        make.right.equalTo(self).with.offset(-14);
-//    }];
-//
-//    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(self);
-//        make.centerY.equalTo(cancelButton);
-//    }];
+
 }
 
-
-
 - (void)playVideo {
-    self.playBtn.hidden = YES;
+
     if (!self.m_timer) {
         self.m_timer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(stopPlay) userInfo:nil repeats:YES];
     }
     if (self.player.timeControlStatus == AVPlayerTimeControlStatusPaused) {
         [self.player play];
-    }
-}
-
--(void)tapVideo{
-    if (self.player.timeControlStatus == AVPlayerTimeControlStatusPaused) {
-        [self.player play];
-    }
-    else if (self.player.timeControlStatus == AVPlayerTimeControlStatusPlaying){
-        [self.player pause];
     }
 }
 
@@ -424,6 +368,7 @@
         CMTime time = CMTimeMakeWithSeconds(self.startTime, self.m_ftp);
         [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
             if (finished) {
+                [self playVideo];
             }
         }];
         if (self.m_timer) {
@@ -478,8 +423,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
                     if (finished) {
-                        [self.player pause];
-                        self.playBtn.hidden = NO;
+                        [self playVideo];
                     }
                 }];
             });
@@ -532,8 +476,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
                     if (finished) {
-                        [self.player pause];
-                        self.playBtn.hidden = NO;
+                        [self playVideo];
                     }
                 }];
             });
@@ -546,8 +489,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.player seekToTime:startTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
                     if (finished) {
-                        [self.player pause];
-                        self.playBtn.hidden = NO;
+                        [self playVideo];
                     }
                 }];
             });
@@ -613,30 +555,31 @@
             CGFloat addTime = scrollView.contentOffset.x*self.timeScale;
             self.tempStartTime = self.startTime + addTime - self.contentOffsetX*self.timeScale;
             self.tempEndTime = self.endTime + addTime - self.contentOffsetX*self.timeScale;
-            CMTime time = CMTimeMakeWithSeconds(self.tempStartTime, self.m_ftp);
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-                        if (finished) {
-                            [self.player pause];
-                            self.playBtn.hidden = NO;
-                        }
-                    }];
-                });
-                
-            });
+            
         }
     }
     NSLog(@"offset:%@", NSStringFromCGPoint(scrollView.contentOffset));
     NSLog(@"%f",self.startTime);
 }
-
+#pragma mark - 结束滚动
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if (scrollView.tag == kClipTimeScrollTag){
         self.contentOffsetX = scrollView.contentOffset.x;
         self.startTime = self.tempStartTime;
         self.endTime = self.tempEndTime;
+        
+        CMTime time = CMTimeMakeWithSeconds(self.tempStartTime, self.m_ftp);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+                    if (finished) {
+                        
+                        [self playVideo];
+                    }
+                }];
+            });
+        });
     }
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
@@ -725,27 +668,10 @@
 - (void)videoCapture{
     
     [self videoCropping];
-    
-    return;
-
-    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
-    NSRange range = NSMakeRange(self.startTime, self.endTime - self.startTime);
-    CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
-    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.videoUrl withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
-        if (error) {
-            NSLog(@"error:%@",error);
-            return ;
-        }
-        CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
-        NSLog(@"%f", end- start);
-        NSLog(@"----++%@",url);//本地视频记得删除
-        NSString * urlpath = url.absoluteString;
-        [self saveVideoToAlbumWithUrlPath:urlpath];
-    }];
 }
+
 - (void)saveVideoToAlbumWithUrlPath:(NSString *)urlPath{
-    
-    
+
     if ([urlPath hasPrefix:@"file://"]) {
         urlPath = [urlPath substringFromIndex:7];
     }
@@ -904,7 +830,6 @@
     
     [compositionAudioTrack insertTimeRange:audioTimeRange ofTrack:([audioAsset tracksWithMediaType:AVMediaTypeAudio].count > 0) ? [audioAsset tracksWithMediaType:AVMediaTypeAudio].firstObject : nil atTime:kCMTimeZero error:nil];
     
-    
     // 5 - Create exporter
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition
                                                                       presetName:AVAssetExportPresetHighestQuality];
@@ -924,5 +849,6 @@
         });
     }];
 }
+
 @end
 
