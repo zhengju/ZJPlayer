@@ -79,10 +79,7 @@
     [self.captureBtn setTitle:@"截视频" forState:UIControlStateNormal];
     [self.captureBtn bk_addEventHandler:^(id sender) {
         _action = 0;
-        if ([self.delegate respondsToSelector:@selector(setAction:)]) {
-            [self.delegate setAction:0];
-
-        }
+        
 
     } forControlEvents:UIControlEventTouchUpInside];
 
@@ -104,10 +101,7 @@
     [self.gifScreenshotBtn setTitle:@"截GIF" forState:UIControlStateNormal];
     [self.gifScreenshotBtn bk_addEventHandler:^(id sender) {
         _action = 1;
-        if ([self.delegate respondsToSelector:@selector(setAction:)]) {
-            [self.delegate setAction:1];
-
-        }
+        
 
     } forControlEvents:UIControlEventTouchUpInside];
 

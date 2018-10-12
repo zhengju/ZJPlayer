@@ -12,11 +12,11 @@
 #import "Masonry.h"
 #import <Photos/Photos.h>
 #import "ZJCommonHeader.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+
 #import "ZJInterceptTopView.h"
 #import "ZJSelectFrameView.h"
 #import "ZJScreenCaptureToolBox.h"
-
+#import "ZJVideoTools.h"
 
 
 #define kLeftWidth   50 //scrollview的左边距
@@ -82,7 +82,13 @@
 @implementation InterceptView
 - (void)setCurrentTtime:(CMTime)currentTtime{
     _currentTtime = currentTtime;
-    UIImage * bgImage = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:CMTimeGetSeconds(_currentTtime)+0.01];
+    
+     AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
+    
+    UIImage * bgImage = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:CMTimeGetSeconds(_currentTtime)+0.01];
+    
+    
+//    [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:CMTimeGetSeconds(_currentTtime)+0.01];
 
     self.BGView.image = bgImage;
     
@@ -181,13 +187,17 @@
     float second = CMTimeGetSeconds(self.currentTtime);
     
     //要判断seconds是否会超出总的时间区间
-
+ 
+    AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
     //大于11s
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     if (self.videoDuration>11.0) {
         //每隔1s截取一张图片
         for (int i = 0; i <  self.videoDuration-1; i++) {
-            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime: second + i +0.01];
+           
+            
+            UIImage * image = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:second + i +0.01];
+           
             if (image) {
                 [imageArrays addObject:image];
             }
@@ -196,7 +206,9 @@
     else{
         //截取11张
         for (int i = 0; i < 11; i++) {
-            UIImage *image = [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:self.videoDuration*i/12.0+0.01];
+
+            UIImage *image =  [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:self.videoDuration*i/12.0+0.01];
+
             if (image) {
                 [imageArrays addObject:image];
             }
@@ -216,7 +228,7 @@
     self.backgroundColor = UIColorFromRGB(0x2f2f2f);
     
     
-    UIImage * bgImage =  [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:5+0.01];
+    UIImage * bgImage = [ZJVideoTools getVideoPreViewImageFromVideo:self.playerItem.asset atTime:2+0.01];
     
     self.BGView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     self.BGView.backgroundColor = [UIColor redColor];
@@ -228,10 +240,6 @@
     self.topView.delegate = self;
     [self addSubview:self.topView];
 
-    
-    
-    
-    
     //主预览图
     UIScrollView *clipView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 72, kScreenWidth, ZJHeight)];
     clipView.delegate = self;
@@ -643,68 +651,20 @@
     return second;
 }
 
-//截图
-- (UIImage*)getVideoPreViewImageFromVideoPath:(NSURL *)videoPath withAtTime:(float)atTime {
-    
-   // AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoPath options:nil];
-    AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
-    if ([asset tracksWithMediaType:AVMediaTypeVideo].count == 0) {
-        return nil;
-    }
-
-    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    gen.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
-    
-    gen.appliesPreferredTrackTransform = YES;
-    
-    //防止时间出现偏差 当你指定要获取time时刻的帧，如果不设置这两个属性，系统会默认如果在指定time段内有缓存，就从缓存中直接返回结果，但并不准确，这是为了优化性能
-//    gen.requestedTimeToleranceAfter = kCMTimeZero;
-//    gen.requestedTimeToleranceBefore = kCMTimeZero;
-    
-    CMTime time = CMTimeMakeWithSeconds(atTime, 600);//atTime  第几秒的截图,是当前视频播放到的帧数的具体时间; 600 首选的时间尺度 "每秒的帧数"
-    
-    NSError *error = nil;
-    CMTime actualTime;
-    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];//线上视频比较耗时(新创建的AVURLAsset比较耗时)，用上一个AVURLAsset,或等player缓冲可以看了的时候，再截屏耗时短
-    CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
-    NSLog(@"一张图片耗时：====--%f", end - start);
-    
-    UIImage *img = [[UIImage alloc] initWithCGImage:image];
-    UIGraphicsBeginImageContext(CGSizeMake([[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].width, [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].height));//asset.naturalSize.width, asset.naturalSize.height)
-    [img drawInRect:CGRectMake(0, 0, [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].width, [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] naturalSize].height)];
-    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    CGImageRelease(image);
-   
-    return scaledImage;
-}
 #pragma mark - ZJInterceptTopViewDelegate
 - (void)back{
     [self.player pause];
     self.player  = nil;
     [self removeFromSuperview];
 }
+
 - (void)finishWithAction:(float)action{
     
     if (action == 0) {//截视频
-        [self videoCapture];
+        [self videoCropping];
     }else{//截GIF
         [self gifScreenshot];
     }
-}
-- (void)setAction:(float)action{
-    if (action == 0) {//截视频
-        NSLog(@"视频");
-//        [self configureSelectFrameView];
-    }else{//截GIF
-        NSLog(@"GIF");
-    }
-}
-
-- (void)videoCapture{
-    
-    [self videoCropping];
 }
 
 - (void)configureSelectFrameView{
@@ -715,21 +675,6 @@
     
 }
 
-- (void)saveVideoToAlbumWithUrlPath:(NSString *)urlPath{
-
-    if ([urlPath hasPrefix:@"file://"]) {
-        urlPath = [urlPath substringFromIndex:7];
-    }
-    
-    BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(urlPath);
-    if(compatible)
-    {
-        //保存相册核心代码
-        UISaveVideoAtPathToSavedPhotosAlbum(urlPath,self,@selector(savedVideoPhotoImage:didFinishSavingWithError:contextInfo:),nil);
-    }else{
-        HUDNormal(@"路径失败");
-    }
-}
 - (void)gifScreenshot{
     //裁剪视频可以看这篇文章：http://www.hudongdong.com/ios/550.html
     NSLog(@"开始裁剪:开始时间:%f,结束时间:%f,裁剪区域W:%f,H:%f",self.startTime,self.endTime,self.clipPoint.x,self.clipPoint.y);
@@ -750,150 +695,51 @@
         [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
             
             NSLog(@"Finished generating GIF: %@", GifURL);
-            //保存到相册
-            NSData *data = [NSData dataWithContentsOfURL:GifURL];
-            
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
-                                                                                          NSError *error) {
+
+            [GifURL saveGIFToCameraRollWithCompletion:^(NSString * _Nullable path, NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"error :%@",error.userInfo);
+                    return ;
+                }
                 HUDNormal(@"保存成功");
-                NSLog(@"Success at %@", [assetURL path] );
-                
+                NSLog(@"Success at %@", path );
             }];
         }];
     }];
 }
 
-- (void)savedVideoPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError*)error contextInfo: (void*)contextInfo {
-    if(error) {
-        NSLog(@"保存视频失败%@", error.localizedDescription);
-    }else{
-        HUDNormal(@"保存视频成功");
-    }
-}
 #pragma mark - 视频裁剪
 - (void)videoCropping{
     
-    //1 — 采集
-    
-    //不添加背景音乐
-    NSURL *audioUrl =nil;
-    //AVURLAsset此类主要用于获取媒体信息，包括视频、声音等
-    AVURLAsset* audioAsset = [[AVURLAsset alloc] initWithURL:audioUrl options:nil];
-    
-    AVAsset *videoAsset = self.playerItem.asset;
-    
-    // 2 创建AVMutableComposition实例. apple developer 里边的解释 【AVMutableComposition is a mutable subclass of AVComposition you use when you want to create a new composition from existing assets. You can add and remove tracks, and you can add, remove, and scale time ranges.】
-    AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
-    
-    // 3 - 视频通道  工程文件中的轨道，有音频轨、视频轨等，里面可以插入各种对应的素材
-    
-    // 这块是裁剪,rangtime .前面的是开始时间,后面是裁剪多长
-    CMTimeRange videoTimeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(self.startTime, self.m_ftp),CMTimeMakeWithSeconds(self.endTime - self.startTime, self.m_ftp));
-
-   //音频轨道
-
-  //视频声音采集(也可不执行这段代码不采集视频音轨，合并后的视频文件将没有视频原来的声音)
-
-    AVMutableCompositionTrack *compositionVoiceTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-
-    [compositionVoiceTrack insertTimeRange:videoTimeRange ofTrack:([videoAsset tracksWithMediaType:AVMediaTypeAudio].count>0)?[videoAsset tracksWithMediaType:AVMediaTypeAudio].firstObject:nil atTime:kCMTimeZero error:nil];
-
-    AVMutableCompositionTrack *videoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo
-                                                                preferredTrackID:kCMPersistentTrackID_Invalid];
-    NSError *error = nil;
-    // 这块是裁剪,rangtime .前面的是开始时间,后面是裁剪多长 (我这裁剪的是从第二秒开始裁剪，裁剪2.55秒时长.)
-    [videoTrack insertTimeRange:videoTimeRange
-                        ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0]
-                         atTime:kCMTimeZero
-                          error:&error];
-    
-    // 3.1 AVMutableVideoCompositionInstruction 视频轨道中的一个视频，可以缩放、旋转等
-    AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-    mainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration);
-    
-    // 3.2 AVMutableVideoCompositionLayerInstruction 一个视频轨道，包含了这个轨道上的所有视频素材
-    AVMutableVideoCompositionLayerInstruction *videolayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
-    AVAssetTrack *videoAssetTrack = [[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-    UIImageOrientation videoAssetOrientation_  = UIImageOrientationUp;
-    
-    BOOL isVideoAssetPortrait_  = NO;
-    
-    CGAffineTransform videoTransform = videoAssetTrack.preferredTransform;
-    
-    if (videoTransform.a == 0 && videoTransform.b == 1.0 && videoTransform.c == -1.0 && videoTransform.d == 0) {
-        videoAssetOrientation_ = UIImageOrientationRight;
-        isVideoAssetPortrait_ = YES;
-    }
-    if (videoTransform.a == 0 && videoTransform.b == -1.0 && videoTransform.c == 1.0 && videoTransform.d == 0) {
-        videoAssetOrientation_ =  UIImageOrientationLeft;
-        isVideoAssetPortrait_ = YES;
-    }
-    if (videoTransform.a == 1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == 1.0) {
-        videoAssetOrientation_ =  UIImageOrientationUp;
-    }
-    if (videoTransform.a == -1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == -1.0) {
-        videoAssetOrientation_ = UIImageOrientationDown;
-    }
-    [videolayerInstruction setTransform:videoAssetTrack.preferredTransform atTime:kCMTimeZero];
-    [videolayerInstruction setOpacity:0.0 atTime:videoAsset.duration];
-    
-    // 3.3 - Add instructions
-    mainInstruction.layerInstructions = [NSArray arrayWithObjects:videolayerInstruction,nil];
-    // AVMutableVideoComposition：管理所有视频轨道，可以决定最终视频的尺寸，裁剪需要在这里进行
-    AVMutableVideoComposition *mainCompositionInst = [AVMutableVideoComposition videoComposition];
-    
-    CGSize naturalSize;
-    if(isVideoAssetPortrait_){
-        naturalSize = CGSizeMake(videoAssetTrack.naturalSize.height, videoAssetTrack.naturalSize.width);
-    } else {
-        naturalSize = videoAssetTrack.naturalSize;
-    }
-    
-    float renderWidth, renderHeight;
-    
-    renderWidth = naturalSize.width;
-    
-    renderHeight = naturalSize.height;
-    mainCompositionInst.accessibilityFrame = _videoCroppingFrame;
-    mainCompositionInst.renderSize = _videoCroppingFrame.size;//裁剪的视频size
-    mainCompositionInst.instructions = [NSArray arrayWithObject:mainInstruction];
-    mainCompositionInst.frameDuration = CMTimeMake(1, 30);
-    // 4 - Get path
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:
                              [NSString stringWithFormat:@"FinalVideo-%d.mov",arc4random() % 1000]];
     NSURL * videoUrl = [NSURL fileURLWithPath:myPathDocs];
-    
-    
-    //声音长度截取范围==视频长度
-    CMTimeRange audioTimeRange = videoTimeRange;
-    
-    //音频采集compositionCommentaryTrack
-    AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-    
-    [compositionAudioTrack insertTimeRange:audioTimeRange ofTrack:([audioAsset tracksWithMediaType:AVMediaTypeAudio].count > 0) ? [audioAsset tracksWithMediaType:AVMediaTypeAudio].firstObject : nil atTime:kCMTimeZero error:nil];
-    
-    // 5 - Create exporter
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition
-                                                                      presetName:AVAssetExportPresetHighestQuality];
-    exporter.outputURL = videoUrl;
-    exporter.outputFileType = AVFileTypeQuickTimeMovie;
-    exporter.shouldOptimizeForNetworkUse = YES;
-    exporter.videoComposition = mainCompositionInst;
-    [exporter exportAsynchronouslyWithCompletionHandler:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            NSLog(@"视频剪裁成功：%@",videoUrl);
-            
-            NSString * urlpath = videoUrl.absoluteString;
-            
-            [self saveVideoToAlbumWithUrlPath:urlpath];
-            
-        });
+
+    [ZJVideoTools mixVideo:self.playerItem.asset startTime:CMTimeMakeWithSeconds(self.startTime, self.m_ftp) WithVideoCroppingFrame:_videoCroppingFrame toUrl:videoUrl outputFileType:AVFileTypeQuickTimeMovie withMaxDuration:CMTimeMakeWithSeconds(self.endTime - self.startTime, self.m_ftp) withCompletionBlock:^(NSError *error) {
+        
+        if (error == nil) {
+
+                NSLog(@"视频剪裁成功：%@",videoUrl);
+
+                [videoUrl saveVideoToCameraRollWithCompletion:^(NSString * _Nullable path, NSError * _Nullable error) {
+                    if (error) {
+                        NSLog(@"保存视频出错：%@",error.userInfo);
+                        return ;
+                    }
+                    HUDNormal(@"保存视频至相册成功");
+                    NSLog(@"保存视频至相册成功：%@",path);
+                }];
+                
+           
+        }else{
+            NSLog(@"error is :%@",error.userInfo);
+        }
+        
     }];
 }
+
 #pragma mark - ZJScreenCaptureToolBoxDelegate
 - (void)screenCaptureFrame:(CGRect)frame{
     

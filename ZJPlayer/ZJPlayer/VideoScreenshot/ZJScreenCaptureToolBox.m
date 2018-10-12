@@ -117,7 +117,7 @@
 
         CGPoint translation = [gesture translationInView:gesture.view];
         
-        CGFloat sliderX = self.dragView.frameX + translation.x/50.0;
+        CGFloat sliderX = self.dragView.frameX + translation.x/40.0;//放慢速度
 
         CGFloat maxX = self.frameW - self.dragView.frameW;
         CGFloat minX = 0;

@@ -14,7 +14,6 @@
  返回事件
  */
 - (void)back;
-- (void)setAction:(float)action;//0截视频 1截GIF
 - (void)finishWithAction:(float)action;
 /**
  GIF视频截屏
