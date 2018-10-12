@@ -7,10 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZJSelectFrameView.h"
+@protocol ZJScreenCaptureToolBoxDelegate <NSObject>
+
+- (void)screenCaptureFrame:(CGRect)frame;
 
 
+@end
 
 @interface ZJScreenCaptureToolBox : UIView
+
+- (void)setCaptureDragViewFrame:(CGRect)frame type:(ZJSelectFrameType)type;
+
+@property(nonatomic, weak)  id<ZJScreenCaptureToolBoxDelegate> delegate;
 
 @end
 

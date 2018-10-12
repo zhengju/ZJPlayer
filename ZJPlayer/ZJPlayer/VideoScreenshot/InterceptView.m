@@ -26,8 +26,10 @@
 #define kColorWithRGBA(_R,_G,_B,_A)    ((UIColor *)[UIColor colorWithRed:_R/255.0 green:_G/255.0 blue:_B/255.0 alpha:_A])
 //#define kScreenWidth   200
 #define ZJHeight 200
-@interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate>
-
+@interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate,ZJScreenCaptureToolBoxDelegate,ZJSelectFrameViewDelegate>
+{
+    CGRect _videoCroppingFrame;
+}
 @property (nonatomic, strong) UIImage *cover;
 @property (nonatomic, strong) PHAsset *asset;
 @property(nonatomic, strong) ZJSelectFrameView * selectFrameView;
@@ -217,6 +219,10 @@
     self.topView.delegate = self;
     [self addSubview:self.topView];
 
+    
+    
+    
+    
     //主预览图
     UIScrollView *clipView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 72, kScreenWidth, ZJHeight)];
     clipView.delegate = self;
@@ -252,8 +258,8 @@
     clipView.contentSize = CGSizeMake(imgW, imgH);
     
     
-    self.screenCaptureToolBox = [[ZJScreenCaptureToolBox alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, 0, imgH, imgH)];
-    self.screenCaptureToolBox.backgroundColor = RGBACOLOR(22, 225, 369, 0.5);
+    self.screenCaptureToolBox = [[ZJScreenCaptureToolBox alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, 0, imgW, imgH)];
+    self.screenCaptureToolBox.delegate = self;
     [clipView addSubview:self.screenCaptureToolBox];
     
     
@@ -361,6 +367,8 @@
         make.top.equalTo(self.scrollView.mas_bottom).with.offset(8);
     }];
 
+    [self configureSelectFrameView];
+    
 }
 
 - (void)playVideo {
@@ -671,7 +679,7 @@
 - (void)setAction:(float)action{
     if (action == 0) {//截视频
         NSLog(@"视频");
-        [self configureSelectFrameView];
+//        [self configureSelectFrameView];
     }else{//截GIF
         NSLog(@"GIF");
     }
@@ -685,6 +693,7 @@
 - (void)configureSelectFrameView{
     
     self.selectFrameView = [[ZJSelectFrameView alloc]initWithFrame:CGRectMake(kScreenWidth - 150, (kScreenHeight - 180)/2.0, 120, 180)];
+    self.selectFrameView.delegate = self;
     [self addSubview:self.selectFrameView];
     
 }
@@ -829,8 +838,8 @@
     renderWidth = naturalSize.width;
     
     renderHeight = naturalSize.height;
-    mainCompositionInst.accessibilityFrame = CGRectMake(100, 0, 200, renderHeight);
-    mainCompositionInst.renderSize = CGSizeMake(200, renderHeight);//裁剪的视频size
+    mainCompositionInst.accessibilityFrame = _videoCroppingFrame;
+    mainCompositionInst.renderSize = _videoCroppingFrame.size;//裁剪的视频size
     mainCompositionInst.instructions = [NSArray arrayWithObject:mainInstruction];
     mainCompositionInst.frameDuration = CMTimeMake(1, 30);
     // 4 - Get path
@@ -868,6 +877,37 @@
         });
     }];
 }
-
+#pragma mark - ZJScreenCaptureToolBoxDelegate
+- (void)screenCaptureFrame:(CGRect)frame{
+    
+    _videoCroppingFrame = frame;
+}
+#pragma mark - ZJSelectFrameViewDelegate
+- (void)selectedFrameType:(ZJSelectFrameType)type{
+    switch (type) {
+        case ZJSelectFrameViewOriginal://原始
+        {
+            [self.screenCaptureToolBox setCaptureDragViewFrame:CGRectZero type:type];
+        }
+            break;
+        case ZJSelectFrameViewVerticalPlate://竖版
+        {
+            [self.screenCaptureToolBox setCaptureDragViewFrame:CGRectMake(0, 0, (self.coverImgView.frameH/3.0)*2, self.coverImgView.frameH) type:type];
+        }
+            break;
+        case ZJSelectFrameViewFilm://电影
+        {
+            [self.screenCaptureToolBox setCaptureDragViewFrame:CGRectMake(0, 0, self.coverImgView.frameW, self.coverImgView.frameH) type:type];
+        }
+            break;
+        case ZJSelectFrameViewSquare://方形
+        {
+            [self.screenCaptureToolBox setCaptureDragViewFrame:CGRectMake(0, 0, self.coverImgView.frameH, self.coverImgView.frameH) type:type];
+        }
+            break;
+        default:
+            break;
+    }
+}
 @end
 
