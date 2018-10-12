@@ -17,9 +17,14 @@
 
 @interface ZJScreenCaptureToolBox : UIView
 
+@property(nonatomic, weak)  id<ZJScreenCaptureToolBoxDelegate> delegate;
+
+@property(nonatomic) CGRect  originVideoFrame;
+
+
 - (void)setCaptureDragViewFrame:(CGRect)frame type:(ZJSelectFrameType)type;
 
-@property(nonatomic, weak)  id<ZJScreenCaptureToolBoxDelegate> delegate;
+- (CGRect)captureDragViewFrameWithType:(ZJSelectFrameType)type;
 
 @end
 

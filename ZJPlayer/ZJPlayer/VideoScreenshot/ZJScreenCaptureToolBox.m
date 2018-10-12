@@ -67,6 +67,8 @@
 - (void)setCaptureDragViewFrame:(CGRect)frame type:(ZJSelectFrameType)type{
     if (type == ZJSelectFrameViewOriginal) {
         self.hidden = YES;
+        self.dragView.frameX = 0;
+        
     }else if(type == ZJSelectFrameViewVerticalPlate){
         self.hidden = NO;
         self.dragView.frameW = _verticalPlateW;
@@ -74,6 +76,7 @@
     }else if(type == ZJSelectFrameViewFilm){
         self.hidden = NO;
         self.dragView.frame = frame;
+        self.dragView.frameX = 0;
     }else if(type == ZJSelectFrameViewSquare){
         self.hidden = NO;
         self.dragView.frameX = _squareX;
@@ -81,6 +84,31 @@
     }
     self.selectedFrameType = type;
     [self setNeedsDisplay];
+}
+
+- (CGRect)captureDragViewFrameWithType:(ZJSelectFrameType)type{
+    
+    CGFloat rate = self.originVideoFrame.size.width/self.frameW;
+    
+    CGRect frame = CGRectZero;
+    if (type == ZJSelectFrameViewOriginal) {
+        
+        frame = self.originVideoFrame;
+        
+    }else if(type == ZJSelectFrameViewVerticalPlate){
+        
+        frame = CGRectMake(_verticalPlateX*rate, 0, _verticalPlateW*rate, self.originVideoFrame.size.height);
+        
+    }else if(type == ZJSelectFrameViewFilm){
+        
+        frame = self.originVideoFrame;
+        
+    }else if(type == ZJSelectFrameViewSquare){
+        
+        frame = CGRectMake(_squareX*rate, 0, self.originVideoFrame.size.height, self.originVideoFrame.size.height);
+        
+    }
+    return frame;
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)gesture{

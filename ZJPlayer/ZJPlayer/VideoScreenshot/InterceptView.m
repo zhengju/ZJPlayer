@@ -24,8 +24,17 @@
 #define kClipTimeScrollTag  20
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define kColorWithRGBA(_R,_G,_B,_A)    ((UIColor *)[UIColor colorWithRed:_R/255.0 green:_G/255.0 blue:_B/255.0 alpha:_A])
-//#define kScreenWidth   200
-#define ZJHeight 200
+
+
+
+//#define ZJHeight kScreenHeight/2.0
+
+#define ZJHeight kScreenHeight/2.0
+
+#define originRate 16.0/9.0
+
+
+
 @interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate,ZJScreenCaptureToolBoxDelegate,ZJSelectFrameViewDelegate>
 {
     CGRect _videoCroppingFrame;
@@ -235,20 +244,27 @@
     self.clipView = clipView;
     
     UIImage *image = self.cover;
+    
     CGFloat imgW = image.size.width;
     CGFloat imgH = image.size.height;
-    CGFloat imgRate = image.size.height / image.size.width;
-    CGFloat originRate = ZJHeight /kScreenWidth;
-    CGFloat min = MIN(imgRate, originRate);
     
+    imgW = ZJHeight*originRate;
+    
+    imgH = ZJHeight;
+    
+    
+    CGFloat imgRate = image.size.width / image.size.height;
+
+    CGFloat min = MIN(imgRate, originRate);
+
     if (min == imgRate) {
 
-        imgW = kScreenWidth;
-        imgH = imgW * imgRate;//H不会超过originH
+        imgW = originRate*ZJHeight;
+        imgH = imgW / imgRate;//H不会超过originH
 
     }else{
         imgH = ZJHeight;
-        imgW = imgH / imgRate;
+        imgW = imgH * imgRate;
     }
 
     self.coverImgView = [[UIImageView alloc] initWithImage:image];
@@ -259,9 +275,10 @@
     
     
     self.screenCaptureToolBox = [[ZJScreenCaptureToolBox alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, 0, imgW, imgH)];
+    self.screenCaptureToolBox.originVideoFrame = CGRectMake(0, 0, image.size.width, image.size.height);
     self.screenCaptureToolBox.delegate = self;
     [clipView addSubview:self.screenCaptureToolBox];
-    
+    _videoCroppingFrame = [self.screenCaptureToolBox captureDragViewFrameWithType:ZJSelectFrameViewOriginal];
     
     //下面的小图
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 20, kScreenWidth-2*kLeftWidth, 50)];
@@ -908,6 +925,7 @@
         default:
             break;
     }
+    _videoCroppingFrame = [self.screenCaptureToolBox captureDragViewFrameWithType:type];
 }
 @end
 

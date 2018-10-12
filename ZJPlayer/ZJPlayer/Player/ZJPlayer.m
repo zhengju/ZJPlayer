@@ -1372,31 +1372,5 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     view.playerItem = self.player.currentItem;
     [self addSubview:view];
     
-    return;
-    
-    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
-    NSRange range = NSMakeRange(10, 15);
-    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.url withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
-        if (error) {
-            NSLog(@"error:%@",error);
-            return ;
-        }
-        NSLog(@"----++%@",url);//本地视频记得删除
-        [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
-            
-            NSLog(@"Finished generating GIF: %@", GifURL);
-            //保存到相册
-            NSData *data = [NSData dataWithContentsOfURL:GifURL];
-              
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
-                                                                                                                                            NSError *error) {
-                HUDNormal(@"保存成功");
-                            NSLog(@"Success at %@", [assetURL path] );
-                
-            }] ;
-            
-        }];
-    }];
 }
 @end
