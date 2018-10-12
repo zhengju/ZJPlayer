@@ -14,6 +14,11 @@
 #import "ZJCommonHeader.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ZJInterceptTopView.h"
+#import "ZJSelectFrameView.h"
+#import "ZJScreenCaptureToolBox.h"
+
+
+
 #define kLeftWidth   50 //scrollview的左边距
 #define kCoverImageScrollTag 10
 #define kClipTimeScrollTag  20
@@ -25,6 +30,7 @@
 
 @property (nonatomic, strong) UIImage *cover;
 @property (nonatomic, strong) PHAsset *asset;
+@property(nonatomic, strong) ZJSelectFrameView * selectFrameView;
 @property (nonatomic, strong) ZJInterceptTopView * topView;
 @property (nonatomic, strong) UIImageView *BGView;
 @property (nonatomic, strong) UIScrollView *scrollView;         //视频封面的滚动
@@ -36,9 +42,8 @@
 @property (nonatomic, strong) UIImageView *upOpacityImgView;    //上边白色
 @property (nonatomic, strong) UIImageView *downOpacityImgView;  //下班白色
 @property (nonatomic, strong) UILabel *selDurationLabel;        //显示时间label
-//@property (nonatomic, strong) UIButton *playBtn;                //播放按钮
 @property (nonatomic, strong) NSArray *coverImgs;               //封面图片
-
+@property(nonatomic, strong) ZJScreenCaptureToolBox * screenCaptureToolBox;
 @property (nonatomic, strong) UIView *rangeView;   //裁剪范围的rang
 @property (nonatomic, assign) CGFloat imgWidth;   //指示器图片宽
 @property (nonatomic, assign) CGFloat minWidth;   //两个指示器间隔距离最短
@@ -245,6 +250,12 @@
     [clipView addSubview:self.coverImgView];
     self.coverImgView.frame = CGRectMake((kScreenWidth - imgW)/2.0, (ZJHeight-imgH)/2.0, imgW, imgH);
     clipView.contentSize = CGSizeMake(imgW, imgH);
+    
+    
+    self.screenCaptureToolBox = [[ZJScreenCaptureToolBox alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, 0, imgH, imgH)];
+    self.screenCaptureToolBox.backgroundColor = RGBACOLOR(22, 225, 369, 0.5);
+    [clipView addSubview:self.screenCaptureToolBox];
+    
     
     //下面的小图
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 20, kScreenWidth-2*kLeftWidth, 50)];
@@ -660,6 +671,7 @@
 - (void)setAction:(float)action{
     if (action == 0) {//截视频
         NSLog(@"视频");
+        [self configureSelectFrameView];
     }else{//截GIF
         NSLog(@"GIF");
     }
@@ -668,6 +680,13 @@
 - (void)videoCapture{
     
     [self videoCropping];
+}
+
+- (void)configureSelectFrameView{
+    
+    self.selectFrameView = [[ZJSelectFrameView alloc]initWithFrame:CGRectMake(kScreenWidth - 150, (kScreenHeight - 180)/2.0, 120, 180)];
+    [self addSubview:self.selectFrameView];
+    
 }
 
 - (void)saveVideoToAlbumWithUrlPath:(NSString *)urlPath{
@@ -707,7 +726,7 @@
             NSLog(@"Finished generating GIF: %@", GifURL);
             //保存到相册
             NSData *data = [NSData dataWithContentsOfURL:GifURL];
-             
+            
             ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
             [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
                                                                                           NSError *error) {
@@ -715,10 +734,10 @@
                 NSLog(@"Success at %@", [assetURL path] );
                 
             }];
-            
         }];
     }];
 }
+
 - (void)savedVideoPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError*)error contextInfo: (void*)contextInfo {
     if(error) {
         NSLog(@"保存视频失败%@", error.localizedDescription);
