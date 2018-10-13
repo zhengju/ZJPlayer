@@ -17,25 +17,20 @@
 #import "ZJSelectFrameView.h"
 #import "ZJScreenCaptureToolBox.h"
 #import "ZJVideoTools.h"
+#import "ZJInterceptBottomTools.h"
 
-
-#define kLeftWidth   50 //scrollview的左边距
+#define kLeftWidth   0 
 #define kCoverImageScrollTag 10
 #define kClipTimeScrollTag  20
+
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define kColorWithRGBA(_R,_G,_B,_A)    ((UIColor *)[UIColor colorWithRed:_R/255.0 green:_G/255.0 blue:_B/255.0 alpha:_A])
-
-
-
-//#define ZJHeight kScreenHeight/2.0
 
 #define ZJHeight kScreenHeight/2.0
 
 #define originRate 16.0/9.0
 
-
-
-@interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate,ZJScreenCaptureToolBoxDelegate,ZJSelectFrameViewDelegate>
+@interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate,ZJScreenCaptureToolBoxDelegate,ZJSelectFrameViewDelegate,ZJInterceptBottomToolsDelegate>
 {
     CGRect _videoCroppingFrame;
 }
@@ -44,34 +39,19 @@
 @property(nonatomic, strong) ZJSelectFrameView * selectFrameView;
 @property (nonatomic, strong) ZJInterceptTopView * topView;
 @property (nonatomic, strong) UIImageView *BGView;
-@property (nonatomic, strong) UIScrollView *scrollView;         //视频封面的滚动
 @property (nonatomic, strong) UIImageView *coverImgView;        //封面imgview
-@property (nonatomic, strong) UIImageView *leftSliderImgView;   //左滑块
-@property (nonatomic, strong) UIImageView *rightSliderImgView;  //右滑块
-@property (nonatomic, strong) UIImageView *leftOpacityImgView;  //左边黑色遮罩
-@property (nonatomic, strong) UIImageView *rightOpacityImgView; //右边黑色遮罩
-@property (nonatomic, strong) UIImageView *upOpacityImgView;    //上边白色
-@property (nonatomic, strong) UIImageView *downOpacityImgView;  //下班白色
-@property (nonatomic, strong) UILabel *selDurationLabel;        //显示时间label
+
+@property(nonatomic, strong) ZJInterceptBottomTools * bottomToolView;
 @property (nonatomic, strong) NSArray *coverImgs;               //封面图片
 @property(nonatomic, strong) ZJScreenCaptureToolBox * screenCaptureToolBox;
-@property (nonatomic, strong) UIView *rangeView;   //裁剪范围的rang
-@property (nonatomic, assign) CGFloat imgWidth;   //指示器图片宽
-@property (nonatomic, assign) CGFloat minWidth;   //两个指示器间隔距离最短
-@property (nonatomic, assign) CGFloat maxWidth;   //两个指示器间隔距离最长
-@property (nonatomic, assign) CGFloat timeScale;  //每个像素占多少秒
 
 @property (nonatomic, assign) unsigned long videoDuration;  //截取的时间长度
 @property (nonatomic, assign) CGFloat startTime;            //开始截取的时间
 @property (nonatomic, assign) CGFloat endTime;              //结束截取的时间
-@property (nonatomic, assign) CGFloat tempStartTime;    //滚动的偏移量的开始时间
-@property (nonatomic, assign) CGFloat tempEndTime;      //滚动的偏移量的结束时间
-@property (nonatomic, assign) CGFloat contentOffsetX;
 
 @property (nonatomic, assign) CGPoint clipPoint;        //开始截取的点
 @property (nonatomic, assign) float m_ftp;              //视频的ftp
 @property (nonatomic, strong) NSTimer *m_timer;         //
-@property (nonatomic, strong) UIView *m_tapView; //拖动层
 @property (nonatomic, strong) UIView *guideBg;       //新手引导界面
 @property (nonatomic, strong) UIView *pullGuideBg;  //拖动提示
 @property (nonatomic, strong) UIScrollView *clipView;   //视频截取的滚动
@@ -86,9 +66,6 @@
      AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
     
     UIImage * bgImage = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:CMTimeGetSeconds(_currentTtime)+0.01];
-    
-    
-//    [self getVideoPreViewImageFromVideoPath:self.videoUrl withAtTime:CMTimeGetSeconds(_currentTtime)+0.01];
 
     self.BGView.image = bgImage;
     
@@ -135,23 +112,13 @@
         return;
     }
     [self getCoverImgs];
-//    AVAsset *asset = [AVAsset assetWithURL:self.videoUrl];
     AVAsset *asset = self.playerItem.asset;
     self.m_ftp = [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] nominalFrameRate];
     CMTimeShow(self.currentTtime);
     CMTimeShow(asset.duration);
     self.startTime = 0.0f + CMTimeGetSeconds(self.currentTtime);//
     self.endTime = self.startTime + 10.0f;
-    self.imgWidth = [UIImage imageNamed:@"resume_btn_control_r"].size.width;
-    CGFloat totalWidth = kScreenWidth - 2*kLeftWidth;
-    self.timeScale = 10.0f/totalWidth;
-    self.minWidth = 0.6*totalWidth - self.imgWidth;
-    if (self.videoDuration >=10.0) {
-        self.maxWidth = totalWidth - self.imgWidth;
-    }
-    else{
-        self.maxWidth = totalWidth * self.videoDuration/10.0 - self.imgWidth;
-    }
+    
     [self createUI];
     
     [self.player play];
@@ -287,84 +254,14 @@
     self.screenCaptureToolBox.delegate = self;
     [clipView addSubview:self.screenCaptureToolBox];
     _videoCroppingFrame = [self.screenCaptureToolBox captureDragViewFrameWithType:ZJSelectFrameViewOriginal];
-    
-    //下面的小图
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 20, kScreenWidth-2*kLeftWidth, 50)];
-    [self.scrollView setTag:kClipTimeScrollTag];
-    self.scrollView.delegate = self;
-    [self.scrollView setAlwaysBounceHorizontal:NO];
-    [self.scrollView setShowsHorizontalScrollIndicator:NO];
-    [self addSubview:self.scrollView];
-    self.scrollView.backgroundColor = [UIColor clearColor];
-    //图片宽
-    float imgWidth = self.maxWidth/10.0;
-    for (int i = 0; i< self.coverImgs.count; i++) {
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[self.coverImgs objectAtIndex:i]];
-        [imageView setFrame:CGRectMake(i*imgWidth, 0, imgWidth, 50)];
-        [self.scrollView addSubview:imageView];
-    }
-    [self.scrollView setContentSize:CGSizeMake(imgWidth*self.coverImgs.count, 50)];
-    
-    //滑块
-    UIPanGestureRecognizer *leftPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleLeftPan:)];
-    UIPanGestureRecognizer *rightPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleRightPan:)];
-    UIImage *leftSliderImg = [UIImage imageNamed:@"resume_btn_control_l"];
-    UIImage *rightSliderImg = [UIImage imageNamed:@"resume_btn_control_r"];
-    
-    self.leftSliderImgView = [[UIImageView alloc] initWithImage:leftSliderImg];
-    self.leftSliderImgView.userInteractionEnabled = YES;
-    self.leftSliderImgView.frame = CGRectMake(kLeftWidth, self.scrollView.frame.origin.y, leftSliderImg.size.width, leftSliderImg.size.height);
-    [self.leftSliderImgView addGestureRecognizer:leftPan];
-    [self addSubview:self.leftSliderImgView];
-    
-    self.rightSliderImgView = [[UIImageView alloc] initWithImage:rightSliderImg];
-    self.rightSliderImgView.userInteractionEnabled = YES;
-    //最大的长度裁剪
-    self.rightSliderImgView.frame = CGRectMake(self.leftSliderImgView.frameX + _maxWidth, self.scrollView.frameY, rightSliderImg.size.width, rightSliderImg.size.height);
-    
-    [self.rightSliderImgView addGestureRecognizer:rightPan];
-    [self addSubview:self.rightSliderImgView];
-    
-    //透明度
-    self.leftOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(kLeftWidth, self.scrollView.frame.origin.y, 0, leftSliderImg.size.height)];
-    [self addSubview:self.leftOpacityImgView];
-    self.leftOpacityImgView.backgroundColor = kColorWithRGBA(0, 0, 0, 0.6);
-    
-    self.rightOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.leftSliderImgView.frame.origin.x + _maxWidth+self.imgWidth, self.scrollView.frame.origin.y, kScreenWidth - self.rightSliderImgView.frameX-self.imgWidth - kLeftWidth, self.scrollView.frame.size.height)];
-    [self addSubview:self.rightOpacityImgView];
-    self.rightOpacityImgView.backgroundColor = kColorWithRGBA(0, 0, 0, 0.6);
-    
-    //指示器范围
-    self.rangeView = [[UIView alloc] initWithFrame:CGRectMake(kLeftWidth, self.scrollView.frame.origin.y, kScreenWidth - 2*kLeftWidth, self.scrollView.frameH)];
-    [self.rangeView.layer setMasksToBounds:YES];
-    [self.rangeView.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [self.rangeView.layer setBorderWidth:1.0f];
-    [self addSubview:self.rangeView];
-    [self.rangeView setHidden:YES];
-    
-    //上边的白色横条
-    self.upOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.leftSliderImgView.frameX, self.scrollView.frameY, self.rightSliderImgView.frameX-self.leftSliderImgView.frameX+self.leftSliderImgView.frameW, 2.0)];
-    [self.upOpacityImgView setBackgroundColor:[UIColor whiteColor]];
-    [self addSubview:self.upOpacityImgView];
-    
-    self.downOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.leftSliderImgView.frameX, self.scrollView.frameY+48, self.rightSliderImgView.frameX-self.leftSliderImgView.frameX+self.leftSliderImgView.frameW, 2.0)];
-    [self.downOpacityImgView setBackgroundColor:[UIColor whiteColor]];
-    [self addSubview:self.downOpacityImgView];
-    
-    //选中片段时长
-    self.selDurationLabel = [[UILabel alloc] init];
-    self.selDurationLabel.textColor = [UIColor whiteColor];
-    self.selDurationLabel.font = [UIFont systemFontOfSize:12];
-    if (self.videoDuration >= 10.) {
-        self.selDurationLabel.text = @"10.0s";
-    }else if (self.videoDuration > 6.) {
-        self.selDurationLabel.text = [NSString stringWithFormat:@"%.lds", self.videoDuration];
-    }else {
-        self.selDurationLabel.text = @"6.0s";
-    }
-    [self.selDurationLabel sizeToFit];
-    [self addSubview:self.selDurationLabel];
-    
+ 
+    self.bottomToolView = [[ZJInterceptBottomTools alloc]initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 20, kScreenWidth-2*kLeftWidth, 50) coverImgs:self.coverImgs];
+    self.bottomToolView.backgroundColor = [UIColor clearColor];
+    self.bottomToolView.startTime = self.startTime;
+    self.bottomToolView.endTime = self.endTime;
+    self.bottomToolView.delegate = self;
+    [self addSubview:self.bottomToolView];
+
     //第一次使用裁剪视频，显示引导
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kYZCropVideoFirstTime"]) {
         UITapGestureRecognizer *tap3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissPullGuide:)];
@@ -385,12 +282,6 @@
         
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kYZCropVideoFirstTime"];
     }
-
-    
-    [self.selDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.mas_right).with.offset(-14);
-        make.top.equalTo(self.scrollView.mas_bottom).with.offset(8);
-    }];
 
     [self configureSelectFrameView];
     
@@ -422,124 +313,6 @@
     }
 }
 
-#pragma mark -
-#pragma mark - Handele Gesture
-- (void)handleLeftPan:(UIPanGestureRecognizer *)gesture {
-    if (gesture.state == UIGestureRecognizerStateBegan) {
-        [self.rangeView setHidden:NO];
-    }
-    if (gesture.state == UIGestureRecognizerStateChanged) {
-        CGFloat sliderW = self.leftSliderImgView.frame.size.width;
-        CGFloat sliderH = self.leftSliderImgView.frame.size.height;
-        CGFloat sliderY = self.leftSliderImgView.frame.origin.y;
-        
-        CGPoint translation = [gesture translationInView:gesture.view];
-        CGFloat rightX = self.rightSliderImgView.frame.origin.x;
-        CGFloat leftX = self.leftSliderImgView.frame.origin.x + translation.x;
-        
-        if (leftX <= kLeftWidth) {
-            leftX = kLeftWidth;
-        }
-        if (leftX <= rightX - _maxWidth) {
-            leftX = rightX - _maxWidth;
-        }
-        else if (leftX >= rightX - _minWidth) {
-            leftX = rightX - _minWidth;
-        }
-        
-        CGFloat width = rightX - leftX+ self.imgWidth;
-        CGFloat selDuration = width * self.timeScale;
-        self.startTime = self.contentOffsetX*self.timeScale + leftX *self.timeScale;
-        self.endTime = self.startTime + selDuration;
-        if (self.startTime < 0.) {
-            self.startTime = 0.;
-        }
-        self.selDurationLabel.text = [NSString stringWithFormat:@"%.1fs", selDuration];
-        self.leftSliderImgView.frame = CGRectMake(leftX, sliderY, sliderW, sliderH);
-        self.leftOpacityImgView.frame = CGRectMake(kLeftWidth, sliderY, leftX-self.leftSliderImgView.frameW/2.0, self.scrollView.frame.size.height);
-        
-        self.upOpacityImgView.frame = CGRectMake(self.leftSliderImgView.frameX, self.scrollView.frameY, self.rightSliderImgView.frameX-self.leftSliderImgView.frameX+self.leftSliderImgView.frameW, 2.0);
-        self.downOpacityImgView.frame = CGRectMake(self.leftSliderImgView.frameX, self.scrollView.frameY+48, self.rightSliderImgView.frameX-self.leftSliderImgView.frameX+self.leftSliderImgView.frameW, 2.0);
-        
-        [gesture setTranslation:CGPointZero inView:gesture.view];
-        CMTime time = CMTimeMakeWithSeconds(self.startTime, self.m_ftp);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-                    if (finished) {
-                        [self playVideo];
-                    }
-                }];
-            });
-            
-        });
-    }
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        [self.rangeView setHidden:YES];
-    }
-}
-
-- (void)handleRightPan:(UIPanGestureRecognizer *)gesture {
-    if (gesture.state == UIGestureRecognizerStateBegan) {
-        [self.rangeView setHidden:NO];
-    }
-    if (gesture.state == UIGestureRecognizerStateChanged) {
-        CGFloat sliderY = self.rightSliderImgView.frame.origin.y;
-        CGFloat sliderW = self.rightSliderImgView.frame.size.width;
-        CGFloat sliderH = self.rightSliderImgView.frame.size.height;
-        
-        CGPoint translation = [gesture locationInView:gesture.view];
-        CGFloat leftX = self.leftSliderImgView.frame.origin.x;
-        CGFloat rightX = self.rightSliderImgView.frame.origin.x + translation.x;
-        
-        if (rightX >= kScreenWidth - kLeftWidth - self.imgWidth) {
-            rightX = kScreenWidth - kLeftWidth - self.imgWidth;
-        }
-        
-        if (rightX <= leftX + _minWidth) {
-            rightX = leftX + _minWidth;
-        }
-        if (rightX >= leftX + _maxWidth) {
-            rightX = leftX + _maxWidth;
-        }
-        
-        CGFloat width = rightX - leftX + self.imgWidth;
-        CGFloat selDuration = width * self.timeScale;
-        self.endTime = self.startTime + selDuration;
-        self.selDurationLabel.text = [NSString stringWithFormat:@"%.1fs", selDuration];
-        
-        self.rightSliderImgView.frame = CGRectMake(rightX, sliderY, sliderW, sliderH);
-        self.rightOpacityImgView.frame = CGRectMake(rightX+self.leftSliderImgView.frameW, sliderY, kScreenWidth - rightX-self.leftSliderImgView.frameW -kLeftWidth, self.scrollView.frame.size.height);
-        
-        self.upOpacityImgView.frame = CGRectMake(self.leftSliderImgView.frameX, self.scrollView.frameY, self.rightSliderImgView.frameX-self.leftSliderImgView.frameX+self.leftSliderImgView.frameW, 2.0);
-        self.downOpacityImgView.frame = CGRectMake(self.leftSliderImgView.frameX, self.scrollView.frameY+48, self.rightSliderImgView.frameX-self.leftSliderImgView.frameX+self.leftSliderImgView.frameW, 2.0);
-        
-        [gesture setTranslation:CGPointZero inView:gesture.view];
-        CMTime time = CMTimeMakeWithSeconds(self.endTime, self.m_ftp);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-                    if (finished) {
-                        [self playVideo];
-                    }
-                }];
-            });
-        });
-    }
-    else if (gesture.state == UIGestureRecognizerStateEnded){
-        [self.rangeView setHidden:YES];
-        CMTime startTime = CMTimeMakeWithSeconds(self.startTime, self.m_ftp);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.player seekToTime:startTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-                    if (finished) {
-                        [self playVideo];
-                    }
-                }];
-            });
-        });
-    }
-}
 
 -(void)dismissGuide:(UIPanGestureRecognizer *)gesture{
     [_guideBg removeFromSuperview];
@@ -588,60 +361,6 @@
     }];
 }
 
-#pragma mark -
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.tag == kCoverImageScrollTag) {
-        self.clipPoint = CGPointMake(scrollView.contentOffset.x*720.0/kScreenWidth, scrollView.contentOffset.y*720.0/kScreenWidth);
-    }
-    else if (scrollView.tag == kClipTimeScrollTag){
-        if (scrollView.contentOffset.x>=0) {
-            CGFloat addTime = scrollView.contentOffset.x*self.timeScale;
-            self.tempStartTime = self.startTime + addTime - self.contentOffsetX*self.timeScale;
-            self.tempEndTime = self.endTime + addTime - self.contentOffsetX*self.timeScale;
-            
-        }
-    }
-    NSLog(@"offset:%@", NSStringFromCGPoint(scrollView.contentOffset));
-    NSLog(@"%f",self.startTime);
-}
-#pragma mark - 结束滚动
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (scrollView.tag == kClipTimeScrollTag){
-        self.contentOffsetX = scrollView.contentOffset.x;
-        self.startTime = self.tempStartTime;
-        self.endTime = self.tempEndTime;
-        
-        CMTime time = CMTimeMakeWithSeconds(self.tempStartTime, self.m_ftp);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-                    if (finished) {
-                        
-                        [self playVideo];
-                    }
-                }];
-            });
-        });
-    }
-}
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
-    if (scrollView.tag == kClipTimeScrollTag){
-        self.contentOffsetX = scrollView.contentOffset.x;
-        self.startTime = self.tempStartTime;
-        self.endTime = self.tempEndTime;
-    }
-}
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if (scrollView.tag == kClipTimeScrollTag){
-        self.contentOffsetX = scrollView.contentOffset.x;
-        self.startTime = self.tempStartTime;
-        self.endTime = self.tempEndTime;
-    }
-}
 ///获取本地视频的时长
 - (NSUInteger)durationWithVideo:(NSString *)videoPath {
     NSDictionary *opts = [NSDictionary dictionaryWithObject:@(NO) forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
@@ -656,11 +375,22 @@
     [self.player pause];
     self.player  = nil;
     [self removeFromSuperview];
+    if ([self.delegate respondsToSelector:@selector(interceptViewToback)]) {
+        [self.delegate interceptViewToback];
+    }
 }
-
-- (void)finishWithAction:(float)action{
+- (void)action:(ZJInterceptTopViewType)actionType{
+    if (actionType == ZJInterceptTopViewVideo) {//截视频
+        self.selectFrameView.hidden = NO;
+        self.screenCaptureToolBox.hidden = NO;
+    }else{//截GIF 隐藏
+        self.screenCaptureToolBox.hidden = YES;
+        self.selectFrameView.hidden = YES;
+    }
+}
+- (void)finishWithAction:(ZJInterceptTopViewType)actionType{
     
-    if (action == 0) {//截视频
+    if (actionType == ZJInterceptTopViewVideo) {//截视频
         [self videoCropping];
     }else{//截GIF
         [self gifScreenshot];
@@ -772,6 +502,22 @@
             break;
     }
     _videoCroppingFrame = [self.screenCaptureToolBox captureDragViewFrameWithType:type];
+}
+#pragma mark -ZJInterceptBottomToolsDelegate
+-(void)seekToTime:(CGFloat)startTime enTime:(CGFloat)endTime{
+    
+    self.endTime = endTime;
+    CMTime time = CMTimeMakeWithSeconds(startTime, self.m_ftp);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+                if (finished) {
+                    [self playVideo];
+                }
+            }];
+        });
+    });
 }
 @end
 

@@ -26,6 +26,7 @@
 #import "NSGIF.h"
 #import "NSURL+ZJSaveToCameraRoll.h"
 #import "UIImage+ZJSaveToCameraRoll.h"
+#import "UIButton+ZJPlayer.h"
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 

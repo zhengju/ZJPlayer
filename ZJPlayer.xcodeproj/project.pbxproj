@@ -58,6 +58,8 @@
 		7A6DA0A6217095EE008C02CB /* ZJSaveToCameraRollOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0A5217095EE008C02CB /* ZJSaveToCameraRollOperation.m */; };
 		7A6DA0A92170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0A82170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m */; };
 		7A6DA0AC21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0AB21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m */; };
+		7A6DA0B02171A29B008C02CB /* UIButton+ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0AF2171A29B008C02CB /* UIButton+ZJPlayer.m */; };
+		7A6DA0B32171D773008C02CB /* ZJInterceptBottomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0B22171D773008C02CB /* ZJInterceptBottomTools.m */; };
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
 		7AA4F371216B7D870091094C /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F370216B7D870091094C /* libc++abi.tbd */; };
 		7AA4F374216C46C70091094C /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F373216C46C60091094C /* NSGIF.m */; };
@@ -166,6 +168,10 @@
 		7A6DA0A82170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZJSaveToCameraRoll.m"; sourceTree = "<group>"; };
 		7A6DA0AA21709799008C02CB /* NSURL+ZJSaveToCameraRoll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURL+ZJSaveToCameraRoll.h"; sourceTree = "<group>"; };
 		7A6DA0AB21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURL+ZJSaveToCameraRoll.m"; sourceTree = "<group>"; };
+		7A6DA0AE2171A29B008C02CB /* UIButton+ZJPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+ZJPlayer.h"; sourceTree = "<group>"; };
+		7A6DA0AF2171A29B008C02CB /* UIButton+ZJPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ZJPlayer.m"; sourceTree = "<group>"; };
+		7A6DA0B12171D773008C02CB /* ZJInterceptBottomTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptBottomTools.h; sourceTree = "<group>"; };
+		7A6DA0B22171D773008C02CB /* ZJInterceptBottomTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptBottomTools.m; sourceTree = "<group>"; };
 		7AA4F36E216B6E590091094C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		7AA4F372216C46C60091094C /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
@@ -237,6 +243,8 @@
 				18318B63216E45D4006507B6 /* InterceptView.m */,
 				7A6DA086216EE12D008C02CB /* ZJInterceptTopView.h */,
 				7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */,
+				7A6DA0B12171D773008C02CB /* ZJInterceptBottomTools.h */,
+				7A6DA0B22171D773008C02CB /* ZJInterceptBottomTools.m */,
 				7A6DA089216F2071008C02CB /* ZJSelectFrameView.h */,
 				7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */,
 				7A6DA09A216F784A008C02CB /* ZJScreenCaptureToolBox.h */,
@@ -281,6 +289,8 @@
 				18C204EC1F692AC60043A18E /* UIView+Player.m */,
 				1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */,
 				1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */,
+				7A6DA0AE2171A29B008C02CB /* UIButton+ZJPlayer.h */,
+				7A6DA0AF2171A29B008C02CB /* UIButton+ZJPlayer.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -577,6 +587,7 @@
 				7A6DA0A92170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
 				7A6DA09C216F784B008C02CB /* ZJScreenCaptureToolBox.m in Sources */,
+				7A6DA0B02171A29B008C02CB /* UIButton+ZJPlayer.m in Sources */,
 				184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */,
 				18318B65216E45D4006507B6 /* InterceptView.m in Sources */,
 				182273E51F7907D700156FDA /* DownloadList.m in Sources */,
@@ -607,6 +618,7 @@
 				18C204ED1F692AC60043A18E /* UIView+Player.m in Sources */,
 				18C4B5F21F5FF025002430E4 /* main.m in Sources */,
 				18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */,
+				7A6DA0B32171D773008C02CB /* ZJInterceptBottomTools.m in Sources */,
 				18C204D91F68FFFD0043A18E /* ZJTabBarButton.m in Sources */,
 				18EE509E1F70008200A5C606 /* ZJVolume.m in Sources */,
 			);

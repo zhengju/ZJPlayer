@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     slidingProgress//进度滑动
 };
 
-@interface ZJPlayer()<ZJControlViewDelegate,ZJTopViewDelegate>
+@interface ZJPlayer()<ZJControlViewDelegate,ZJTopViewDelegate,InterceptViewDelegate>
 
 @property(strong,nonatomic) UIViewController * controller;
 
@@ -1358,19 +1358,27 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     CGFloat nowTime = CMTimeGetSeconds(self.playerItem.currentTime);
 
+    
     UIImage *image = [ZJCustomTools thumbnailImageRequest:nowTime url:_url.absoluteString];
     
     [self saveImageToPhotos:image];
 }
 - (void)gifScreenshot{
-    
-    
+
     [self pause];
     
     InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem currentTime:self.playerItem.currentTime];
     view.currentTtime = self.playerItem.currentTime;
     view.playerItem = self.player.currentItem;
+    view.delegate = self;
     [self addSubview:view];
     
 }
+
+#pragma mark -InterceptViewDelegate
+-(void)interceptViewToback{
+    [self play];
+}
+
+
 @end

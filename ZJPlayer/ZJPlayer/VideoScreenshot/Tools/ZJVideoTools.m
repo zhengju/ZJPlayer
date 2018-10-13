@@ -20,6 +20,7 @@
     AVURLAsset* audioAsset = [[AVURLAsset alloc] initWithURL:audioUrl options:nil];
 
     // 2 创建AVMutableComposition实例. apple developer 里边的解释 【AVMutableComposition is a mutable subclass of AVComposition you use when you want to create a new composition from existing assets. You can add and remove tracks, and you can add, remove, and scale time ranges.】
+    
     AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     
     // 3 - 视频通道  工程文件中的轨道，有音频轨、视频轨等，里面可以插入各种对应的素材

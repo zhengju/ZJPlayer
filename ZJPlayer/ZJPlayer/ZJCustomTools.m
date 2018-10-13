@@ -103,8 +103,10 @@ typedef NS_ENUM(NSInteger, GIFSize) {
      * actualTime:缩略图实际生成的时间
      */
     NSError *error=nil;
-    CMTime time=CMTimeMakeWithSeconds(timeBySecond, 1000);//CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要活的某一秒的第几帧可以使用CMTimeMake方法)
+    CMTime time=CMTimeMakeWithSeconds(timeBySecond, 600);//CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要活的某一秒的第几帧可以使用CMTimeMake方法)
     CMTime actualTime;
+    CMTimeShow(time);
+    /** 使用copyCGImageAtTime:actualTime:error:生成一张指定时间点的图片。AVFoundation不一定能精确的生成一张你所指定时间的图片，所以你可以在第二个参数传一个CMTime的指针，用来获取所生成图片的精确时间。**/
     CGImageRef cgImage= [imageGenerator copyCGImageAtTime:time actualTime:&actualTime error:&error];
     if(error){
         NSLog(@"截取视频缩略图时发生错误，错误信息：%@",error.localizedDescription);

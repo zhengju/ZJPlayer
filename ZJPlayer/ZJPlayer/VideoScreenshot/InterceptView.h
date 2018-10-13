@@ -9,6 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
+
+@protocol InterceptViewDelegate <NSObject>
+
+- (void)interceptViewToback;
+
+@end
+
+
 @interface InterceptView : UIView
 
 @property(strong,nonatomic) AVPlayerItem * playerItem;
@@ -22,7 +30,9 @@
  */
 @property (nonatomic,strong) NSURL * videoUrl;
 
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime;
+@property(nonatomic, weak) id<InterceptViewDelegate> delegate;
+
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime;//考虑时间边界问题
 
 @end
 
@@ -39,6 +49,6 @@
  8.把耗时操作放在子线程中
  9.重新架构
    9.1 ZJPlayer架构 拆分解耦 参考SCRecorder中SCPlayer https://github.com/rFlex/SCRecorder
-   9.2 
+   9.2
  10.
  **/

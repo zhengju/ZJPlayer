@@ -10,7 +10,8 @@
 
 @interface ZJInterceptTopView()
 {
-    float _action;
+    ZJInterceptTopViewType _actionType;
+    UIButton * _selectedBtn;
 }
 /**
  左上角返回按钮
@@ -56,8 +57,9 @@
     self.backgroundColor = [UIColor clearColor];
 
     //顶部关闭按钮
-    self.cancelButton = [[UIButton alloc]init];
-    [self.cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+
+    self.cancelButton = [UIButton buttonWithTitle:@"取消" normalTitleColor:nil selectedTitleColor:nil];
+    
     [self.cancelButton bk_addEventHandler:^(id sender) {
 
         if ([self.delegate respondsToSelector:@selector(back)]) {
@@ -75,45 +77,60 @@
     }];
     
     //截屏
-    self.captureBtn = [[UIButton alloc]init];
-    [self.captureBtn setTitle:@"截视频" forState:UIControlStateNormal];
+    self.captureBtn = [UIButton buttonWithTitle:@"截视频" normalTitleColor:[UIColor whiteColor] selectedTitleColor:[UIColor grayColor]];
     [self.captureBtn bk_addEventHandler:^(id sender) {
-        _action = 0;
+        _actionType = ZJInterceptTopViewVideo;
         
-
+        if (self.captureBtn != _selectedBtn) {
+            _selectedBtn.selected = NO;
+            _selectedBtn = self.captureBtn;
+            _selectedBtn.selected = YES;
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(action:)]) {
+            [self.delegate action:ZJInterceptTopViewVideo];
+        }
+        
     } forControlEvents:UIControlEventTouchUpInside];
 
     [self addSubview:self.captureBtn];
 
     [self.captureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
 
-        make.left.equalTo(self.cancelButton.mas_right).offset(-5);
+        make.right.equalTo(self.mas_centerX).offset(-2.5);
         make.centerY.equalTo(self);
         make.height.mas_equalTo(35);
         make.width.mas_equalTo(70);
 
     }];
  
+    _selectedBtn = self.captureBtn;
+    _selectedBtn.selected = YES;
+
     //GIF截屏
-    self.gifScreenshotBtn = [[UIButton alloc]init];
-    self.gifScreenshotBtn.showsTouchWhenHighlighted = YES;
-
-    [self.gifScreenshotBtn setTitle:@"截GIF" forState:UIControlStateNormal];
+    self.gifScreenshotBtn = [UIButton buttonWithTitle:@"截GIF" normalTitleColor:[UIColor whiteColor] selectedTitleColor:[UIColor grayColor]];
     [self.gifScreenshotBtn bk_addEventHandler:^(id sender) {
-        _action = 1;
         
-
+        _actionType = ZJInterceptTopViewGIF;
+        
+        if (self.gifScreenshotBtn != _selectedBtn) {
+            _selectedBtn.selected = NO;
+            _selectedBtn = self.gifScreenshotBtn;
+            _selectedBtn.selected = YES;
+        }
+        if ([self.delegate respondsToSelector:@selector(action:)]) {
+            [self.delegate action:ZJInterceptTopViewGIF];
+        }
     } forControlEvents:UIControlEventTouchUpInside];
 
     [self addSubview:self.gifScreenshotBtn];
 
     [self.gifScreenshotBtn mas_makeConstraints:^(MASConstraintMaker *make) {
 
-        make.left.equalTo(self.captureBtn.mas_right).offset(5);
+        make.left.equalTo(self.mas_centerX).offset(2.5);
         make.centerY.equalTo(self);
         make.height.mas_equalTo(35);
         make.width.mas_equalTo(70);
-
 
     }];
     //完成
@@ -123,7 +140,8 @@
     [self.finishBtn bk_addEventHandler:^(id sender) {
       
         if ([self.delegate respondsToSelector:@selector(finishWithAction:)]) {
-            [self.delegate finishWithAction:_action];
+            
+            [self.delegate finishWithAction:_actionType];
             
         }
         
@@ -140,5 +158,7 @@
         
     }];
 }
+
+
 
 @end
