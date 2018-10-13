@@ -73,10 +73,9 @@
     }
     [self.scrollView setContentSize:CGSizeMake(kScreenWidth, 50)];
     
-    self.sliderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 50)];
+    self.sliderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.minWidth, 50)];
     [self addSubview:self.sliderView];
     
-    self.sliderView.backgroundColor = [UIColor blueColor];
     
     //滑块
     UIPanGestureRecognizer *handlePan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
@@ -90,7 +89,14 @@
     
     self.leftSliderImgView = [[UIImageView alloc] initWithImage:leftSliderImg];
     self.leftSliderImgView.userInteractionEnabled = YES;
-    self.leftSliderImgView.frame = CGRectMake(0, 0, leftSliderImg.size.width, 50);
+    
+    
+    CGFloat x = (kScreenWidth-leftSliderImg.size.width*2-self.minWidth)/2.0;
+    
+    
+    self.leftSliderImgView.frame = CGRectMake(x, 0, leftSliderImg.size.width, 50);
+    
+    
     [self.leftSliderImgView addGestureRecognizer:leftPan];
     [self addSubview:self.leftSliderImgView];
     
@@ -109,11 +115,11 @@
     [self addSubview:self.rightSliderImgView];
     
     //上边的白色横条
-    self.upOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.leftSliderImgView.frameX, 0, self.sliderView.frameW, 2.0)];
+    self.upOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.sliderView.frameX, 0, self.sliderView.frameW, 2.0)];
     [self.upOpacityImgView setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:self.upOpacityImgView];
     //下边的白色横条
-    self.downOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.leftSliderImgView.frameX, 48, self.sliderView.frameW, 2.0)];
+    self.downOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.sliderView.frameX, 48, self.sliderView.frameW, 2.0)];
     [self.downOpacityImgView setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:self.downOpacityImgView];
     
@@ -152,6 +158,11 @@
         CGFloat sliderX = self.sliderView.frame.origin.x + translation.x;
         
         CGFloat leftX = self.leftSliderImgView.frame.origin.x + translation.x;
+        
+        if (self.leftSliderImgView.frameX == 0 && self.rightSliderImgView.frameX == kScreenWidth - self.rightSliderImgView.frameW) {
+            return;
+        }//已经是最大时长了
+        
         
         if (leftX <= 0) {
             leftX = 0;

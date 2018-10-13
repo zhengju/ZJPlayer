@@ -160,7 +160,7 @@
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     if (self.videoDuration>11.0) {
         //每隔1s截取一张图片
-        for (int i = 0; i <  self.videoDuration-1; i++) {
+        for (int i = 0; i <  self.videoDuration; i++) {
            
             
             UIImage * image = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:second + i +0.01];
@@ -294,6 +294,7 @@
     }
     if (self.player.timeControlStatus == AVPlayerTimeControlStatusPaused) {
         [self.player play];
+        NSLog(@"l开始播放了");
     }
 }
 
@@ -505,6 +506,10 @@
 }
 #pragma mark -ZJInterceptBottomToolsDelegate
 -(void)seekToTime:(CGFloat)startTime enTime:(CGFloat)endTime{
+    
+    
+    NSLog(@"start:%f,end:%f",startTime,endTime);
+    [self.player pause];
     
     self.endTime = endTime;
     CMTime time = CMTimeMakeWithSeconds(startTime, self.m_ftp);
