@@ -38,5 +38,7 @@
  7.实现裁剪之后的视频压缩
  8.把耗时操作放在子线程中
  9.重新架构
+   9.1 ZJPlayer架构 拆分解耦 参考SCRecorder中SCPlayer https://github.com/rFlex/SCRecorder
+   9.2 
  10.
  **/

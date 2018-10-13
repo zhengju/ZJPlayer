@@ -232,26 +232,15 @@
 		18318B62216E45D4006507B6 /* VideoScreenshot */ = {
 			isa = PBXGroup;
 			children = (
-				7AA4F372216C46C60091094C /* NSGIF.h */,
-				7AA4F373216C46C60091094C /* NSGIF.m */,
+				7A6DA0AD2170A11C008C02CB /* Tools */,
 				18318B64216E45D4006507B6 /* InterceptView.h */,
 				18318B63216E45D4006507B6 /* InterceptView.m */,
-				7A6DA0A12170896F008C02CB /* ZJVideoTools.h */,
-				7A6DA0A22170896F008C02CB /* ZJVideoTools.m */,
-				7A6DA0A4217095EE008C02CB /* ZJSaveToCameraRollOperation.h */,
-				7A6DA0A5217095EE008C02CB /* ZJSaveToCameraRollOperation.m */,
-				7A6DA0A72170973D008C02CB /* UIImage+ZJSaveToCameraRoll.h */,
-				7A6DA0A82170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m */,
-				7A6DA0AA21709799008C02CB /* NSURL+ZJSaveToCameraRoll.h */,
-				7A6DA0AB21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m */,
 				7A6DA086216EE12D008C02CB /* ZJInterceptTopView.h */,
 				7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */,
 				7A6DA089216F2071008C02CB /* ZJSelectFrameView.h */,
 				7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */,
 				7A6DA09A216F784A008C02CB /* ZJScreenCaptureToolBox.h */,
 				7A6DA09B216F784A008C02CB /* ZJScreenCaptureToolBox.m */,
-				7AA4F37D216CA8590091094C /* UIImage+Crop.h */,
-				7AA4F37E216CA8590091094C /* UIImage+Crop.m */,
 			);
 			path = VideoScreenshot;
 			sourceTree = "<group>";
@@ -419,6 +408,25 @@
 				18C4B5F11F5FF025002430E4 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7A6DA0AD2170A11C008C02CB /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				7A6DA0A4217095EE008C02CB /* ZJSaveToCameraRollOperation.h */,
+				7A6DA0A5217095EE008C02CB /* ZJSaveToCameraRollOperation.m */,
+				7A6DA0A72170973D008C02CB /* UIImage+ZJSaveToCameraRoll.h */,
+				7A6DA0A82170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m */,
+				7A6DA0AA21709799008C02CB /* NSURL+ZJSaveToCameraRoll.h */,
+				7A6DA0AB21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m */,
+				7AA4F37D216CA8590091094C /* UIImage+Crop.h */,
+				7AA4F37E216CA8590091094C /* UIImage+Crop.m */,
+				7AA4F372216C46C60091094C /* NSGIF.h */,
+				7AA4F373216C46C60091094C /* NSGIF.m */,
+				7A6DA0A12170896F008C02CB /* ZJVideoTools.h */,
+				7A6DA0A22170896F008C02CB /* ZJVideoTools.m */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		7AA4F387216CB0A30091094C /* SourceBundle */ = {
