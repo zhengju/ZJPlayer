@@ -12,7 +12,7 @@
 #import "Masonry.h"
 #import <Photos/Photos.h>
 #import "ZJCommonHeader.h"
-
+#import "ZJDisplayVideoToSaveView.h"
 #import "ZJInterceptTopView.h"
 #import "ZJSelectFrameView.h"
 #import "ZJScreenCaptureToolBox.h"
@@ -57,6 +57,10 @@
 @property (nonatomic, strong) UIScrollView *clipView;   //视频截取的滚动
 
 @property (nonatomic, strong) AVPlayer     *player;
+
+@property(strong,nonatomic) ZJDisplayVideoToSaveView * displaySaveView;
+
+
 @end
 
 @implementation InterceptView
@@ -255,7 +259,7 @@
     [clipView addSubview:self.screenCaptureToolBox];
     _videoCroppingFrame = [self.screenCaptureToolBox captureDragViewFrameWithType:ZJSelectFrameViewOriginal];
  
-    self.bottomToolView = [[ZJInterceptBottomTools alloc]initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 20, kScreenWidth-2*kLeftWidth, 50) coverImgs:self.coverImgs];
+    self.bottomToolView = [[ZJInterceptBottomTools alloc]initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 50, kScreenWidth-2*kLeftWidth, 80) coverImgs:self.coverImgs];
     self.bottomToolView.backgroundColor = [UIColor clearColor];
     self.bottomToolView.startTime = self.startTime;
     self.bottomToolView.endTime = self.endTime;
@@ -390,6 +394,19 @@
     }
 }
 - (void)finishWithAction:(ZJInterceptTopViewType)actionType{
+    
+//    [self.player pause];
+//    
+//    
+//    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime];
+//    self.startTime = self.startTime;
+//    self.endTime = self.endTime;
+//    
+//    self.currentTtime = self.currentTtime;
+//    
+//    [self addSubview:self.displaySaveView];
+//    
+//    return;
     
     if (actionType == ZJInterceptTopViewVideo) {//截视频
         [self videoCropping];

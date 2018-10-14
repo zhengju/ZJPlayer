@@ -14,6 +14,12 @@
 
 @interface ZJInterceptBottomTools()
 
+{
+    CGFloat _leftSliderImgViewW;
+    CGFloat _RightSliderImgViewW;
+}
+
+
 @property(nonatomic, strong) UIView * sliderView;
 
 @property (nonatomic, strong) UIScrollView *scrollView;         //视频封面的滚动
@@ -44,6 +50,14 @@
 
 
 @implementation ZJInterceptBottomTools
+- (void)setStartTime:(CGFloat)startTime{
+    _startTime = startTime;
+    self.startChangeTime = _startTime;
+}
+- (void)setEndTime:(CGFloat)endTime{
+    _endTime = endTime;
+    self.endChangeTime = endTime;
+}
 - (instancetype)initWithFrame:(CGRect)frame  coverImgs:(NSArray *)coverImgs{
     if (self = [super initWithFrame:frame]) {
         self.coverImgs = coverImgs;
@@ -58,7 +72,7 @@
     self.minWidth = 5.0f/self.timeScale;//5秒钟占的宽
 
     //下面的小图
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, kScreenWidth, 50)];
     [self.scrollView setTag:kClipTimeScrollTag];
     [self.scrollView setAlwaysBounceHorizontal:NO];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
@@ -73,7 +87,7 @@
     }
     [self.scrollView setContentSize:CGSizeMake(kScreenWidth, 50)];
     
-    self.sliderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.minWidth, 50)];
+    self.sliderView = [[UIView alloc]initWithFrame:CGRectMake(0, 30, self.minWidth, 50)];
     [self addSubview:self.sliderView];
     
     
@@ -94,10 +108,11 @@
     CGFloat x = (kScreenWidth-leftSliderImg.size.width*2-self.minWidth)/2.0;
     
     
-    self.leftSliderImgView.frame = CGRectMake(x, 0, leftSliderImg.size.width, 50);
+    self.leftSliderImgView.frame = CGRectMake(x, 30, leftSliderImg.size.width, 50);
     
     
     [self.leftSliderImgView addGestureRecognizer:leftPan];
+    
     [self addSubview:self.leftSliderImgView];
     
     self.leftSliderImgView.backgroundColor = [UIColor redColor];
@@ -109,37 +124,44 @@
     self.rightSliderImgView.backgroundColor = [UIColor redColor];
     
     //最大的长度裁剪
-    self.rightSliderImgView.frame = CGRectMake(CGRectGetMaxX(self.sliderView.frame), 0, rightSliderImg.size.width, 50);
+    self.rightSliderImgView.frame = CGRectMake(CGRectGetMaxX(self.sliderView.frame), 30, rightSliderImg.size.width, 50);
     
     [self.rightSliderImgView addGestureRecognizer:rightPan];
     [self addSubview:self.rightSliderImgView];
     
+    
+    self.minWidth = self.minWidth - rightSliderImg.size.width ;//最小宽度是包含两个条的宽度
+    
+    _leftSliderImgViewW = self.leftSliderImgView.frameW;
+    _RightSliderImgViewW = self.rightSliderImgView.frameW;
+    
+    
     //上边的白色横条
-    self.upOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.sliderView.frameX, 0, self.sliderView.frameW, 2.0)];
+    self.upOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.sliderView.frameX, 30, self.sliderView.frameW, 2.0)];
     [self.upOpacityImgView setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:self.upOpacityImgView];
     //下边的白色横条
-    self.downOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.sliderView.frameX, 48, self.sliderView.frameW, 2.0)];
+    self.downOpacityImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.sliderView.frameX, 48+30, self.sliderView.frameW, 2.0)];
     [self.downOpacityImgView setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:self.downOpacityImgView];
     
     //选中片段时长
     self.selDurationLabel = [[UILabel alloc] init];
     self.selDurationLabel.textColor = [UIColor whiteColor];
-    self.selDurationLabel.font = [UIFont systemFontOfSize:12];
+    self.selDurationLabel.font = [UIFont systemFontOfSize:15];
     if (self.videoDuration >= 30.) {
-        self.selDurationLabel.text = @"30.0s";
+        self.selDurationLabel.text = @"当前截取30.0s秒";
     }else if (self.videoDuration > 5.) {
-        self.selDurationLabel.text = [NSString stringWithFormat:@"%.lds", self.videoDuration];
+        self.selDurationLabel.text = [NSString stringWithFormat:@"当前截取%.lds秒", self.videoDuration];
     }else {
-        self.selDurationLabel.text = @"5.0s";
+        self.selDurationLabel.text = @"当前截取5.0s秒";
     }
     [self.selDurationLabel sizeToFit];
     [self addSubview:self.selDurationLabel];
     
     [self.selDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.mas_right).with.offset(-14);
-        make.top.equalTo(self.scrollView.mas_bottom).with.offset(8);
+        make.centerX.equalTo(self.mas_centerX);
+        make.top.equalTo(self.mas_top).with.offset(5);
     }];
     
 }
@@ -175,14 +197,16 @@
             leftX = kScreenWidth - self.rightSliderImgView.frameW - self.sliderView.frameW - self.leftSliderImgView.frameW;
         }
         
-        CGFloat width = rightX - leftX+ self.imgWidth;
+        CGFloat width = rightX - leftX + _RightSliderImgViewW;
         CGFloat selDuration = width * self.timeScale;
-        self.startTime = self.contentOffsetX*self.timeScale + leftX *self.timeScale;
-        self.endTime = self.startTime + selDuration;
-        if (self.startTime < 0.) {
-            self.startTime = 0.;
+        self.startChangeTime = self.startTime + leftX *self.timeScale;
+        self.endChangeTime = self.startChangeTime + selDuration;
+        
+        if (self.startChangeTime < 0.) {
+            self.startChangeTime = 0.;
         }
-        self.selDurationLabel.text = [NSString stringWithFormat:@"%.1fs", selDuration];
+        
+        self.selDurationLabel.text = [NSString stringWithFormat:@"当前截取%.1fs秒", selDuration];
         
         self.leftSliderImgView.frameX = leftX;
         
@@ -193,7 +217,7 @@
         [gesture setTranslation:CGPointZero inView:gesture.view];
         
         if ([self.delegate respondsToSelector:@selector(seekToTime:enTime:)]) {
-            [self.delegate seekToTime:self.startTime enTime:self.endTime];
+            [self.delegate seekToTime:self.startChangeTime enTime:self.endChangeTime];
         }
         
     }
@@ -219,15 +243,16 @@
             leftX = rightX - _minWidth;
         }
         
-        CGFloat width = rightX - leftX+ self.imgWidth;
+        CGFloat width = rightX - leftX + _RightSliderImgViewW;
         CGFloat selDuration = width * self.timeScale;
-        self.startTime = self.contentOffsetX*self.timeScale + leftX *self.timeScale;
-        self.endTime = self.startTime + selDuration;
-        if (self.startTime < 0.) {
-            self.startTime = 0.;
+        self.startChangeTime = self.startTime + leftX *self.timeScale;
+        self.endChangeTime = self.startChangeTime + selDuration;
+        
+        if (self.startChangeTime < 0.) {
+            self.startChangeTime = 0.;
         }
         
-        self.selDurationLabel.text = [NSString stringWithFormat:@"%.1fs", selDuration];
+        self.selDurationLabel.text = [NSString stringWithFormat:@"当前截取%.1fs秒", selDuration];
         
         self.leftSliderImgView.frameX = leftX;
         
@@ -238,11 +263,10 @@
         [gesture setTranslation:CGPointZero inView:gesture.view];
 
         if ([self.delegate respondsToSelector:@selector(seekToTime:enTime:)]) {
-            [self.delegate seekToTime:self.startTime enTime:self.endTime];
+            [self.delegate seekToTime:self.startChangeTime enTime:self.endChangeTime];
         }
     }
     if (gesture.state == UIGestureRecognizerStateEnded) {
-        //        [self.rangeView setHidden:YES];
     }
 }
 
@@ -254,7 +278,7 @@
         CGPoint translation = [gesture locationInView:gesture.view];
         CGFloat leftX = self.leftSliderImgView.frame.origin.x;
         CGFloat rightX = self.rightSliderImgView.frame.origin.x + translation.x;
-        
+
         if (rightX >= kScreenWidth - self.rightSliderImgView.frameW) {
             rightX = kScreenWidth - self.rightSliderImgView.frameW;
         }
@@ -262,11 +286,13 @@
         if (rightX <= leftX + _minWidth) {
             rightX = leftX + _minWidth;
         }
-        
-        CGFloat width = rightX - leftX + self.imgWidth;
+
+        CGFloat width = rightX - leftX + _RightSliderImgViewW;
         CGFloat selDuration = width * self.timeScale;
-        self.endTime = self.startTime + selDuration;
-        self.selDurationLabel.text = [NSString stringWithFormat:@"%.1fs", selDuration];
+        self.endChangeTime = self.startChangeTime + selDuration;
+        
+        
+        self.selDurationLabel.text = [NSString stringWithFormat:@"当前截取%.1fs秒", selDuration];
         
         self.rightSliderImgView.frameX = rightX;
         

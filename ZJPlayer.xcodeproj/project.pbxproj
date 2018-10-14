@@ -23,6 +23,8 @@
 		184829BD1F79EE5500BF2BDB /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829BA1F79EE4500BF2BDB /* NSString+Hash.m */; };
 		184829BE1F79EE5900BF2BDB /* ZJDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829BC1F79EE4500BF2BDB /* ZJDownloadManager.m */; };
 		184829C11F7A05A600BF2BDB /* ZJCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829C01F7A05A600BF2BDB /* ZJCustomTools.m */; };
+		185364342172ED5200EAD522 /* ZJDisplayVideoToSaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 185364332172ED5200EAD522 /* ZJDisplayVideoToSaveView.m */; };
+		1877119721733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1877119621733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m */; };
 		1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */; };
 		1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */; };
 		18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204CE1F68FFFD0043A18E /* ZJNavigationController.m */; };
@@ -98,6 +100,10 @@
 		184829BC1F79EE4500BF2BDB /* ZJDownloadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloadManager.m; sourceTree = "<group>"; };
 		184829BF1F7A05A600BF2BDB /* ZJCustomTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJCustomTools.h; sourceTree = "<group>"; };
 		184829C01F7A05A600BF2BDB /* ZJCustomTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJCustomTools.m; sourceTree = "<group>"; };
+		185364322172ED5200EAD522 /* ZJDisplayVideoToSaveView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveView.h; sourceTree = "<group>"; };
+		185364332172ED5200EAD522 /* ZJDisplayVideoToSaveView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDisplayVideoToSaveView.m; sourceTree = "<group>"; };
+		1877119521733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveTopView.h; sourceTree = "<group>"; };
+		1877119621733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDisplayVideoToSaveTopView.m; sourceTree = "<group>"; };
 		1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayer.h; sourceTree = "<group>"; };
 		1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayer.m; sourceTree = "<group>"; };
 		1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCommonHeader.h; sourceTree = "<group>"; };
@@ -249,6 +255,10 @@
 				7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */,
 				7A6DA09A216F784A008C02CB /* ZJScreenCaptureToolBox.h */,
 				7A6DA09B216F784A008C02CB /* ZJScreenCaptureToolBox.m */,
+				185364322172ED5200EAD522 /* ZJDisplayVideoToSaveView.h */,
+				185364332172ED5200EAD522 /* ZJDisplayVideoToSaveView.m */,
+				1877119521733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.h */,
+				1877119621733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m */,
 			);
 			path = VideoScreenshot;
 			sourceTree = "<group>";
@@ -575,6 +585,7 @@
 				18C204DA1F68FFFD0043A18E /* ZJTabBarController.m in Sources */,
 				182273E11F7907AD00156FDA /* VideoListController.m in Sources */,
 				182273E61F7907D900156FDA /* DownloadListCell.m in Sources */,
+				185364342172ED5200EAD522 /* ZJDisplayVideoToSaveView.m in Sources */,
 				182273E81F7907DE00156FDA /* PlayerVideoController.m in Sources */,
 				184829BE1F79EE5900BF2BDB /* ZJDownloadManager.m in Sources */,
 				18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */,
@@ -583,6 +594,7 @@
 				18C204F81F6A74F30043A18E /* ZJCacheTask.m in Sources */,
 				18D574171F7DF15700E77007 /* UITabBarController+Player.m in Sources */,
 				18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */,
+				1877119721733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m in Sources */,
 				18C205401F6BE3030043A18E /* ZJTopView.m in Sources */,
 				7A6DA0A92170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,

@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZJInterceptBottomTools : UIView
 
+@property (nonatomic, assign) CGFloat startChangeTime;            //开始截取的时间
+@property (nonatomic, assign) CGFloat endChangeTime;              //结束截取的时间
 
 @property (nonatomic, assign) CGFloat startTime;            //开始截取的时间
 @property (nonatomic, assign) CGFloat endTime;              //结束截取的时间
