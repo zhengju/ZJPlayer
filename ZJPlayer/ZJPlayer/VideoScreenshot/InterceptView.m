@@ -30,7 +30,7 @@
 
 #define originRate 16.0/9.0
 
-@interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate,ZJScreenCaptureToolBoxDelegate,ZJSelectFrameViewDelegate,ZJInterceptBottomToolsDelegate>
+@interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate,ZJScreenCaptureToolBoxDelegate,ZJSelectFrameViewDelegate,ZJInterceptBottomToolsDelegate,ZJDisplayVideoToSaveViewDelegate>
 {
     CGRect _videoCroppingFrame;
 }
@@ -395,18 +395,21 @@
 }
 - (void)finishWithAction:(ZJInterceptTopViewType)actionType{
     
-//    [self.player pause];
-//    
-//    
-//    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime];
-//    self.startTime = self.startTime;
-//    self.endTime = self.endTime;
-//    
-//    self.currentTtime = self.currentTtime;
-//    
-//    [self addSubview:self.displaySaveView];
-//    
-//    return;
+    [self.player pause];
+    
+    
+    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime];
+    self.displaySaveView.startTime = self.startTime;
+    self.displaySaveView.endTime = self.endTime;
+    self.displaySaveView.delegate = self;
+    self.displaySaveView.currentTtime = self.currentTtime;
+    self.displaySaveView.videoCroppingFrame = _videoCroppingFrame;
+    self.BGView.image = self.BGView.image;
+    [self addSubview:self.displaySaveView];
+    
+    return;
+    
+    
     
     if (actionType == ZJInterceptTopViewVideo) {//截视频
         [self videoCropping];
@@ -465,7 +468,12 @@
                              [NSString stringWithFormat:@"FinalVideo-%d.mov",arc4random() % 1000]];
     NSURL * videoUrl = [NSURL fileURLWithPath:myPathDocs];
 
-    [ZJVideoTools mixVideo:self.playerItem.asset startTime:CMTimeMakeWithSeconds(self.startTime, self.m_ftp) WithVideoCroppingFrame:_videoCroppingFrame toUrl:videoUrl outputFileType:AVFileTypeQuickTimeMovie withMaxDuration:CMTimeMakeWithSeconds(self.endTime - self.startTime, self.m_ftp) withCompletionBlock:^(NSError *error) {
+    
+    [ZJVideoTools mixVideo:self.playerItem.asset startTime:CMTimeMakeWithSeconds(self.startTime, self.m_ftp) WithVideoCroppingFrame:_videoCroppingFrame toUrl:videoUrl outputFileType:AVFileTypeQuickTimeMovie withMaxDuration:CMTimeMakeWithSeconds(self.endTime - self.startTime, self.m_ftp) compositionProgressBlock:^(CGFloat progress) {
+        
+        NSLog(@" 视频 打印信息:%f",progress);
+        
+    }  withCompletionBlock:^(NSError *error) {
         
         if (error == nil) {
 
@@ -540,6 +548,14 @@
             }];
         });
     });
+}
+#pragma mark - ZJDisplayVideoToSaveViewDelegate
+- (void)displayVideoToSaveViewToback{
+    [self.player play];
+    [self.displaySaveView removeFromSuperview];
+}
+- (void)displayVideoToSaveViewExit{
+    [self back];
 }
 @end
 

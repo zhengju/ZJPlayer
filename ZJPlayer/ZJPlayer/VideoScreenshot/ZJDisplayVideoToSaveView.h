@@ -12,11 +12,14 @@
 @protocol ZJDisplayVideoToSaveViewDelegate <NSObject>
 
 - (void)displayVideoToSaveViewToback;
-
+- (void)displayVideoToSaveViewExit;
 @end
 
 
 @interface ZJDisplayVideoToSaveView : UIView
+
+
+@property(nonatomic, weak) id<ZJDisplayVideoToSaveViewDelegate > delegate;
 
 @property(strong,nonatomic) AVPlayerItem * playerItem;
 
@@ -32,6 +35,10 @@
 @property (nonatomic, assign) CGFloat startTime;            //开始截取的时间
 
 @property (nonatomic, assign) CGFloat endTime;    
+
+@property(nonatomic, assign) CGRect videoCroppingFrame ;
+
+@property (nonatomic, strong) UIImageView *BGView;
 
 - (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime;
 

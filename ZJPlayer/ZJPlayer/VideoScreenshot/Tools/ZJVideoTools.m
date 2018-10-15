@@ -9,7 +9,7 @@
 #import "ZJVideoTools.h"
 
 @implementation ZJVideoTools
-+ (void)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration withCompletionBlock:(void(^)(NSError *error))completionBlock{
++ (void)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration compositionProgressBlock:(void(^)(CGFloat progress))compositionProgressBlock withCompletionBlock:(void(^)(NSError *error))completionBlock{
     
     NSError * error = nil;
     //1 — 采集
@@ -88,6 +88,9 @@
     
     [compositionAudioTrack insertTimeRange:audioTimeRange ofTrack:([audioAsset tracksWithMediaType:AVMediaTypeAudio].count > 0) ? [audioAsset tracksWithMediaType:AVMediaTypeAudio].firstObject : nil atTime:kCMTimeZero error:nil];
     
+    
+    __block NSTimer *timer = nil;
+    
     // 5 - Create exporter
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:mixComposition
                                                                       presetName:AVAssetExportPresetHighestQuality];
@@ -96,7 +99,15 @@
     exportSession.shouldOptimizeForNetworkUse = YES;
     exportSession.videoComposition = mainCompositionInst;
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
+
+        if (timer) {
+            [timer invalidate];
+            timer = nil;
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            
+             compositionProgressBlock(exportSession.progress);
             
             NSError * error = nil;
             if (exportSession.error != nil) {
@@ -117,6 +128,21 @@
             
         });
     }];
+    
+    if (@available(iOS 10.0, *)) {
+        timer = [NSTimer scheduledTimerWithTimeInterval:0.05 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            
+            if (compositionProgressBlock) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                
+                    compositionProgressBlock(exportSession.progress);
+                    
+                });
+            }
+        }];
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 + (UIImage*)getVideoPreViewImageFromVideo:(AVAsset *)videoAsset atTime:(float)atTime{

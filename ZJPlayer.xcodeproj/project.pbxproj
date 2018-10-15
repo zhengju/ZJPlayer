@@ -53,6 +53,7 @@
 		18EE509E1F70008200A5C606 /* ZJVolume.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509D1F70008200A5C606 /* ZJVolume.m */; };
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
+		7A402B092174A62C008B75B0 /* temp.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 7A402B082174A62C008B75B0 /* temp.mp4 */; };
 		7A6DA088216EE12D008C02CB /* ZJInterceptTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */; };
 		7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */; };
 		7A6DA09C216F784B008C02CB /* ZJScreenCaptureToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA09B216F784A008C02CB /* ZJScreenCaptureToolBox.m */; };
@@ -160,6 +161,7 @@
 		18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Player.m"; sourceTree = "<group>"; };
 		361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZJPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EB192BACD32CA54F2F1785 /* Pods-ZJPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		7A402B082174A62C008B75B0 /* temp.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = temp.mp4; sourceTree = "<group>"; };
 		7A6DA086216EE12D008C02CB /* ZJInterceptTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptTopView.h; sourceTree = "<group>"; };
 		7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptTopView.m; sourceTree = "<group>"; };
 		7A6DA089216F2071008C02CB /* ZJSelectFrameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJSelectFrameView.h; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 			isa = PBXGroup;
 			children = (
 				18C4B5F31F5FF025002430E4 /* AppDelegate.h */,
+				7A402B082174A62C008B75B0 /* temp.mp4 */,
 				18C4B5F41F5FF025002430E4 /* AppDelegate.m */,
 				18C4B5F61F5FF025002430E4 /* ViewController.h */,
 				18C4B5F71F5FF025002430E4 /* ViewController.m */,
@@ -522,6 +525,7 @@
 				18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */,
 				182273E91F790BFB00156FDA /* DownloadListCell.xib in Resources */,
 				18C4B5FD1F5FF025002430E4 /* Assets.xcassets in Resources */,
+				7A402B092174A62C008B75B0 /* temp.mp4 in Resources */,
 				18C4B5FB1F5FF025002430E4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

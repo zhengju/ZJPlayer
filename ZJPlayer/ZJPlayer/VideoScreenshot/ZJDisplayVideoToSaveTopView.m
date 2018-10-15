@@ -73,7 +73,7 @@
   
     //完成
     self.exitBtn = [[UIButton alloc]init];
-    [self.exitBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [self.exitBtn setTitle:@"退出" forState:UIControlStateNormal];
     
     [self.exitBtn bk_addEventHandler:^(id sender) {
         
