@@ -33,6 +33,7 @@
 @interface InterceptView()<UIScrollViewDelegate,ZJInterceptTopViewDelegate,ZJScreenCaptureToolBoxDelegate,ZJSelectFrameViewDelegate,ZJInterceptBottomToolsDelegate,ZJDisplayVideoToSaveViewDelegate>
 {
     CGRect _videoCroppingFrame;
+    CGRect _clipPlayFrame;
 }
 @property (nonatomic, strong) UIImage *cover;
 @property (nonatomic, strong) PHAsset *asset;
@@ -257,8 +258,11 @@
     self.screenCaptureToolBox.originVideoFrame = CGRectMake(0, 0, image.size.width, image.size.height);
     self.screenCaptureToolBox.delegate = self;
     [clipView addSubview:self.screenCaptureToolBox];
+    
     _videoCroppingFrame = [self.screenCaptureToolBox captureDragViewFrameWithType:ZJSelectFrameViewOriginal];
- 
+    _clipPlayFrame = [self.screenCaptureToolBox playerViewFrameWithType:ZJSelectFrameViewOriginal];
+    
+    
     self.bottomToolView = [[ZJInterceptBottomTools alloc]initWithFrame:CGRectMake(kLeftWidth, kScreenHeight - 50 - 50, kScreenWidth-2*kLeftWidth, 80) coverImgs:self.coverImgs];
     self.bottomToolView.backgroundColor = [UIColor clearColor];
     self.bottomToolView.startTime = self.startTime;
@@ -288,7 +292,7 @@
     }
 
     [self configureSelectFrameView];
-    
+
 }
 
 - (void)playVideo {
@@ -398,33 +402,19 @@
     [self.player pause];
     
     
-    
-    
-    
-    AVAsset * asset =   [ZJVideoTools mixVideo:self.playerItem.asset startTime:CMTimeMakeWithSeconds(self.startTime, 25) WithVideoCroppingFrame:_videoCroppingFrame toUrl:nil outputFileType:AVFileTypeQuickTimeMovie withMaxDuration:CMTimeMakeWithSeconds(self.endTime - self.startTime, 25)];
-    
-    
-    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime withAsset:asset videoCroppingFrame:_videoCroppingFrame];
-    
-    
-    
-    
+    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime withAsset:self.playerItem.asset videoCroppingFrame:_videoCroppingFrame playeFrame:_clipPlayFrame];
+
     self.displaySaveView.startTime = self.startTime;
     self.displaySaveView.endTime = self.endTime;
     self.displaySaveView.delegate = self;
     self.displaySaveView.currentTtime = self.currentTtime;
     self.displaySaveView.videoCroppingFrame = _videoCroppingFrame;
     self.displaySaveView.BGView.image = self.BGView.image;
-    
-    
-    
-    
+
     [self addSubview:self.displaySaveView];
     
     return;
-    
-    
-    
+
     if (actionType == ZJInterceptTopViewVideo) {//截视频
         [self videoCropping];
     }else{//截GIF
@@ -511,10 +501,14 @@
 }
 
 #pragma mark - ZJScreenCaptureToolBoxDelegate
-- (void)screenCaptureFrame:(CGRect)frame{
+- (void)screenCaptureFrame:(CGRect)frame playeFrame:(CGRect)playFrame{
+    
+    _clipPlayFrame = playFrame;
     
     _videoCroppingFrame = frame;
+    
 }
+
 #pragma mark - ZJSelectFrameViewDelegate
 - (void)selectedFrameType:(ZJSelectFrameType)type{
     switch (type) {
@@ -541,7 +535,11 @@
         default:
             break;
     }
+    
     _videoCroppingFrame = [self.screenCaptureToolBox captureDragViewFrameWithType:type];
+    
+    _clipPlayFrame = [self.screenCaptureToolBox playerViewFrameWithType:type];
+    
 }
 #pragma mark -ZJInterceptBottomToolsDelegate
 -(void)seekToTime:(CGFloat)startTime enTime:(CGFloat)endTime{

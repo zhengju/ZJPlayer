@@ -47,7 +47,7 @@
     _verticalPlateX = (self.frameW - _verticalPlateW)/2.0;
     _squareX = (self.frameW - _squareW)/2.0;
     
-    self.dragView = [[UIView alloc]initWithFrame:CGRectMake((self.frameW-self.frameH)/2.0, 0, self.frameH, self.frameH)];
+    self.dragView = [[UIView alloc]initWithFrame:self.bounds];
     self.dragView.backgroundColor = [UIColor clearColor];
     [self addSubview:self.dragView];
     
@@ -68,14 +68,14 @@
     if (type == ZJSelectFrameViewOriginal) {
         self.hidden = YES;
         self.dragView.frameX = 0;
-        
+        self.dragView.bounds = self.bounds;
     }else if(type == ZJSelectFrameViewVerticalPlate){
         self.hidden = NO;
         self.dragView.frameW = _verticalPlateW;
         self.dragView.frameX = _verticalPlateX;
     }else if(type == ZJSelectFrameViewFilm){
         self.hidden = NO;
-        self.dragView.frame = frame;
+        self.dragView.frame = self.bounds;
         self.dragView.frameX = 0;
     }else if(type == ZJSelectFrameViewSquare){
         self.hidden = NO;
@@ -87,7 +87,7 @@
 }
 
 - (CGRect)captureDragViewFrameWithType:(ZJSelectFrameType)type{
-    
+    self.selectedFrameType = type;
     CGFloat rate = self.originVideoFrame.size.width/self.frameW;
     
     CGRect frame = CGRectZero;
@@ -109,6 +109,12 @@
         
     }
     return frame;
+}
+
+- (CGRect)playerViewFrameWithType:(ZJSelectFrameType)type{
+    
+    return self.dragView.bounds;
+    
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)gesture{
@@ -148,8 +154,8 @@
         [self setNeedsDisplay];
         
     }else if (gesture.state == UIGestureRecognizerStateEnded) {
-        if ([self.delegate respondsToSelector:@selector(screenCaptureFrame:)]) {
-            [self.delegate screenCaptureFrame:self.dragView.frame];
+        if ([self.delegate respondsToSelector:@selector(screenCaptureFrame:playeFrame:)]) {
+            [self.delegate screenCaptureFrame:[self captureDragViewFrameWithType:self.selectedFrameType] playeFrame:self.dragView.bounds];
         }
     }
 }

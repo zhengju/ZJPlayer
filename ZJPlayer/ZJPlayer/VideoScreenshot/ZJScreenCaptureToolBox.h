@@ -10,7 +10,7 @@
 #import "ZJSelectFrameView.h"
 @protocol ZJScreenCaptureToolBoxDelegate <NSObject>
 
-- (void)screenCaptureFrame:(CGRect)frame;
+- (void)screenCaptureFrame:(CGRect)frame playeFrame:(CGRect)playFrame;
 
 
 @end
@@ -25,7 +25,7 @@
 - (void)setCaptureDragViewFrame:(CGRect)frame type:(ZJSelectFrameType)type;
 
 - (CGRect)captureDragViewFrameWithType:(ZJSelectFrameType)type;
-
+- (CGRect)playerViewFrameWithType:(ZJSelectFrameType)type;
 @end
 
 

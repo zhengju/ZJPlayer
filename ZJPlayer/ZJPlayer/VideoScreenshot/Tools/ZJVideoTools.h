@@ -11,10 +11,6 @@
 #import <Photos/Photos.h>
 
 @interface ZJVideoTools : NSObject
-
-
-+ (AVAsset *)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration;
-
 /**
  剪裁视频
 
@@ -29,7 +25,6 @@
 + (void)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration compositionProgressBlock:(void(^)(CGFloat progress))compositionProgressBlock withCompletionBlock:(void(^)(NSError *error))completionBlock;
 
 + (UIImage*)getVideoPreViewImageFromVideo:(AVAsset *)videoAsset atTime:(float)atTime;
-
 
 @end
 

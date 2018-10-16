@@ -10,7 +10,7 @@
 #import "ZJCommonHeader.h"
 #import "ZJDisplayVideoToSaveTopView.h"
 
-
+#import "ZJGlKImageView.h"
 
 #define ZJHeight kScreenHeight/2.0
 
@@ -21,6 +21,17 @@
 {
   
     CGRect   _videoCroppingFrame;
+    
+    AVPlayerItemVideoOutput *_videoOutPut;
+    
+    dispatch_queue_t _renderQueue;
+    
+    dispatch_queue_t _videoCroppingQueue;
+    
+    CGSize _videoSize;
+    
+    CGRect _playFrame;
+    
 }
 @property (nonatomic, strong) AVPlayer     *player;
 
@@ -40,6 +51,12 @@
 
 @property(nonatomic, strong) UIView * layerBGView;
 
+@property(nonatomic,strong) CADisplayLink *playLink;
+
+@property(nonatomic,strong) ZJGlKImageView *glkImgView;
+
+@property(nonatomic,strong) UIVisualEffectView *effectView;
+
 @end
 
 
@@ -51,12 +68,8 @@
 }
 
 - (void)setCurrentTtime:(CMTime)currentTtime{
-    
-    
-    
+
     _currentTtime = currentTtime;
-    
-    AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
 
     CMTime time = CMTimeMakeWithSeconds(CMTimeGetSeconds(_currentTtime), 25);
     [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
@@ -65,11 +78,12 @@
         }
     }];
 }
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame{
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame  playeFrame:(CGRect)playFrame{
     self.videoUrl = videoUrl;
     self.playerItem = playerItem;
     self.currentTtime = currentTime;
     self.asset = asset;
+    _playFrame= playFrame;
     _videoCroppingFrame = videoCroppingFrame;
     if (self = [super initWithFrame:frame]) {
         self.videoUrl = videoUrl;
@@ -89,6 +103,14 @@
     //播放的同时子线程生成本地视频
     
 }
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
+
+    self.glkImgView.frame = CGRectMake((kScreenWidth - _playFrame.size.width)/2.0, CGRectGetMaxY(self.topView.frame), _playFrame.size.width, _playFrame.size.height);
+
+}
+
 #pragma mark - Private method
 -(void)initPlayerView{
     
@@ -99,28 +121,35 @@
     self.topView.delegate = self;
     [self addSubview:self.topView];
     
-//
-//    self.layerBGView = [[UIView alloc]initWithFrame:CGRectMake(70, 72, 100, 100)];
-//    self.layerBGView.backgroundColor = [UIColor redColor];
-//    [self addSubview:self.layerBGView];
-//
+
+    _renderQueue = dispatch_queue_create("com.render", DISPATCH_QUEUE_SERIAL);
     
+    _videoCroppingQueue = dispatch_queue_create("com.videoCropping", DISPATCH_QUEUE_SERIAL);
     
     CGFloat  imgW = ZJHeight*originRate;
-    CGFloat  imgH = ZJHeight;
+    
     
     //通过playerItem创建AVPlayer
     AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:self.playerItem.asset];
+    
+    _videoOutPut =  [[AVPlayerItemVideoOutput alloc] initWithOutputSettings:nil];
+    
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
-    //或者直接使用URL创建AVPlayer
-    AVPlayerLayer *layer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-    layer.frame = CGRectMake((kScreenWidth - imgW)/2.0, CGRectGetMaxY(self.topView.frame), imgW, imgH);
-    layer.videoGravity =AVLayerVideoGravityResizeAspect;
-    [self.layer addSublayer:layer];
+
+    [self.player.currentItem addOutput:_videoOutPut];
+    
+    
     [self.player play];
 
+    _playLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(playerRender)];
+    [_playLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    _playLink.frameInterval = 2;
     
-    self.slider = [[UIProgressView alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, CGRectGetMaxY(layer.frame), imgW, 2)];
+    _glkImgView = [[ZJGlKImageView alloc] init];
+    [self addSubview:_glkImgView];
+    
+    
+    self.slider = [[UIProgressView alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, ZJHeight+72, imgW, 2)];
     self.slider.progressTintColor = [UIColor blueColor];
     self.slider.trackTintColor = [UIColor whiteColor];
     [self addSubview:self.slider];
@@ -141,9 +170,6 @@
     } forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.saveBtn];
-    
-   
-    
 
 }
 - (void)playVideo {
@@ -184,16 +210,17 @@
     
     [ZJVideoTools mixVideo:self.playerItem.asset startTime:CMTimeMakeWithSeconds(self.startTime, 25) WithVideoCroppingFrame:_videoCroppingFrame toUrl:self.videoUrlPath outputFileType:AVFileTypeQuickTimeMovie withMaxDuration:CMTimeMakeWithSeconds(self.endTime - self.startTime, 25) compositionProgressBlock:^(CGFloat progress) {
         
-        NSLog(@" 视频 打印信息:%f",progress);
-        
-        self.slider.progress = progress;
-        
-        if (progress == 1) {
-            self.desLabel.text = @"视频生成ok,可以保存和分享了..";
-            self.slider.hidden = YES;
+        if (progress != 0) {
+            NSLog(@" 视频 打印信息:%f",progress);
+            
+            self.slider.progress = progress;
+            
+            if (progress == 1) {
+                self.desLabel.text = @"视频生成ok,可以保存和分享了..";
+                self.slider.hidden = YES;
+            }
         }
-        
-        
+
     }  withCompletionBlock:^(NSError *error) {
         
         if (error == nil) {
@@ -214,16 +241,53 @@
             HUDNormal(@"保存视频至相册成功");
             NSLog(@"保存视频至相册成功：%@",path);
         }];
+}
+
+- (void)playerRender{
     
+    CMTime itemTime = [_videoOutPut itemTimeForHostTime:CACurrentMediaTime()];
+    
+    if ([_videoOutPut hasNewPixelBufferForItemTime:itemTime]) {
+        
+        dispatch_async(_renderQueue, ^{
+            
+            CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+            
+            CVPixelBufferRef pixelBuffer = [_videoOutPut copyPixelBufferForItemTime:itemTime itemTimeForDisplay:nil];
+            
+          
+            CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+
+          
+            CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                self.glkImgView.renderImg = outPutImg;
+                
+            });
+            
+            CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+            NSLog(@"像素耗时：-----%f", end - start);
+            
+            CVBufferRelease(pixelBuffer);
+            
+        });
+        
+    }else{
+        
+    }
 }
 
 #pragma mark -ZJDisplayVideoToSaveTopViewDelegate
 - (void)displayVideoToSaveTopViewBack{
+    [self.player pause];
     if ([self.delegate respondsToSelector:@selector(displayVideoToSaveViewToback)]) {
         [self.delegate displayVideoToSaveViewToback];
     }
 }
 - (void)displayVideoToSaveTopViewExit{
+    [self.player pause];
     if ([self.delegate respondsToSelector:@selector(displayVideoToSaveViewExit)]) {
         [self.delegate displayVideoToSaveViewExit];
     }

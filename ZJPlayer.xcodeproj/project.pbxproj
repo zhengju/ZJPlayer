@@ -53,6 +53,7 @@
 		18EE509E1F70008200A5C606 /* ZJVolume.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509D1F70008200A5C606 /* ZJVolume.m */; };
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
+		7A05D6312175D4EF0077728B /* ZJGlKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05D62F2175D4EF0077728B /* ZJGlKImageView.m */; };
 		7A6DA088216EE12D008C02CB /* ZJInterceptTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */; };
 		7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */; };
 		7A6DA09C216F784B008C02CB /* ZJScreenCaptureToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA09B216F784A008C02CB /* ZJScreenCaptureToolBox.m */; };
@@ -160,6 +161,8 @@
 		18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Player.m"; sourceTree = "<group>"; };
 		361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZJPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EB192BACD32CA54F2F1785 /* Pods-ZJPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		7A05D62F2175D4EF0077728B /* ZJGlKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJGlKImageView.m; sourceTree = "<group>"; };
+		7A05D6302175D4EF0077728B /* ZJGlKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJGlKImageView.h; sourceTree = "<group>"; };
 		7A6DA086216EE12D008C02CB /* ZJInterceptTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptTopView.h; sourceTree = "<group>"; };
 		7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptTopView.m; sourceTree = "<group>"; };
 		7A6DA089216F2071008C02CB /* ZJSelectFrameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJSelectFrameView.h; sourceTree = "<group>"; };
@@ -259,6 +262,8 @@
 				185364332172ED5200EAD522 /* ZJDisplayVideoToSaveView.m */,
 				1877119521733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.h */,
 				1877119621733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m */,
+				7A05D6302175D4EF0077728B /* ZJGlKImageView.h */,
+				7A05D62F2175D4EF0077728B /* ZJGlKImageView.m */,
 			);
 			path = VideoScreenshot;
 			sourceTree = "<group>";
@@ -625,6 +630,7 @@
 				7AA4F37F216CA8590091094C /* UIImage+Crop.m in Sources */,
 				7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */,
 				184829BD1F79EE5500BF2BDB /* NSString+Hash.m in Sources */,
+				7A05D6312175D4EF0077728B /* ZJGlKImageView.m in Sources */,
 				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,
 				182273E31F7907B500156FDA /* VideoList.m in Sources */,
 				18C204ED1F692AC60043A18E /* UIView+Player.m in Sources */,

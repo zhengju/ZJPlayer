@@ -40,6 +40,6 @@
 
 @property (nonatomic, strong) UIImageView *BGView;
 
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame;
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame playeFrame:(CGRect)playFrame;
 
 @end
