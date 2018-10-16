@@ -68,9 +68,6 @@
         
     }];
     
-  
-    
-  
     //完成
     self.exitBtn = [[UIButton alloc]init];
     [self.exitBtn setTitle:@"退出" forState:UIControlStateNormal];

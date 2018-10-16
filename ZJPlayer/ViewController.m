@@ -17,6 +17,7 @@
 @end
 
 @implementation ViewController
+//https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4
 ///Users/leeco/Documents/童话侠.mp4
 //http://img.house.china.com.cn/voice/rongch.mp4
 //http://gslb.miaopai.com/stream/QgZbuZjY70~LOyicMJz9NQ__.mp4?yx=&KID=unistore,video&Expires=1488340984&ssig=9xbm%2BqHngF
@@ -24,7 +25,7 @@
     [super viewDidLoad];
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/rongch.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
+    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://tb-video.bdstatic.com/tieba-movideo/11233547_ac127ce9e993877dce0eebceaa04d6c2_593d93a619b0.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
     player.isRotatingSmallScreen = YES;
 
     [self.view addSubview:player];

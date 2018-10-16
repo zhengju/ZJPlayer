@@ -72,6 +72,8 @@
     
     UIImage * bgImage = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:CMTimeGetSeconds(_currentTtime)+0.01];
 
+    self.cover = bgImage;
+    
     self.BGView.image = bgImage;
     
     CMTime time = CMTimeMakeWithSeconds(CMTimeGetSeconds(_currentTtime), self.m_ftp);
@@ -116,7 +118,7 @@
     if (self.videoUrl == nil) {
         return;
     }
-    [self getCoverImgs];
+
     AVAsset *asset = self.playerItem.asset;
     self.m_ftp = [[[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] nominalFrameRate];
     CMTimeShow(self.currentTtime);
@@ -125,6 +127,9 @@
     self.endTime = self.startTime + 10.0f;
     
     [self createUI];
+    
+    
+    [self getCoverImgs];
     
     [self.player play];
     //设置视频视图
@@ -151,48 +156,59 @@
 }
 //截帧逻辑可以优化，比较多时可以放在子线程中去完成
 - (void)getCoverImgs {
-    NSMutableArray *imageArrays = [NSMutableArray array];
-    self.videoDuration = [self durationWithVideo:self.videoUrl.absoluteString];
-    self.videoDuration = 20;//30秒截图20张
     
-    
-    float second = CMTimeGetSeconds(self.currentTtime);
-    
-    //要判断seconds是否会超出总的时间区间
- 
-    AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
-    //大于11s
-    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    if (self.videoDuration>11.0) {
-        //每隔1s截取一张图片
-        for (int i = 0; i <  self.videoDuration; i++) {
-           
-            
-            UIImage * image = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:second + i*1.5 +0.01];
-           
-            if (image) {
-                [imageArrays addObject:image];
+  
+    dispatch_queue_t   queue = dispatch_queue_create("com.queue", DISPATCH_QUEUE_SERIAL);
+
+    dispatch_async(queue, ^{
+//
+        NSMutableArray *imageArrays = [NSMutableArray array];
+        self.videoDuration = [self durationWithVideo:self.videoUrl.absoluteString];
+        self.videoDuration = 20;//30秒截图20张
+        
+        
+        float second = CMTimeGetSeconds(self.currentTtime);
+        
+        //要判断seconds是否会超出总的时间区间
+        
+        AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
+        //大于11s
+        //CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        if (self.videoDuration>11.0) {
+            //每隔1s截取一张图片
+            for (int i = 0; i <  self.videoDuration; i++) {
+                
+                
+                UIImage * image = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:second + i*1.5 +0.01];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //添加图片
+                    
+                    [self.bottomToolView addImg:image];
+                    
+                });
+
+
             }
         }
-    }
-    else{
-        //截取11张
-        for (int i = 0; i < 11; i++) {
-
-            UIImage *image =  [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:self.videoDuration*i/12.0+0.01];
-
-            if (image) {
-                [imageArrays addObject:image];
+        else{
+            //截取11张
+            for (int i = 0; i < 11; i++) {
+                
+                UIImage *image =  [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:self.videoDuration*i/12.0+0.01];
+                
+                if (image) {
+                    [imageArrays addObject:image];
+                }
+                
             }
-            
         }
-    }
-    
-    self.coverImgs = [NSArray arrayWithArray:imageArrays];
-    self.cover = [imageArrays objectAtIndex:0];
-    
-    CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
-    NSLog(@"截屏耗时：-----%f", end - start);
+
+    });
+
+
+//    CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+//    NSLog(@"截屏耗时：-----%f", end - start);
     
 }
 
@@ -383,6 +399,8 @@
 - (void)back{
     [self.player pause];
     self.player  = nil;
+    self.bottomToolView = nil;
+    [self.bottomToolView removeFromSuperview];
     [self removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(interceptViewToback)]) {
         [self.delegate interceptViewToback];

@@ -9,7 +9,7 @@
 #import "ZJDisplayVideoToSaveView.h"
 #import "ZJCommonHeader.h"
 #import "ZJDisplayVideoToSaveTopView.h"
-
+#import "LYOpenGLView.h"
 #import "ZJGlKImageView.h"
 
 #define ZJHeight kScreenHeight/2.0
@@ -56,6 +56,8 @@
 @property(nonatomic,strong) ZJGlKImageView *glkImgView;
 
 @property(nonatomic,strong) UIVisualEffectView *effectView;
+
+@property (nonatomic , strong) LYOpenGLView *mOpenGLView;
 
 @end
 
@@ -121,6 +123,7 @@
     self.topView.delegate = self;
     [self addSubview:self.topView];
     
+    
 
     _renderQueue = dispatch_queue_create("com.render", DISPATCH_QUEUE_SERIAL);
     
@@ -148,6 +151,11 @@
     _glkImgView = [[ZJGlKImageView alloc] init];
     [self addSubview:_glkImgView];
     
+    //self.mOpenGLView =
+//    [[LYOpenGLView alloc]initWithFrame:CGRectMake((kScreenWidth - _playFrame.size.width)/2.0, CGRectGetMaxY(self.topView.frame), _playFrame.size.width, _playFrame.size.height)];
+//    self.mOpenGLView.backgroundColor = [UIColor redColor];
+//    [self.mOpenGLView setupGL];
+//    [self addSubview:self.mOpenGLView];
     
     self.slider = [[UIProgressView alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, ZJHeight+72, imgW, 2)];
     self.slider.progressTintColor = [UIColor blueColor];
@@ -258,22 +266,24 @@
           
             CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
 
-          
+
             CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
-            
+
             dispatch_async(dispatch_get_main_queue(), ^{
-                
+
                 self.glkImgView.renderImg = outPutImg;
+                
+ 
+               // [self.mOpenGLView displayPixelBuffer:pixelBuffer];
                 
             });
             
             CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+            
             NSLog(@"像素耗时：-----%f", end - start);
             
             CVBufferRelease(pixelBuffer);
-            
         });
-        
     }else{
         
     }

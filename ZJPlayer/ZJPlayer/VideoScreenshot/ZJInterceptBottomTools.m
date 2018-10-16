@@ -17,6 +17,7 @@
 {
     CGFloat _leftSliderImgViewW;
     CGFloat _RightSliderImgViewW;
+    int _index;
 }
 
 
@@ -67,6 +68,8 @@
 }
 - (void)configureUI{
     
+    _index = 0;
+    
     self.timeScale = 30.0f/kScreenWidth;
     
     self.minWidth = 5.0f/self.timeScale;//5秒钟占的宽
@@ -78,13 +81,7 @@
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self addSubview:self.scrollView];
     self.scrollView.backgroundColor = [UIColor clearColor];
-    //图片宽
-    float imgWidth = kScreenWidth/20.0;//20张图
-    for (int i = 0; i< self.coverImgs.count; i++) {
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[self.coverImgs objectAtIndex:i]];
-        [imageView setFrame:CGRectMake(i*imgWidth, 0, imgWidth, 50)];
-        [self.scrollView addSubview:imageView];
-    }
+   
     [self.scrollView setContentSize:CGSizeMake(kScreenWidth, 50)];
     
     self.sliderView = [[UIView alloc]initWithFrame:CGRectMake(0, 30, self.minWidth, 50)];
@@ -163,8 +160,20 @@
         make.centerX.equalTo(self.mas_centerX);
         make.top.equalTo(self.mas_top).with.offset(5);
     }];
-    
 }
+- (void)addImg:(UIImage *)image{
+    
+    float imgWidth = kScreenWidth/20.0;
+    
+     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    
+    [imageView setFrame:CGRectMake(_index*imgWidth, 0, imgWidth, 50)];
+    
+    [self.scrollView addSubview:imageView];
+    
+    _index ++;
+}
+
 #pragma mark -
 #pragma mark - Handele Gesture
 

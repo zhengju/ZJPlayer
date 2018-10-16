@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFrame:(CGRect)frame coverImgs:(NSArray *)coverImgs;
 
+- (void)addImg:(UIImage *)image;
 
 @end
 

@@ -21,9 +21,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        
-        self.backgroundColor = [UIColor redColor];
-        
+
         [self initGlkView];
     }
     return self;
@@ -40,8 +38,6 @@
     [EAGLContext setCurrentContext:eaglContext];
     
     _imageContext = [CIContext contextWithEAGLContext:eaglContext options:@{kCIContextWorkingColorSpace:[NSNull null]}];
-    
-    
 }
 
 
