@@ -152,7 +152,7 @@
 - (void)getCoverImgs {
     NSMutableArray *imageArrays = [NSMutableArray array];
     self.videoDuration = [self durationWithVideo:self.videoUrl.absoluteString];
-    self.videoDuration = 20;
+    self.videoDuration = 20;//30秒截图20张
     
     
     float second = CMTimeGetSeconds(self.currentTtime);
@@ -167,7 +167,7 @@
         for (int i = 0; i <  self.videoDuration; i++) {
            
             
-            UIImage * image = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:second + i +0.01];
+            UIImage * image = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:second + i*1.5 +0.01];
            
             if (image) {
                 [imageArrays addObject:image];
@@ -398,13 +398,27 @@
     [self.player pause];
     
     
-    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime];
+    
+    
+    
+    AVAsset * asset =   [ZJVideoTools mixVideo:self.playerItem.asset startTime:CMTimeMakeWithSeconds(self.startTime, 25) WithVideoCroppingFrame:_videoCroppingFrame toUrl:nil outputFileType:AVFileTypeQuickTimeMovie withMaxDuration:CMTimeMakeWithSeconds(self.endTime - self.startTime, 25)];
+    
+    
+    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime withAsset:asset videoCroppingFrame:_videoCroppingFrame];
+    
+    
+    
+    
     self.displaySaveView.startTime = self.startTime;
     self.displaySaveView.endTime = self.endTime;
     self.displaySaveView.delegate = self;
     self.displaySaveView.currentTtime = self.currentTtime;
     self.displaySaveView.videoCroppingFrame = _videoCroppingFrame;
-    self.BGView.image = self.BGView.image;
+    self.displaySaveView.BGView.image = self.BGView.image;
+    
+    
+    
+    
     [self addSubview:self.displaySaveView];
     
     return;
@@ -535,7 +549,7 @@
     
     NSLog(@"start:%f,end:%f",startTime,endTime);
     [self.player pause];
-    
+    self.startTime = startTime;
     self.endTime = endTime;
     CMTime time = CMTimeMakeWithSeconds(startTime, self.m_ftp);
     

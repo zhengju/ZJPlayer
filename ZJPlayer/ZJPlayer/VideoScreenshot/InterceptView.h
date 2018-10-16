@@ -50,5 +50,6 @@
  9.重新架构
    9.1 ZJPlayer架构 拆分解耦 参考SCRecorder中SCPlayer https://github.com/rFlex/SCRecorder
    9.2 视频截屏抽出工具条，拖拽时间需校准--已完成
- 10.
+   9.3 视频截帧的时间边界 
+ 10.视频裁剪播放
  **/

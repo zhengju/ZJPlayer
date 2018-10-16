@@ -18,7 +18,10 @@
 
 
 @interface ZJDisplayVideoToSaveView()<ZJDisplayVideoToSaveTopViewDelegate>
-
+{
+  
+    CGRect   _videoCroppingFrame;
+}
 @property (nonatomic, strong) AVPlayer     *player;
 
 @property (nonatomic, strong) NSTimer *m_timer;         //
@@ -32,6 +35,10 @@
 @property(nonatomic, strong) UIButton * saveBtn;
 
 @property(nonatomic, strong) NSURL * videoUrlPath;
+
+@property(nonatomic, strong) AVAsset * asset;
+
+@property(nonatomic, strong) UIView * layerBGView;
 
 @end
 
@@ -58,10 +65,12 @@
         }
     }];
 }
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime{
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame{
     self.videoUrl = videoUrl;
     self.playerItem = playerItem;
     self.currentTtime = currentTime;
+    self.asset = asset;
+    _videoCroppingFrame = videoCroppingFrame;
     if (self = [super initWithFrame:frame]) {
         self.videoUrl = videoUrl;
         self.playerItem = playerItem;
@@ -84,33 +93,32 @@
 -(void)initPlayerView{
     
     self.BGView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-    
     [self addSubview:self.BGView];
-    
+
     self.topView = [[ZJDisplayVideoToSaveTopView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 72)];
     self.topView.delegate = self;
     [self addSubview:self.topView];
     
+//
+//    self.layerBGView = [[UIView alloc]initWithFrame:CGRectMake(70, 72, 100, 100)];
+//    self.layerBGView.backgroundColor = [UIColor redColor];
+//    [self addSubview:self.layerBGView];
+//
     
     
-    CGFloat   imgW = ZJHeight*originRate;
-    
- 
+    CGFloat  imgW = ZJHeight*originRate;
     CGFloat  imgH = ZJHeight;
     
-    //CGRectMake((kScreenWidth - imgW)/2.0, (ZJHeight-imgH)/2.0, imgW, imgH);
-
     //通过playerItem创建AVPlayer
     AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:self.playerItem.asset];
-    
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
     //或者直接使用URL创建AVPlayer
-    //self.playss = [AVPlayer playerWithURL:sourceMovieUrl];
     AVPlayerLayer *layer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     layer.frame = CGRectMake((kScreenWidth - imgW)/2.0, CGRectGetMaxY(self.topView.frame), imgW, imgH);
     layer.videoGravity =AVLayerVideoGravityResizeAspect;
     [self.layer addSublayer:layer];
     [self.player play];
+
     
     self.slider = [[UIProgressView alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, CGRectGetMaxY(layer.frame), imgW, 2)];
     self.slider.progressTintColor = [UIColor blueColor];
@@ -182,16 +190,14 @@
         
         if (progress == 1) {
             self.desLabel.text = @"视频生成ok,可以保存和分享了..";
+            self.slider.hidden = YES;
         }
+        
         
     }  withCompletionBlock:^(NSError *error) {
         
         if (error == nil) {
-            
-            NSLog(@"视频剪裁成功：%@",self.videoUrl);
-            
 
-            
         }else{
             NSLog(@"error is :%@",error.userInfo);
         }

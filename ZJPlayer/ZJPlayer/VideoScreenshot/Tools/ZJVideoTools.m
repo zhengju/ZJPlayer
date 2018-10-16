@@ -9,6 +9,88 @@
 #import "ZJVideoTools.h"
 
 @implementation ZJVideoTools
+
++ (AVAsset *)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration{
+    NSError * error = nil;
+    //1 — 采集
+    
+    //不添加背景音乐
+    NSURL *audioUrl =nil;
+    //AVURLAsset此类主要用于获取媒体信息，包括视频、声音等
+    AVURLAsset* audioAsset = [[AVURLAsset alloc] initWithURL:audioUrl options:nil];
+    
+    // 2 创建AVMutableComposition实例. apple developer 里边的解释 【AVMutableComposition is a mutable subclass of AVComposition you use when you want to create a new composition from existing assets. You can add and remove tracks, and you can add, remove, and scale time ranges.】
+    
+    AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
+    
+    // 3 - 视频通道  工程文件中的轨道，有音频轨、视频轨等，里面可以插入各种对应的素材
+    
+    // 这块是裁剪,rangtime .前面的是开始时间,后面是裁剪多长
+    CMTimeRange videoTimeRange = CMTimeRangeMake(startTime,maxDuration);
+    
+    
+    NSArray * videoTracks = [videoAsset tracksWithMediaType:AVMediaTypeVideo];
+    
+    //音频轨道
+    
+    //视频声音采集(也可不执行这段代码不采集视频音轨，合并后的视频文件将没有视频原来的声音)
+    
+    AVMutableCompositionTrack *compositionVoiceTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo
+                                                                                   preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    
+    for (AVAssetTrack * track in [videoAsset tracksWithMediaType:AVMediaTypeAudio]) {
+        [compositionVoiceTrack insertTimeRange:videoTimeRange ofTrack:track atTime:kCMTimeZero error:&error];
+        
+        if (error != nil) {
+          //  completionBlock(error);
+            return nil;
+        }
+    }
+    
+    for (AVAssetTrack * track in videoTracks) {
+        [compositionVideoTrack insertTimeRange:videoTimeRange ofTrack:track atTime:kCMTimeZero error:&error];
+        
+        if (error != nil) {
+            //completionBlock(error);
+            return nil;
+        }
+    }
+    
+    // 3.1 AVMutableVideoCompositionInstruction 视频轨道中的一个视频，可以缩放、旋转等
+    AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    mainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration);
+    
+    // 3.2 AVMutableVideoCompositionLayerInstruction 一个视频轨道，包含了这个轨道上的所有视频素材
+    AVMutableVideoCompositionLayerInstruction *videolayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTrack];
+    
+    AVAssetTrack *videoAssetTrack = [videoTracks objectAtIndex:0];
+    
+    [videolayerInstruction setTransform:videoAssetTrack.preferredTransform atTime:kCMTimeZero];
+    [videolayerInstruction setOpacity:0.0 atTime:videoAsset.duration];
+    
+    // 3.3 - Add instructions
+    mainInstruction.layerInstructions = [NSArray arrayWithObjects:videolayerInstruction,nil];
+    // AVMutableVideoComposition：管理所有视频轨道，可以决定最终视频的尺寸，裁剪需要在这里进行
+    AVMutableVideoComposition *mainCompositionInst = [AVMutableVideoComposition videoComposition];
+    
+    mainCompositionInst.accessibilityFrame = videoCroppingFrame;
+    mainCompositionInst.renderSize = videoCroppingFrame.size;//裁剪的视频size
+    mainCompositionInst.instructions = [NSArray arrayWithObject:mainInstruction];
+    mainCompositionInst.frameDuration = CMTimeMake(1, 30);
+    
+    //声音长度截取范围==视频长度
+    CMTimeRange audioTimeRange = videoTimeRange;
+    //音频采集compositionCommentaryTrack
+    AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    [compositionAudioTrack insertTimeRange:audioTimeRange ofTrack:([audioAsset tracksWithMediaType:AVMediaTypeAudio].count > 0) ? [audioAsset tracksWithMediaType:AVMediaTypeAudio].firstObject : nil atTime:kCMTimeZero error:nil];
+    
+    return mixComposition;
+}
+
 + (void)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration compositionProgressBlock:(void(^)(CGFloat progress))compositionProgressBlock withCompletionBlock:(void(^)(NSError *error))completionBlock{
     
     NSError * error = nil;

@@ -12,6 +12,9 @@
 
 @interface ZJVideoTools : NSObject
 
+
++ (AVAsset *)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration;
+
 /**
  剪裁视频
 
