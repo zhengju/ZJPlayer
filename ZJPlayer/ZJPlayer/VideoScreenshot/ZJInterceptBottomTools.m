@@ -146,13 +146,10 @@
     self.selDurationLabel = [[UILabel alloc] init];
     self.selDurationLabel.textColor = [UIColor whiteColor];
     self.selDurationLabel.font = [UIFont systemFontOfSize:15];
-    if (self.videoDuration >= 30.) {
-        self.selDurationLabel.text = @"当前截取30.0s秒";
-    }else if (self.videoDuration > 5.) {
-        self.selDurationLabel.text = [NSString stringWithFormat:@"当前截取%.lds秒", self.videoDuration];
-    }else {
-        self.selDurationLabel.text = @"当前截取5.0s秒";
-    }
+    
+    
+    self.selDurationLabel.text = @"当前截取10.0s秒";
+    
     [self.selDurationLabel sizeToFit];
     [self addSubview:self.selDurationLabel];
     

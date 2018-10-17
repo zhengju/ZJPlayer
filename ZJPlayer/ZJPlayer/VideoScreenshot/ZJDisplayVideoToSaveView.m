@@ -11,18 +11,18 @@
 #import "ZJDisplayVideoToSaveTopView.h"
 #import "LYOpenGLView.h"
 #import "ZJGlKImageView.h"
-
+#import "ZJPlayGIFView.h"
 #define ZJHeight kScreenHeight/2.0
 
 #define originRate 16.0/9.0
 
 
-@interface ZJDisplayVideoToSaveView()<ZJDisplayVideoToSaveTopViewDelegate>
+@interface ZJDisplayVideoToSaveView()<ZJDisplayVideoToSaveTopViewDelegate,AVPlayerItemOutputPullDelegate>
 {
   
     CGRect   _videoCroppingFrame;
     
-    AVPlayerItemVideoOutput *_videoOutPut;
+//    AVPlayerItemVideoOutput *_videoOutPut;
     
     dispatch_queue_t _renderQueue;
     
@@ -33,6 +33,9 @@
     CGRect _playFrame;
     
 }
+
+@property(nonatomic, strong) AVPlayerItemVideoOutput * videoOutPut;
+
 @property (nonatomic, strong) AVPlayer     *player;
 
 @property (nonatomic, strong) NSTimer *m_timer;         //
@@ -45,8 +48,10 @@
 
 @property(nonatomic, strong) UIButton * saveBtn;
 
-@property(nonatomic, strong) NSURL * videoUrlPath;
+@property(nonatomic, strong) UIButton * playGIFBtn;//玩GIF按钮
 
+@property(nonatomic, strong) NSURL * videoUrlPath;
+@property(nonatomic, strong) NSURL * GIFUrlPath;
 @property(nonatomic, strong) AVAsset * asset;
 
 @property(nonatomic, strong) UIView * layerBGView;
@@ -66,9 +71,21 @@
 
 -(void)setVideoCroppingFrame:(CGRect)videoCroppingFrame{
     _videoCroppingFrame = videoCroppingFrame;
-    [self videoCropping];
-}
 
+    if (_type == ZJInterceptTopViewVideo) {//截视频
+        [self videoCropping];
+    }else{//截GIF
+        [self gifScreenshot];
+    }
+}
+- (void)setType:(ZJInterceptTopViewType)type{
+    _type = type;
+    if (type == ZJInterceptTopViewVideo) {
+        self.player.volume = 0.5;
+    }else{
+        self.player.volume = 0.0;
+    }
+}
 - (void)setCurrentTtime:(CMTime)currentTtime{
 
     _currentTtime = currentTtime;
@@ -80,18 +97,21 @@
         }
     }];
 }
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame  playeFrame:(CGRect)playFrame{
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame  playeFrame:(CGRect)playFrame videoOutPut:(AVPlayerItemVideoOutput *)videoOutPut  type: (ZJInterceptTopViewType)type{
+    self.type = type;
     self.videoUrl = videoUrl;
-    self.playerItem = playerItem;
+//    self.playerItem = playerItem;
     self.currentTtime = currentTime;
     self.asset = asset;
     _playFrame= playFrame;
-    _videoCroppingFrame = videoCroppingFrame;
+    self.videoOutPut = videoOutPut;
+//    _videoCroppingFrame = videoCroppingFrame;
     if (self = [super initWithFrame:frame]) {
         self.videoUrl = videoUrl;
         self.playerItem = playerItem;
         self.currentTtime = currentTime;
         [self configureUI];
+        self.type = type;
     }
     return self;
 }
@@ -100,10 +120,7 @@
     self.backgroundColor = [UIColor blackColor];
     
     [self initPlayerView];
-    
-    
-    //播放的同时子线程生成本地视频
-    
+
 }
 
 - (void)layoutSubviews{
@@ -134,28 +151,36 @@
     
     //通过playerItem创建AVPlayer
     AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:self.playerItem.asset];
+    self.playerItem = playerItem;
+    [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+
     
-    _videoOutPut =  [[AVPlayerItemVideoOutput alloc] initWithOutputSettings:nil];
     
+    NSDictionary *pixBuffAttributes = @{(id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)};
+    
+    self.videoOutPut = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:pixBuffAttributes];
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
 
     [self.player.currentItem addOutput:_videoOutPut];
-    
-    
+
     [self.player play];
 
     _playLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(playerRender)];
     [_playLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     _playLink.frameInterval = 2;
     
-    _glkImgView = [[ZJGlKImageView alloc] init];
-    [self addSubview:_glkImgView];
-    
-    //self.mOpenGLView =
+//    self.mOpenGLView =
 //    [[LYOpenGLView alloc]initWithFrame:CGRectMake((kScreenWidth - _playFrame.size.width)/2.0, CGRectGetMaxY(self.topView.frame), _playFrame.size.width, _playFrame.size.height)];
 //    self.mOpenGLView.backgroundColor = [UIColor redColor];
 //    [self.mOpenGLView setupGL];
+//
 //    [self addSubview:self.mOpenGLView];
+    
+    
+    _glkImgView = [[ZJGlKImageView alloc] init];
+    [self addSubview:_glkImgView];
+    
+    
     
     self.slider = [[UIProgressView alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, ZJHeight+72, imgW, 2)];
     self.slider.progressTintColor = [UIColor blueColor];
@@ -165,7 +190,8 @@
     self.desLabel = [[UILabel alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, CGRectGetMaxY(self.slider.frame), imgW, 30)];
     self.desLabel.textColor = [UIColor whiteColor];
     self.desLabel.textAlignment = NSTextAlignmentCenter;
-    self.desLabel.text = @"正在生成视频";
+   
+    
     [self addSubview:self.desLabel];
     
     self.saveBtn = [[UIButton alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, CGRectGetMaxY(self.desLabel.frame), imgW, 30)];
@@ -173,13 +199,68 @@
     
     [self.saveBtn bk_addEventHandler:^(id sender) {
         
-        [self saveVideo];
-        
+        if (self.type == ZJInterceptTopViewVideo) {
+            [self saveVideo];
+        }else{
+            [self saveGIF];
+        }
+
     } forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.saveBtn];
+    
+    
+    
+    self.playGIFBtn = [[UIButton alloc]initWithFrame:CGRectMake(kScreenWidth - 100, (kScreenHeight - 30)/2.0, 100, 30)];
 
+    [self.playGIFBtn setTitle:@"玩GIF" forState:UIControlStateNormal];
+    [self.playGIFBtn setBackgroundColor:[UIColor yellowColor]];
+    [self.playGIFBtn bk_addEventHandler:^(id sender) {
+        
+        ZJPlayGIFView * playGIFView = [[ZJPlayGIFView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        playGIFView.backgroundColor = [UIColor blackColor];
+        playGIFView.url = self.GIFUrlPath;
+        [self addSubview:playGIFView];
+        
+    } forControlEvents:UIControlEventTouchUpInside];
+    
+    [self addSubview:self.playGIFBtn];
+    
+    if (self.type == ZJInterceptTopViewVideo) {
+        self.desLabel.text = @"正在生成视频";
+        self.playGIFBtn.hidden = YES;
+    }else{
+        self.desLabel.text = @"正在生成GIF";
+        self.playGIFBtn.hidden = NO;
+    }
+    
 }
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+    
+    if ([object isKindOfClass:[AVPlayerItem class]]) {
+        if ([keyPath isEqualToString:@"status"]) {
+            switch (_playerItem.status) {
+                case AVPlayerItemStatusReadyToPlay:
+                    //推荐将视频播放放在这里
+//                    [self play];
+                     NSLog(@"AVPlayerItemStatusReadyToPlay");
+                    break;
+                    
+                case AVPlayerItemStatusUnknown:
+                    NSLog(@"AVPlayerItemStatusUnknown");
+                    break;
+                    
+                case AVPlayerItemStatusFailed:
+                    NSLog(@"AVPlayerItemStatusFailed");
+                    break;
+                    
+                default:
+                    break;
+        }
+        }
+    }
+}
+
 - (void)playVideo {
     
     if (!self.m_timer) {
@@ -239,16 +320,72 @@
         
     }];
 }
+- (void)gifScreenshot{
+    //裁剪视频可以看这篇文章：http://www.hudongdong.com/ios/550.html
+//    NSLog(@"开始裁剪:开始时间:%f,结束时间:%f,裁剪区域W:%f,H:%f",self.startTime,self.endTime,self.clipPoint.x,self.clipPoint.y);
+    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
+    NSRange range = NSMakeRange(self.startTime, self.endTime - self.startTime);
+    CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
+    // dosomething
+
+    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.videoUrl withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range compositionProgressBlock:^(CGFloat progress) {
+        if (progress != 0) {
+            NSLog(@" GIF 打印信息:%f",progress);
+            
+            self.slider.progress = progress;
+            
+            if (progress == 1) {
+                self.desLabel.text = @"GIF生成ok,可以保存和分享了..";
+                self.slider.hidden = YES;
+            }
+        }
+    } intercept:^(NSError *error, NSURL *url) {
+        if (error) {
+            NSLog(@"error:%@",error);
+            return ;
+        }
+        CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
+        NSLog(@"%f", end- start);
+        NSLog(@"----++%@",url);//本地视频记得删除
+
+        [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
+            
+            self.slider.progress = 1.0;
+            
+            
+            self.desLabel.text = @"GIF生成ok,可以保存和分享了..";
+            self.slider.hidden = YES;
+
+            NSLog(@"Finished generating GIF: %@", GifURL);
+            
+            self.GIFUrlPath = GifURL;
+            
+        }];
+    }];
+}
+
+- (void)saveGIF{
+    [self.GIFUrlPath saveGIFToCameraRollWithCompletion:^(NSString * _Nullable path, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"-----error :%@",error.userInfo);
+            return ;
+        }
+        HUDNormal(@"保存成功");
+        NSLog(@"Success at %@", path );
+    }];
+}
 
 - (void)saveVideo{
-        [self.videoUrlPath saveVideoToCameraRollWithCompletion:^(NSString * _Nullable path, NSError * _Nullable error) {
+    
+    [self.videoUrlPath saveVideoToCameraRollWithCompletion:^(NSString * _Nullable path, NSError * _Nullable error) {
             if (error) {
                 NSLog(@"保存视频出错：%@",error.userInfo);
                 return ;
             }
             HUDNormal(@"保存视频至相册成功");
             NSLog(@"保存视频至相册成功：%@",path);
-        }];
+        
+    }];
 }
 
 - (void)playerRender{
@@ -261,28 +398,29 @@
             
             CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
             
-            CVPixelBufferRef pixelBuffer = [_videoOutPut copyPixelBufferForItemTime:itemTime itemTimeForDisplay:nil];
             
-          
-            CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
-
-
-            CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-
-                self.glkImgView.renderImg = outPutImg;
+            if ([_videoOutPut hasNewPixelBufferForItemTime:itemTime]) {
+                CVPixelBufferRef pixelBuffer = [_videoOutPut copyPixelBufferForItemTime:itemTime itemTimeForDisplay:nil];
+                CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+                CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    self.glkImgView.renderImg = outPutImg;
+                    
+                    //[self.mOpenGLView displayPixelBuffer:pixelBuffer];
+                    
+                });
                 
- 
-               // [self.mOpenGLView displayPixelBuffer:pixelBuffer];
-                
-            });
+                CVBufferRelease(pixelBuffer);
+            }else{
+                NSLog(@"没有。。。");
+            }
+            
             
             CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
             
-            NSLog(@"像素耗时：-----%f", end - start);
+//            NSLog(@"像素耗时：-----%f", end - start);
             
-            CVBufferRelease(pixelBuffer);
         });
     }else{
         
@@ -292,12 +430,14 @@
 #pragma mark -ZJDisplayVideoToSaveTopViewDelegate
 - (void)displayVideoToSaveTopViewBack{
     [self.player pause];
+    [self.playerItem removeObserver:self forKeyPath:@"status"];
     if ([self.delegate respondsToSelector:@selector(displayVideoToSaveViewToback)]) {
         [self.delegate displayVideoToSaveViewToback];
     }
 }
 - (void)displayVideoToSaveTopViewExit{
     [self.player pause];
+    [self.playerItem removeObserver:self forKeyPath:@"status"];
     if ([self.delegate respondsToSelector:@selector(displayVideoToSaveViewExit)]) {
         [self.delegate displayVideoToSaveViewExit];
     }

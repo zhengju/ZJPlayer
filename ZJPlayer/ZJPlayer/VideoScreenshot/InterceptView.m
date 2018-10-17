@@ -34,6 +34,7 @@
 {
     CGRect _videoCroppingFrame;
     CGRect _clipPlayFrame;
+    ZJInterceptTopViewType _actionType;
 }
 @property (nonatomic, strong) UIImage *cover;
 @property (nonatomic, strong) PHAsset *asset;
@@ -41,7 +42,7 @@
 @property (nonatomic, strong) ZJInterceptTopView * topView;
 @property (nonatomic, strong) UIImageView *BGView;
 @property (nonatomic, strong) UIImageView *coverImgView;        //封面imgview
-
+@property(nonatomic, strong) AVPlayerItemVideoOutput * videoOutPut;
 @property(nonatomic, strong) ZJInterceptBottomTools * bottomToolView;
 @property (nonatomic, strong) NSArray *coverImgs;               //封面图片
 @property(nonatomic, strong) ZJScreenCaptureToolBox * screenCaptureToolBox;
@@ -67,8 +68,8 @@
 @implementation InterceptView
 - (void)setCurrentTtime:(CMTime)currentTtime{
     _currentTtime = currentTtime;
-    
-     AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
+
+    AVURLAsset *asset = (AVURLAsset *)self.playerItem.asset;
     
     UIImage * bgImage = [ZJVideoTools getVideoPreViewImageFromVideo:asset atTime:CMTimeGetSeconds(_currentTtime)+0.01];
 
@@ -153,7 +154,14 @@
     layer.videoGravity =AVLayerVideoGravityResizeAspect;
     [self.coverImgView.layer addSublayer:layer];
     [self.player play];
+    
+   self.videoOutPut =  [[AVPlayerItemVideoOutput alloc] initWithOutputSettings:nil];
+
+    [self.player.currentItem addOutput:self.videoOutPut];
+    
+    
 }
+
 //截帧逻辑可以优化，比较多时可以放在子线程中去完成
 - (void)getCoverImgs {
     
@@ -407,12 +415,15 @@
     }
 }
 - (void)action:(ZJInterceptTopViewType)actionType{
+    _actionType = actionType;
     if (actionType == ZJInterceptTopViewVideo) {//截视频
         self.selectFrameView.hidden = NO;
         self.screenCaptureToolBox.hidden = NO;
+        self.player.volume = 0.5;
     }else{//截GIF 隐藏
         self.screenCaptureToolBox.hidden = YES;
         self.selectFrameView.hidden = YES;
+        self.player.volume =  0.0;
     }
 }
 - (void)finishWithAction:(ZJInterceptTopViewType)actionType{
@@ -420,24 +431,15 @@
     [self.player pause];
     
     
-    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime withAsset:self.playerItem.asset videoCroppingFrame:_videoCroppingFrame playeFrame:_clipPlayFrame];
+    self.displaySaveView = [[ZJDisplayVideoToSaveView alloc]initWithFrame:self.bounds url:self.videoUrl playerItem:self.playerItem currentTime:self.currentTtime withAsset:self.playerItem.asset videoCroppingFrame:_videoCroppingFrame playeFrame:_clipPlayFrame videoOutPut:self.videoOutPut type:_actionType];
 
-    self.displaySaveView.startTime = self.startTime;
-    self.displaySaveView.endTime = self.endTime;
+    self.displaySaveView.startTime = self.startTime ;
+    self.displaySaveView.endTime = self.startTime + 5;
     self.displaySaveView.delegate = self;
     self.displaySaveView.currentTtime = self.currentTtime;
     self.displaySaveView.videoCroppingFrame = _videoCroppingFrame;
     self.displaySaveView.BGView.image = self.BGView.image;
-
     [self addSubview:self.displaySaveView];
-    
-    return;
-
-    if (actionType == ZJInterceptTopViewVideo) {//截视频
-        [self videoCropping];
-    }else{//截GIF
-        [self gifScreenshot];
-    }
 }
 
 - (void)configureSelectFrameView{
@@ -448,38 +450,7 @@
     
 }
 
-- (void)gifScreenshot{
-    //裁剪视频可以看这篇文章：http://www.hudongdong.com/ios/550.html
-    NSLog(@"开始裁剪:开始时间:%f,结束时间:%f,裁剪区域W:%f,H:%f",self.startTime,self.endTime,self.clipPoint.x,self.clipPoint.y);
-    NSString * url1 = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache.mov"];
-    NSRange range = NSMakeRange(self.startTime, self.endTime - self.startTime);
-    CFAbsoluteTime start= CFAbsoluteTimeGetCurrent();
-    // dosomething
-    
-    [[ZJCustomTools shareCustomTools]interceptVideoAndVideoUrl:self.videoUrl withOutPath:url1 outputFileType:AVFileTypeQuickTimeMovie range:range intercept:^(NSError *error, NSURL *url) {
-        if (error) {
-            NSLog(@"error:%@",error);
-            return ;
-        }
-        CFAbsoluteTime end= CFAbsoluteTimeGetCurrent();
-        NSLog(@"%f", end- start);
-        NSLog(@"----++%@",url);//本地视频记得删除
-        
-        [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
-            
-            NSLog(@"Finished generating GIF: %@", GifURL);
 
-            [GifURL saveGIFToCameraRollWithCompletion:^(NSString * _Nullable path, NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"error :%@",error.userInfo);
-                    return ;
-                }
-                HUDNormal(@"保存成功");
-                NSLog(@"Success at %@", path );
-            }];
-        }];
-    }];
-}
 
 #pragma mark - 视频裁剪
 - (void)videoCropping{

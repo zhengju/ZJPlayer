@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-
+#import "ZJInterceptTopView.h"
 
 
 @protocol ZJDisplayVideoToSaveViewDelegate <NSObject>
@@ -42,6 +42,9 @@
 
 @property (nonatomic, strong) UIImageView *BGView;
 
-- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame playeFrame:(CGRect)playFrame;
+@property(nonatomic, assign) ZJInterceptTopViewType type ;
+
+
+- (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime )currentTime withAsset:(AVAsset*)asset videoCroppingFrame:(CGRect )videoCroppingFrame playeFrame:(CGRect)playFrame videoOutPut:(AVPlayerItemVideoOutput *)videoOutPut type: (ZJInterceptTopViewType)type;
 
 @end

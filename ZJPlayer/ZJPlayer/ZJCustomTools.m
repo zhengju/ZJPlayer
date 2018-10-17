@@ -131,7 +131,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
 
 
 #pragma mark -截取视频
-- (void)interceptVideoAndVideoUrl:(NSURL *)videoUrl withOutPath:(NSString *)outPath outputFileType:(NSString *)outputFileType range:(NSRange)videoRange intercept:(InterceptBlock)interceptBlock {
+- (void)interceptVideoAndVideoUrl:(NSURL *)videoUrl withOutPath:(NSString *)outPath outputFileType:(NSString *)outputFileType range:(NSRange)videoRange compositionProgressBlock:(void(^)(CGFloat progress))compositionProgressBlock intercept:(InterceptBlock)interceptBlock {
     
     _interceptBlock =interceptBlock;
     
@@ -190,14 +190,17 @@ typedef NS_ENUM(NSInteger, GIFSize) {
     {
         [[NSFileManager defaultManager] removeItemAtPath:outPath error:nil];
     }
-    
+    __block NSTimer *timer = nil;
     //输出视频格式
     assetExportSession.outputFileType = outputFileType;
     assetExportSession.outputURL = outPutURL;
     //输出文件是否网络优化
     assetExportSession.shouldOptimizeForNetworkUse = YES;
     [assetExportSession exportAsynchronouslyWithCompletionHandler:^{
-        
+        if (timer) {
+            [timer invalidate];
+            timer = nil;
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             
             switch (assetExportSession.status) {
@@ -244,5 +247,21 @@ typedef NS_ENUM(NSInteger, GIFSize) {
         });
         
     }];
+    
+    if (@available(iOS 10.0, *)) {
+        timer = [NSTimer scheduledTimerWithTimeInterval:0.05 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            
+            if (compositionProgressBlock) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    compositionProgressBlock(assetExportSession.progress);
+                    
+                });
+            }
+        }];
+    } else {
+        // Fallback on earlier versions
+    }
+    
 }
 @end

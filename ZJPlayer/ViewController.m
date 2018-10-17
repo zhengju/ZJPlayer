@@ -12,6 +12,7 @@
 #import "ZJPlayer.h"
 #import "Masonry.h"
 #import "ZJDownloadManager.h"
+#import "ZJPlayGIFView.h"
 @interface ViewController ()
 
 @end
@@ -25,11 +26,15 @@
     [super viewDidLoad];
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://tb-video.bdstatic.com/tieba-movideo/11233547_ac127ce9e993877dce0eebceaa04d6c2_593d93a619b0.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
-    player.isRotatingSmallScreen = YES;
+//    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://tb-video.bdstatic.com/tieba-movideo/11233547_ac127ce9e993877dce0eebceaa04d6c2_593d93a619b0.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
+//    player.isRotatingSmallScreen = YES;
+//
+//    [self.view addSubview:player];
 
-    [self.view addSubview:player];
-
+    ZJPlayGIFView * view = [[ZJPlayGIFView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    [self.view addSubview:view];
+    
+    
 }
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

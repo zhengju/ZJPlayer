@@ -23,5 +23,4 @@
     [saveToCameraRoll saveGIFURL:self completion:completion];
 }
 
-
 @end

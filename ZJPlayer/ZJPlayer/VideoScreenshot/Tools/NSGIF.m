@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
 
 + (void)optimalGIFfromURL:(NSURL*)videoURL loopCount:(int)loopCount completion:(void(^)(NSURL *GifURL))completionBlock {
 
-    float delayTime = 0.02f;
+    float delayTime = 0.2f;//播放时隔
     
     // Create properties dictionaries
     NSDictionary *fileProperties = [self filePropertiesWithLoopCount:loopCount];
@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
     NSURL *fileURL = [NSURL fileURLWithPath:temporaryFile];
     if (fileURL == nil)
         return nil;
-
+    
     CGImageDestinationRef destination = CGImageDestinationCreateWithURL((__bridge CFURLRef)fileURL, kUTTypeGIF , frameCount, NULL);
     CGImageDestinationSetProperties(destination, (CFDictionaryRef)fileProperties);
 
@@ -224,6 +224,7 @@ CGImageRef createImageWithScale(CGImageRef imageRef, float scale) {
 
 #pragma mark - Properties
 
+//设置gif的信息，播放时隔事件，基本数据和delay事件
 + (NSDictionary *)filePropertiesWithLoopCount:(int)loopCount {
     return @{(NSString *)kCGImagePropertyGIFDictionary:
                 @{(NSString *)kCGImagePropertyGIFLoopCount: @(loopCount)}
