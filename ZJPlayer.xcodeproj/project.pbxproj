@@ -56,7 +56,6 @@
 		7A05D6312175D4EF0077728B /* ZJGlKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05D62F2175D4EF0077728B /* ZJGlKImageView.m */; };
 		7A05D6342175FBB70077728B /* LYOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05D6322175FBB70077728B /* LYOpenGLView.m */; };
 		7A05D63E21772EEA0077728B /* ZJPlayGIFView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05D63D21772EEA0077728B /* ZJPlayGIFView.m */; };
-		7A05D642217746CC0077728B /* NSGIF-15397710983.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7A05D641217746CC0077728B /* NSGIF-15397710983.gif */; };
 		7A6DA088216EE12D008C02CB /* ZJInterceptTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */; };
 		7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA08A216F2071008C02CB /* ZJSelectFrameView.m */; };
 		7A6DA09C216F784B008C02CB /* ZJScreenCaptureToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA09B216F784A008C02CB /* ZJScreenCaptureToolBox.m */; };
@@ -170,7 +169,6 @@
 		7A05D6332175FBB70077728B /* LYOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYOpenGLView.h; sourceTree = "<group>"; };
 		7A05D63C21772EEA0077728B /* ZJPlayGIFView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayGIFView.h; sourceTree = "<group>"; };
 		7A05D63D21772EEA0077728B /* ZJPlayGIFView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJPlayGIFView.m; sourceTree = "<group>"; };
-		7A05D641217746CC0077728B /* NSGIF-15397710983.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "NSGIF-15397710983.gif"; path = "../../../../Desktop/NSGIF-15397710983.gif"; sourceTree = "<group>"; };
 		7A6DA086216EE12D008C02CB /* ZJInterceptTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptTopView.h; sourceTree = "<group>"; };
 		7A6DA087216EE12D008C02CB /* ZJInterceptTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptTopView.m; sourceTree = "<group>"; };
 		7A6DA089216F2071008C02CB /* ZJSelectFrameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJSelectFrameView.h; sourceTree = "<group>"; };
@@ -418,7 +416,6 @@
 		18C4B5EF1F5FF025002430E4 /* ZJPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				7A05D641217746CC0077728B /* NSGIF-15397710983.gif */,
 				18C4B5F31F5FF025002430E4 /* AppDelegate.h */,
 				18C4B5F41F5FF025002430E4 /* AppDelegate.m */,
 				18C4B5F61F5FF025002430E4 /* ViewController.h */,
@@ -539,7 +536,6 @@
 			files = (
 				18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */,
 				182273E91F790BFB00156FDA /* DownloadListCell.xib in Resources */,
-				7A05D642217746CC0077728B /* NSGIF-15397710983.gif in Resources */,
 				18C4B5FD1F5FF025002430E4 /* Assets.xcassets in Resources */,
 				18C4B5FB1F5FF025002430E4 /* Main.storyboard in Resources */,
 			);
