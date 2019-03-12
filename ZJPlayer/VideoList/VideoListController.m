@@ -62,8 +62,6 @@
                          @"兴隆。国际城",
                          @"海妖宝藏",
                          @"共享新时代 共赢新发展",
-                         @"共享新时代 共赢新发展",
-                         @"共享新时代 共赢新发展"
                          ];
 
     NSArray * urls = @[
@@ -71,8 +69,6 @@
                        @"http://img.house.china.com.cn/voice/rongch.mp4",
                        @"http://vf1.mtime.cn/Video/2012/04/23/mp4/120423212602431929.mp4",
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
-                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
-                       @"http://img.house.china.com.cn/voice/hdzxjh.mp4"
                        ];
     
     for (int i = 0; i < urls.count; i++) {
@@ -82,9 +78,9 @@
         [self.datas addObject:list];
     }
 }
+
 #pragma 加载视频player
 - (void)initPlayer:(NSIndexPath *)indexPath cell:(VideoListCell*)cell{
-    
     
     self.player = [ZJPlayer sharePlayer];
     
@@ -97,6 +93,7 @@
     self.player.delegate = self;
 
     [cell addSubview:self.player];
+    
     self.player.frame = CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height);
 //    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.top.mas_equalTo(cell.topView.mas_bottom).offset(0);
@@ -120,10 +117,8 @@
     [self.view addSubview:self.tableView];
 }
 
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     NSArray * cells = [self.tableView visibleCells];
-    
     
     if (cells.count == 3) {
         
@@ -138,6 +133,7 @@
         }
     }
 }
+
 #pragma UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
@@ -172,7 +168,13 @@
     return kScreenHeight / 2.0;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    VideoList *   model = self.datas[indexPath.row];
+    
+    
     VideoController * controller = [[VideoController alloc]init];
+    
+    controller.model = model;
     
     [self.navigationController pushViewController:controller animated:YES];
 }

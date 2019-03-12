@@ -15,6 +15,9 @@
 #import "NSGIF.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "InterceptView.h"
+
+#import <MediaPlayer/MPVolumeView.h>
+
 // 缓存主目录
 #define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
 
@@ -93,10 +96,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
  滑动亮度展示器
  */
 @property(strong,nonatomic) ZJBrightness * brightness;
+
 /**
- 滑动声音指示器
+ 系统声音指示器
  */
-@property(strong,nonatomic) ZJVolume * volume;
+@property(strong,nonatomic) UISlider * volumeViewSlider;
+
+
 /**
  开始活动的点
  */
@@ -112,6 +118,23 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 @end
 
 @implementation ZJPlayer
+
+- (UISlider *)volumeViewSlider{
+    if (_volumeViewSlider == nil) {
+        MPVolumeView * volumeView   = [[MPVolumeView alloc] init];
+            UISlider *volumeViewSlider = nil;
+            for (UIView *view in [volumeView subviews]) {
+                if ([view.class.description isEqualToString:@"MPVolumeSlider"]) {
+                    volumeViewSlider = (UISlider *)view;
+                    [self addSubview:_volumeViewSlider];
+                    break;
+                }
+            }
+        self.volumeViewSlider = volumeViewSlider;
+
+    }
+    return _volumeViewSlider;
+}
 
 + (id)sharePlayer
 {
@@ -158,12 +181,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     self.isPlayAfterPause = NO;
     
     if (![_url.absoluteString hasPrefix:@"http"])
-       {
-           self.isLocalVideo = YES;
+    {
+        
+        self.isLocalVideo = YES;
+
+        self.asset = [AVURLAsset URLAssetWithURL:url options:nil];
            
-            self.asset = [AVURLAsset URLAssetWithURL:url options:nil];
-           
-           self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+        self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
            
            if (!self.player) {
                self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
@@ -171,7 +195,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
                [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
            }
 
-           
        }else{
            self.isLocalVideo = NO;
            self.playerItem = nil;
@@ -236,7 +259,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         self.frame = CGRectMake(0, 0, kScreenWidth, self.frameOnFatherView.size.height);
         [self.progress resetFrameisFullScreen:NO];
         [self.brightness resetFrameisFullScreen:NO];
-        [self.volume resetFrameisFullScreen:NO];
     }
     self.playerLayer.frame = self.bounds;
 
@@ -347,7 +369,12 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     self.progress = [[ZJProgress alloc]initWithSuperView:self];
     self.brightness = [[ZJBrightness alloc]initWithSuperView:self];
-    self.volume = [[ZJVolume alloc]initWithSuperView:self];
+    
+    
+  
+    self.volumeViewSlider.frame = CGRectMake(-1000, -1000, 100, 100);
+    
+
     [self addNotificationCenter];
     
   //  [self addSwipeGesture];
@@ -482,7 +509,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         if (pointY>MINDISTANCE) {
             if (x < width / 2.0 ) {//右边
                 self.slidingStyle = slidingVolume;
-                [self.volume show];
                 [self swipeToPlusVolume:!isPlusTime];
             }else{
                 self.slidingStyle = slidingBrightness;
@@ -494,7 +520,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             
             if (x < width / 2.0 ) {//右边
                  self.slidingStyle = slidingVolume;
-                [self.volume show];
                 [self swipeToPlusVolume:isPlusTime];
             }else{
                  self.slidingStyle = slidingBrightness;
@@ -518,12 +543,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
         if (pointY>MINDISTANCE) {
 
-                [self.volume show];
                 [self swipeToPlusVolume:!isPlusTime];
 
         }else if(pointY<-MINDISTANCE){
 
-                [self.volume show];
                 [self swipeToPlusVolume:isPlusTime];
 
         }
@@ -561,7 +584,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 }
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self.brightness dismiss];
-    [self.volume dismiss];
     [self.progress dismiss];
     if (self.isTouchesMoved && self.slidingStyle == slidingProgress) {
         self.isTouchesMoved = NO;
@@ -574,7 +596,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     [self.progress dismiss];
     [self.brightness dismiss];
-    [self.volume dismiss];
     //判断是单击还是滑动
     if (self.isTouchesMoved && self.slidingStyle == slidingProgress) {
         self.isTouchesMoved = NO;
@@ -634,7 +655,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         currentLight = 1.0;
     }
     
-    self.brightness.progress = currentLight;
+//    self.brightness.progress = currentLight;
     
     [[UIScreen mainScreen] setBrightness: currentLight];
 
@@ -660,7 +681,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         currentLolume = 1.0;
     }
     
-    self.volume.progress = currentLolume;
+    self.volumeViewSlider.value = currentLolume;
+    
     
     self.player.volume = currentLolume;
     
@@ -1030,7 +1052,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
                
                 [self initTimer];
                 
-                
+                self.player.volume = 0.4;
                 if (self.isAutoPlay) {
                     [self play];
                 }
@@ -1196,7 +1218,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     [self.progress resetFrameisFullScreen:NO];
     [self.brightness resetFrameisFullScreen:NO];
-    [self.volume resetFrameisFullScreen:NO];
 
     
     self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);

@@ -50,7 +50,6 @@
 		18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */; };
 		18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */; };
 		18EE509B1F6FD82900A5C606 /* ZJBrightness.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509A1F6FD82900A5C606 /* ZJBrightness.m */; };
-		18EE509E1F70008200A5C606 /* ZJVolume.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509D1F70008200A5C606 /* ZJVolume.m */; };
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
 		7A05D6312175D4EF0077728B /* ZJGlKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05D62F2175D4EF0077728B /* ZJGlKImageView.m */; };
@@ -71,6 +70,19 @@
 		7AA4F37C216C8AA30091094C /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F37B216C8AA30091094C /* UIView+Frame.m */; };
 		7AA4F37F216CA8590091094C /* UIImage+Crop.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F37E216CA8590091094C /* UIImage+Crop.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7ACC70982178B3DF0092325C /* Embed PlugIns */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed PlugIns";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Player.h"; sourceTree = "<group>"; };
@@ -157,8 +169,6 @@
 		18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJResourceLoaderManager.m; sourceTree = "<group>"; };
 		18EE50991F6FD82900A5C606 /* ZJBrightness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJBrightness.h; sourceTree = "<group>"; };
 		18EE509A1F6FD82900A5C606 /* ZJBrightness.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJBrightness.m; sourceTree = "<group>"; };
-		18EE509C1F70008200A5C606 /* ZJVolume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJVolume.h; sourceTree = "<group>"; };
-		18EE509D1F70008200A5C606 /* ZJVolume.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJVolume.m; sourceTree = "<group>"; };
 		18FBE06E1F6F7ABE00133732 /* UINavigationController+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Player.h"; sourceTree = "<group>"; };
 		18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Player.m"; sourceTree = "<group>"; };
 		361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZJPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -293,8 +303,6 @@
 				18C2053C1F6BA30C0043A18E /* ZJProgress.m */,
 				18EE50991F6FD82900A5C606 /* ZJBrightness.h */,
 				18EE509A1F6FD82900A5C606 /* ZJBrightness.m */,
-				18EE509C1F70008200A5C606 /* ZJVolume.h */,
-				18EE509D1F70008200A5C606 /* ZJVolume.m */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -485,6 +493,7 @@
 				18C4B5EB1F5FF025002430E4 /* Resources */,
 				7970727BD8224B67F2316E4A /* [CP] Embed Pods Frameworks */,
 				B9CB65B5D3E7F72208C95AD4 /* [CP] Copy Pods Resources */,
+				7ACC70982178B3DF0092325C /* Embed PlugIns */,
 			);
 			buildRules = (
 			);
@@ -650,7 +659,6 @@
 				18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */,
 				7A6DA0B32171D773008C02CB /* ZJInterceptBottomTools.m in Sources */,
 				18C204D91F68FFFD0043A18E /* ZJTabBarButton.m in Sources */,
-				18EE509E1F70008200A5C606 /* ZJVolume.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@
 //
 
 #import "ZJSuperViewController.h"
-
+@class VideoList;
 @interface VideoController : ZJSuperViewController
-
+@property(nonatomic, strong) VideoList * model;
 @end

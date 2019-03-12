@@ -14,18 +14,28 @@
 
 @implementation PlayerVideoController
 
+- (ZJPlayer *)player{
+    if (_player == nil) {
+        _player =   [[ZJPlayer alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view frame:CGRectMake(0, 0, self.view.frame.size.width, 300) controller:self];
+        
+        _player.isRotatingSmallScreen = YES;
+    }
+    return _player;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"视频播放";
    
     self.view.backgroundColor = [UIColor  whiteColor];
-   
-    self.player =   [[ZJPlayer alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view frame:CGRectMake(0, 0, self.view.frame.size.width, 300) controller:self];
-   
-    self.player.isRotatingSmallScreen = YES;
 
     [self.view addSubview:self.player];
-
+    
+}
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    
 }
 - (BOOL)shouldAutorotate//是否支持旋转屏幕
 {

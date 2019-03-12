@@ -32,6 +32,7 @@
     self.layer.masksToBounds = YES;
     self.layer.cornerRadius = 8;
     
+    [self addKVOObserver];
     
     
     self.brightL = [[UILabel alloc]init];
@@ -81,14 +82,39 @@
         [self addSubview:lattice];
     }
 }
+- (void)addKVOObserver {
+    [[UIScreen mainScreen] addObserver:self
+                            forKeyPath:@"brightness"
+                               options:NSKeyValueObservingOptionNew context:NULL];
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    
+    CGFloat levelValue = [change[@"new"] floatValue];
+    
+//    [self removeTimer];
+    [self show];
+    self.progress = levelValue;
+}
 
 - (void)show{
-    self.alpha = 1;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.alpha = 1;
+    } completion:^(BOOL finished) {
+//        [self addtimer];
+    }];
 }
 - (void)dismiss{
-    
-    
-    self.alpha = 0;
+
+    if (self.alpha == 1.0) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.alpha = 0.0;
+        } completion:^(BOOL finished) {
+//            [self removeTimer];
+        }];
+    }
     
 }
 - (void)resetFrameisFullScreen:(BOOL)isFullScreen;{

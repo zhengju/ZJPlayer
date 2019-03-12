@@ -36,10 +36,14 @@
 - (void)setModel:(DownloadList *)model{
     _model = model;
     
-    if (_model.isDownloading) {
-        [_downloadBtn setTitle:@"取消" forState:UIControlStateNormal];
+    if (_model.progress == 1.0) {
+        [_downloadBtn setTitle:@"下载完成" forState:UIControlStateNormal];
     }else{
-        [_downloadBtn setTitle:@"下载" forState:UIControlStateNormal];
+        if (_model.isDownloading) {
+            [_downloadBtn setTitle:@"取消" forState:UIControlStateNormal];
+        }else{
+            [_downloadBtn setTitle:@"下载" forState:UIControlStateNormal];
+        }
     }
     
     _nameL.text = _model.name;

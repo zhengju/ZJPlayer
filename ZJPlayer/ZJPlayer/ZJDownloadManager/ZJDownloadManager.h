@@ -27,6 +27,7 @@ typedef enum {
 @property (nonatomic, assign) long long totalLength;
 
 @property (nonatomic, copy) void(^progressBlock)( CGFloat progress);
+@property (nonatomic, copy) void(^totalLengthBlock)( CGFloat totalLength);
 @property (nonatomic, copy) void(^stateBlock)(ZJDownloadState state);
 
 @end
@@ -37,6 +38,7 @@ typedef enum {
  *  初始化
  *
  */
+
 + (ZJDownloadManager *)sharedInstance;
 
 /**
@@ -47,7 +49,7 @@ typedef enum {
  *  @param progressBlock 下载进度回调
  *  @param stateBlack    下载状态回调
  */
-- (void)downloadDataWithURL:(NSString *)url resume:(BOOL)resume progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack;
+- (void)downloadDataWithURL:(NSString *)url resume:(BOOL)resume totalLength:(void(^)( CGFloat totalLength)) totalLengthBlock progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack;
 /**
  *  查询该资源的下载进度值
  *

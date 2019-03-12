@@ -8,6 +8,7 @@
 
 #import "VideoController.h"
 #import "ZJPlayer.h"
+#import "VideoList.h"
 @interface VideoController ()<ZJPlayerDelegate>
 @property(strong,nonatomic) ZJPlayer* player;
 @end
@@ -30,12 +31,17 @@
     
     self.player.fatherView = self.view;
     
-    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.view).offset(0);
-        make.left.mas_equalTo(self.view);
-        make.right.mas_equalTo(self.view);
-        make.height.mas_equalTo(260);
-    }];
+//    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(self.view).offset(0);
+//        make.left.mas_equalTo(self.view);
+//        make.right.mas_equalTo(self.view);
+//        make.height.mas_equalTo(260);
+//    }];
+    
+    self.player.frame = CGRectMake(0, 0, kScreenWidth, 300);
+    
+    NSLog(@"%@",self.player);
+    
 }
 
 #pragma mark -- ZJPlayerDelegate

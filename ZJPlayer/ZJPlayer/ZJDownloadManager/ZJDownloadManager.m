@@ -97,7 +97,7 @@ static ZJDownloadManager *manager = nil;
 /**
  *  开启任务下载资源
  */
-- (void)downloadDataWithURL:(NSString *)url resume:(BOOL)resume progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack{
+- (void)downloadDataWithURL:(NSString *)url resume:(BOOL)resume totalLength:(void (^)(CGFloat))totalLengthBlock progress:(void (^)(CGFloat))progressBlock state:(void (^)(ZJDownloadState))stateBlack{
 
     if (!url) {
         return;
@@ -128,7 +128,7 @@ static ZJDownloadManager *manager = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     
     // 设置请求头
-    NSString *range = [NSString stringWithFormat:@"bytes=%zd-", ZJDownloadLength(url)];
+    NSString *range = [NSString stringWithFormat:@"bytes=%ld-", ZJDownloadLength(url)];
     [request setValue:range forHTTPHeaderField:@"Range"];
     
     // 创建一个Data任务
@@ -141,6 +141,7 @@ static ZJDownloadManager *manager = nil;
     
     ZJDownload *sessionModel = [[ZJDownload alloc] init];
     sessionModel.url = url;
+    sessionModel.totalLengthBlock = totalLengthBlock;
     sessionModel.progressBlock = progressBlock;
     sessionModel.stateBlock = stateBlack;
     sessionModel.stream = stream;
@@ -296,7 +297,9 @@ static ZJDownloadManager *manager = nil;
     
     // 获得服务器这次请求 返回数据的总长度
     NSInteger totalLength = [response.allHeaderFields[@"Content-Length"] integerValue] + ZJDownloadLength(sessionModel.url);
-    sessionModel.totalLength = totalLength;
+    sessionModel.totalLength = totalLength;//
+    
+    sessionModel.totalLengthBlock(totalLength/1024.0/1024.0);
     
     // 存储总长度
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:ZJTotalLengthFullpath];
@@ -307,6 +310,53 @@ static ZJDownloadManager *manager = nil;
     // 接收这个请求，允许接收服务器的数据
     completionHandler(NSURLSessionResponseAllow);
 }
+/**
+ <NSHTTPURLResponse: 0x2807ee880> { URL: http://house.china.com.cn/img/voice/hdzxjh.mp4 } { Status Code: 206, Headers {
+ CACHE =     (
+ "TCP_HIT"
+ );
+ "CC_CACHE" =     (
+ "TCP_MISS"
+ );
+ "Cache-Control" =     (
+ "max-age=86400"
+ );
+ Connection =     (
+ "keep-alive"
+ );
+ "Content-Length" =     (
+ 22072560
+ );
+ "Content-Range" =     (
+ "bytes 0-22072559/22072560"
+ );
+ "Content-Type" =     (
+ "video/mp4"
+ );
+ Date =     (
+ "Tue, 12 Mar 2019 08:30:54 GMT"
+ );
+ Etag =     (
+ "\"bf1a74fe8ec9d31:0\""
+ );
+ Expires =     (
+ "Wed, 13 Mar 2019 07:59:51 GMT"
+ );
+ "Last-Modified" =     (
+ "Sun, 01 Apr 2018 07:56:51 GMT"
+ );
+ "Powered-By-ChinaCache" =     (
+ "HIT from CNC-DZ-3-3W7"
+ );
+ Server =     (
+ nginx
+ );
+ "X-Powered-By" =     (
+ "ASP.NET"
+ );
+ } }
+ */
+
 /**
  * 接收到服务器返回的数据
  */
@@ -322,8 +372,13 @@ static ZJDownloadManager *manager = nil;
     NSUInteger expectedSize = sessionModel.totalLength;
     CGFloat progress = 1.0 * receivedSize / expectedSize;
     
-    sessionModel.progressBlock(progress);
+    
+    if (sessionModel.progressBlock && progress) {
+         sessionModel.progressBlock(progress);
+    }
+  
     NSLog(@"%f",progress);
+    
     //(receivedSize, expectedSize, progress);
 
 }
