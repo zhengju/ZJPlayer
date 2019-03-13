@@ -1,5 +1,5 @@
 //
-//  ZJDownloadManager.m
+//  ZJDownloaderItemManager.m
 //  ZJPlayer
 //
 //  Created by zhengju on 2017/9/22.
@@ -8,6 +8,10 @@
 
 #import "ZJDownloadManager.h"
 #import "NSString+Hash.h"
+
+#import "ZJDownloadOperation.h"
+
+#define kMaxDownloadOperation    5
 
 // 缓存主目录
 #define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
@@ -19,21 +23,27 @@
 #define ZJFileFullpath(url) [ZJCachesDirectory stringByAppendingPathComponent:ZJFileName(url)]
 
 // 文件的已下载长度
-#define ZJDownloadLength(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:ZJFileFullpath(url) error:nil][NSFileSize] integerValue]
+#define ZJDownloaderItemLength(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:ZJFileFullpath(url) error:nil][NSFileSize] integerValue]
 
 // 存储文件总长度的文件路径（caches）
 #define ZJTotalLengthFullpath [ZJCachesDirectory stringByAppendingPathComponent:@"totalLength.plist"]
 
+@interface ZJDownloadManager()<NSURLSessionDelegate,ZJDownloadOperationDelegate>
+{
+    NSConditionLock * _sliderLock;
+}
 
-@implementation ZJDownload : NSObject
-
-@end
-
-@interface ZJDownloadManager()<NSURLSessionDelegate>
 /** 保存所有任务(注：用下载地址md5后作为key) */
 @property (nonatomic, strong) NSMutableDictionary *tasks;
 /** 保存所有下载相关信息 */
 @property (nonatomic, strong) NSMutableDictionary *sessionModels;
+
+@property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
+
+@property (nonatomic, copy) void(^progressBlock)( CGFloat progress);
+@property (nonatomic, copy) void(^totalLengthBlock)( CGFloat totalLength);
+@property (nonatomic, copy) void(^stateBlock)(ZJDownloadState state);
+
 @end
 
 @implementation ZJDownloadManager
@@ -84,6 +94,15 @@ static ZJDownloadManager *manager = nil;
 {
     return manager;
 }
+- (instancetype)init{
+    if (self = [super init]) {
+        _downloadOperationQueue = [[NSOperationQueue alloc] init];
+        _downloadOperationQueue.maxConcurrentOperationCount = kMaxDownloadOperation;
+    }
+    return self;
+}
+
+
 /**
  *  创建缓存目录文件
  */
@@ -116,9 +135,26 @@ static ZJDownloadManager *manager = nil;
         return;
     }
     
-    // 创建缓存目录文件
-    [self createCacheDirectory];
     
+    
+    self.progressBlock = progressBlock;
+    self.totalLengthBlock = totalLengthBlock;
+    self.stateBlock = stateBlack;
+
+    ZJDownloaderItem * dItem = [[ZJDownloaderItem alloc] init];
+    dItem.downloadUrl = url;
+
+//
+//    // 创建缓存目录文件
+    [self createCacheDirectory];
+//
+    dItem.downloadPath = ZJFileFullpath(url);
+    [self startOperationWithRequestItem:dItem];
+
+    return;
+    
+#warning --
+
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[[NSOperationQueue alloc] init]];
     
     // 创建流
@@ -128,7 +164,7 @@ static ZJDownloadManager *manager = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     
     // 设置请求头
-    NSString *range = [NSString stringWithFormat:@"bytes=%ld-", ZJDownloadLength(url)];
+    NSString *range = [NSString stringWithFormat:@"bytes=%ld-", ZJDownloaderItemLength(url)];
     [request setValue:range forHTTPHeaderField:@"Range"];
     
     // 创建一个Data任务
@@ -139,8 +175,8 @@ static ZJDownloadManager *manager = nil;
     // 保存任务
     [self.tasks setValue:task forKey:ZJFileName(url)];
     
-    ZJDownload *sessionModel = [[ZJDownload alloc] init];
-    sessionModel.url = url;
+    ZJDownloaderItem *sessionModel = [[ZJDownloaderItem alloc] init];
+    sessionModel.downloadUrl = url;
     sessionModel.totalLengthBlock = totalLengthBlock;
     sessionModel.progressBlock = progressBlock;
     sessionModel.stateBlock = stateBlack;
@@ -149,6 +185,15 @@ static ZJDownloadManager *manager = nil;
     
     [self start:url];
 }
+
+#pragma mark - 队列管理
+- (void)startOperationWithRequestItem:(ZJDownloaderItem *)dItem
+{
+    ZJDownloadOperation *  operation = [[ZJDownloadOperation alloc] initWithItem:dItem];
+    operation.delegate = self;
+    [_downloadOperationQueue addOperation:operation];
+}
+
 - (void)handle:(NSString *)url
 {
     NSURLSessionDataTask *task = [self getTask:url];
@@ -199,9 +244,9 @@ static ZJDownloadManager *manager = nil;
 /**
  *  根据url获取对应的下载信息模型
  */
-- (ZJDownload *)getSessionModel:(NSUInteger)taskIdentifier
+- (ZJDownloaderItem *)getSessionModel:(NSUInteger)taskIdentifier
 {
-    return (ZJDownload *)[self.sessionModels valueForKey:@(taskIdentifier).stringValue];
+    return (ZJDownloaderItem *)[self.sessionModels valueForKey:@(taskIdentifier).stringValue];
 }
 
 /**
@@ -209,7 +254,7 @@ static ZJDownloadManager *manager = nil;
  */
 - (BOOL)isCompletion:(NSString *)url
 {
-    if ([self fileTotalLength:url] && ZJDownloadLength(url) == [self fileTotalLength:url]) {
+    if ([self fileTotalLength:url] && ZJDownloaderItemLength(url) == [self fileTotalLength:url]) {
         return YES;
     }
     return NO;
@@ -221,7 +266,7 @@ static ZJDownloadManager *manager = nil;
 - (CGFloat)progress:(NSString *)url
 {
 
-    return [self fileTotalLength:url] == 0 ? 0.0 : 1.0 * ZJDownloadLength(url) /  [self fileTotalLength:url];
+    return [self fileTotalLength:url] == 0 ? 0.0 : 1.0 * ZJDownloaderItemLength(url) /  [self fileTotalLength:url];
 }
 
 /**
@@ -270,7 +315,7 @@ static ZJDownloadManager *manager = nil;
         [[self.tasks allValues] makeObjectsPerformSelector:@selector(cancel)];
         [self.tasks removeAllObjects];
         
-        for (ZJDownload *sessionModel in [self.sessionModels allValues]) {
+        for (ZJDownloaderItem *sessionModel in [self.sessionModels allValues]) {
             [sessionModel.stream close];
         }
         [self.sessionModels removeAllObjects];
@@ -290,13 +335,15 @@ static ZJDownloadManager *manager = nil;
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSHTTPURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
 {
     
-    ZJDownload *sessionModel = [self getSessionModel:dataTask.taskIdentifier];
+    
+    
+    ZJDownloaderItem *sessionModel = [self getSessionModel:dataTask.taskIdentifier];
     
     // 打开流
     [sessionModel.stream open];
     
     // 获得服务器这次请求 返回数据的总长度
-    NSInteger totalLength = [response.allHeaderFields[@"Content-Length"] integerValue] + ZJDownloadLength(sessionModel.url);
+    NSInteger totalLength = [response.allHeaderFields[@"Content-Length"] integerValue] + ZJDownloaderItemLength(sessionModel.downloadUrl);
     sessionModel.totalLength = totalLength;//
     
     sessionModel.totalLengthBlock(totalLength/1024.0/1024.0);
@@ -304,7 +351,7 @@ static ZJDownloadManager *manager = nil;
     // 存储总长度
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:ZJTotalLengthFullpath];
     if (dict == nil) dict = [NSMutableDictionary dictionary];
-    dict[ZJFileName(sessionModel.url)] = @(totalLength);
+    dict[ZJFileName(sessionModel.downloadUrl)] = @(totalLength);
     [dict writeToFile:ZJTotalLengthFullpath atomically:YES];
     
     // 接收这个请求，允许接收服务器的数据
@@ -362,13 +409,13 @@ static ZJDownloadManager *manager = nil;
  */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
-    ZJDownload *sessionModel = [self getSessionModel:dataTask.taskIdentifier];
+    ZJDownloaderItem *sessionModel = [self getSessionModel:dataTask.taskIdentifier];
     
     // 写入数据
     [sessionModel.stream write:data.bytes maxLength:data.length];
     
     // 下载进度
-    NSUInteger receivedSize = ZJDownloadLength(sessionModel.url);
+    NSUInteger receivedSize = ZJDownloaderItemLength(sessionModel.downloadUrl);
     NSUInteger expectedSize = sessionModel.totalLength;
     CGFloat progress = 1.0 * receivedSize / expectedSize;
     
@@ -388,10 +435,10 @@ static ZJDownloadManager *manager = nil;
  */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    ZJDownload *sessionModel = [self getSessionModel:task.taskIdentifier];
+    ZJDownloaderItem *sessionModel = [self getSessionModel:task.taskIdentifier];
     if (!sessionModel) return;
     
-    if ([self isCompletion:sessionModel.url]) {
+    if ([self isCompletion:sessionModel.downloadUrl]) {
         // 下载完成
         sessionModel.stateBlock(ZJDownloadStateCompleted);
     } else if (error){
@@ -404,7 +451,7 @@ static ZJDownloadManager *manager = nil;
     sessionModel.stream = nil;
     
     // 清除任务
-    [self.tasks removeObjectForKey:ZJFileName(sessionModel.url)];
+    [self.tasks removeObjectForKey:ZJFileName(sessionModel.downloadUrl)];
     [self.sessionModels removeObjectForKey:@(task.taskIdentifier).stringValue];
     
 }
@@ -424,8 +471,33 @@ static ZJDownloadManager *manager = nil;
  *已经下载的大小，单位是M
  */
 - (float)downloadLength:(NSString *)url{
-    float downloadLength = ZJDownloadLength(url);
+    float downloadLength = ZJDownloaderItemLength(url);
     return downloadLength/1024.0/1024.0;
+}
+
+
+#pragma mark - ZJDownloadOperationDelegate
+- (void)zjDownloadOperationStartDownloading:(ZJDownloaderItem *)dItem{
+    self.totalLengthBlock(dItem.totalFileSize/1024.0/1024.0);
+}
+- (void)zjDownloadOperationFinishDownload:(ZJDownloaderItem *)dItem{
+    
+    // 存储总长度
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:ZJTotalLengthFullpath];
+    if (dict == nil) dict = [NSMutableDictionary dictionary];
+    dict[ZJFileName(dItem.downloadUrl)] = @(dItem.totalFileSize);
+    [dict writeToFile:ZJTotalLengthFullpath atomically:YES];
+    
+    
+}
+- (void)zjDownloadOperationDownloading:(ZJDownloaderItem *)dItem downloadPercentage:(float)percentage velocity:(float)velocity{
+
+    CGFloat progress = 1.0 * dItem.downloadedFileSize / dItem.totalFileSize;
+
+    NSLog(@"%f",progress);
+    
+    self.progressBlock(progress);
+    
 }
 
 @end

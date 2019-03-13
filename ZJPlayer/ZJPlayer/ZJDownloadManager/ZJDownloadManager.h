@@ -9,26 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "ZJCommonHeader.h"
 
-typedef enum {
-    ZJDownloadStateRunning = 0,     /** 下载中 */
-    ZJDownloadStateSuspended,     /** 下载暂停 */
-    ZJDownloadStateCompleted,     /** 下载完成 */
-    ZJDownloadStateCanceled,     /** 取消下载 */
-    ZJDownloadStateFailed         /** 下载失败 */
-}ZJDownloadState;
-@interface ZJDownload : NSObject
-/** 流 */
-@property (nonatomic, strong) NSOutputStream *stream;
-/** 下载地址 */
-@property (nonatomic, copy) NSString *url;
-/**
- *  文件的总长度
- */
-@property (nonatomic, assign) long long totalLength;
+#import "ZJDownloaderItem.h"
 
-@property (nonatomic, copy) void(^progressBlock)( CGFloat progress);
-@property (nonatomic, copy) void(^totalLengthBlock)( CGFloat totalLength);
-@property (nonatomic, copy) void(^stateBlock)(ZJDownloadState state);
+
+@protocol ZJDownloadManagerDelegate <NSObject>
+
+@optional
+- (void)zjDownloadOperationStartDownloading:(ZJDownloaderItem *)dItem;
+- (void)zjDownloadOperationFinishDownload:(ZJDownloaderItem *)dItem;
+- (void)zjDownloadOperationDownloading:(ZJDownloaderItem *)dItem downloadPercentage:(float)percentage velocity:(float)velocity;
 
 @end
 

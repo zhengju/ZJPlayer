@@ -64,6 +64,8 @@
 		7A6DA0AC21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0AB21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m */; };
 		7A6DA0B02171A29B008C02CB /* UIButton+ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0AF2171A29B008C02CB /* UIButton+ZJPlayer.m */; };
 		7A6DA0B32171D773008C02CB /* ZJInterceptBottomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0B22171D773008C02CB /* ZJInterceptBottomTools.m */; };
+		7A7213212238FC1C00B7C02E /* ZJDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213202238FC1C00B7C02E /* ZJDownloadOperation.m */; };
+		7A7213242238FD1300B7C02E /* ZJDownloaderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213232238FD1300B7C02E /* ZJDownloaderItem.m */; };
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
 		7AA4F371216B7D870091094C /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F370216B7D870091094C /* libc++abi.tbd */; };
 		7AA4F374216C46C70091094C /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F373216C46C60091094C /* NSGIF.m */; };
@@ -197,6 +199,10 @@
 		7A6DA0AF2171A29B008C02CB /* UIButton+ZJPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ZJPlayer.m"; sourceTree = "<group>"; };
 		7A6DA0B12171D773008C02CB /* ZJInterceptBottomTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptBottomTools.h; sourceTree = "<group>"; };
 		7A6DA0B22171D773008C02CB /* ZJInterceptBottomTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptBottomTools.m; sourceTree = "<group>"; };
+		7A72131F2238FC1B00B7C02E /* ZJDownloadOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloadOperation.h; sourceTree = "<group>"; };
+		7A7213202238FC1C00B7C02E /* ZJDownloadOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloadOperation.m; sourceTree = "<group>"; };
+		7A7213222238FD1300B7C02E /* ZJDownloaderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloaderItem.h; sourceTree = "<group>"; };
+		7A7213232238FD1300B7C02E /* ZJDownloaderItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloaderItem.m; sourceTree = "<group>"; };
 		7AA4F36E216B6E590091094C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		7AA4F372216C46C60091094C /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
@@ -350,6 +356,10 @@
 				184829B81F79EE4500BF2BDB /* MD5 */,
 				184829BB1F79EE4500BF2BDB /* ZJDownloadManager.h */,
 				184829BC1F79EE4500BF2BDB /* ZJDownloadManager.m */,
+				7A72131F2238FC1B00B7C02E /* ZJDownloadOperation.h */,
+				7A7213202238FC1C00B7C02E /* ZJDownloadOperation.m */,
+				7A7213222238FD1300B7C02E /* ZJDownloaderItem.h */,
+				7A7213232238FD1300B7C02E /* ZJDownloaderItem.m */,
 			);
 			path = ZJDownloadManager;
 			sourceTree = "<group>";
@@ -648,6 +658,7 @@
 				7A6DA0A32170896F008C02CB /* ZJVideoTools.m in Sources */,
 				18C2053D1F6BA30C0043A18E /* ZJProgress.m in Sources */,
 				7A6DA0A6217095EE008C02CB /* ZJSaveToCameraRollOperation.m in Sources */,
+				7A7213212238FC1C00B7C02E /* ZJDownloadOperation.m in Sources */,
 				7AA4F37F216CA8590091094C /* UIImage+Crop.m in Sources */,
 				7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */,
 				184829BD1F79EE5500BF2BDB /* NSString+Hash.m in Sources */,
@@ -659,6 +670,7 @@
 				18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */,
 				7A6DA0B32171D773008C02CB /* ZJInterceptBottomTools.m in Sources */,
 				18C204D91F68FFFD0043A18E /* ZJTabBarButton.m in Sources */,
+				7A7213242238FD1300B7C02E /* ZJDownloaderItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
