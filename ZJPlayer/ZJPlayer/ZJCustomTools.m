@@ -92,6 +92,13 @@ typedef NS_ENUM(NSInteger, GIFSize) {
  *  @param timeBySecond 时间点
  */
 + (UIImage *)thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr{
+    
+    UIImage * image = [[ZJCacheTask shareTask]imageWith:urlStr];
+    
+    if (image) {//从缓存查找
+        return image;
+    }
+    
     //创建URL
     NSURL *url=[ZJCustomTools getNetworkUrl:urlStr];
     //根据url创建AVURLAsset
@@ -113,8 +120,11 @@ typedef NS_ENUM(NSInteger, GIFSize) {
         return nil;
     }
     CMTimeShow(actualTime);
-    UIImage *image=[UIImage imageWithCGImage:cgImage];//转化为UIImage
+    image=[UIImage imageWithCGImage:cgImage];//转化为UIImage
     
+    //缓存
+    [[ZJCacheTask shareTask] cacheImageWith:urlStr image:image];
+
     CGImageRelease(cgImage);
     return image;
 }

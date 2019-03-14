@@ -58,6 +58,11 @@
                                                                                     error:nil];
                 
                 _task = [_session downloadTaskWithResumeData:newResumeData];
+                
+                if (_downloadType == ZJDownloadOutputStream) {
+                    [self initOuInputStream];
+                }
+                
             }
             else {
                 //TODO:暂时判断data是否为有效resumeData，如果不是则该文件为已下载好的视频，后续修改为resumeData和最终文件分开存放 add by Hou
@@ -74,6 +79,9 @@
         else
         {
             _task = [_session downloadTaskWithRequest:request];
+            if (_downloadType == ZJDownloadOutputStream) {
+                [self initOuInputStream];
+            }
         }
         [_task resume];
         [self startCountdownTimer];
@@ -82,6 +90,12 @@
         }
         [self stopCountdownTimer];
     }
+}
+
+- (void)initOuInputStream{
+    // 创建流
+    self.stream = [NSOutputStream outputStreamToFileAtPath:_downloadItem.downloadPath append:YES];
+    
 }
 
 - (void)dealloc
@@ -150,21 +164,38 @@
 }
 
 #pragma mark - NSURLSessionDownloadDelegate
+/**
+ * 接收到响应
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSHTTPURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+{
+    
+    if (_downloadType == ZJDownloadOutputStream) {
+        // 打开流
+        [self.stream open];
+    }
+    // 接收这个请求，允许接收服务器的数据
+    completionHandler(NSURLSessionResponseAllow);
+}
+
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
 didFinishDownloadingToURL:(NSURL *)location
 {
     [self stopCountdownTimer];
-    //    int code = [(NSHTTPURLResponse *)[downloadTask response] statusCode];
     
-    NSURL *destination = [self createDirectoryForDownloadItem];
-    BOOL success = NO;
-    NSData * data = [NSData dataWithContentsOfURL:location];
-    if (data && data.length != 0)
-    {
-        success = [self copyTempFileAtURL:location toDestination:destination];
+    if (_downloadType == ZJDownloadwriteToFile) {
+        NSURL *destination = [self createDirectoryForDownloadItem];
+        BOOL success = NO;
+        NSData * data = [NSData dataWithContentsOfURL:location];
+        if (data && data.length != 0)
+        {
+            success = [self copyTempFileAtURL:location toDestination:destination];
+        }
+        _downloadItem.isSuccess = success;
     }
+
     __weak typeof(self) wSelf = self;
-    _downloadItem.isSuccess = success;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (wSelf.delegate && [wSelf.delegate respondsToSelector:@selector(zjDownloadOperationFinishDownload:)])
         {
@@ -188,12 +219,19 @@ didCompleteWithError:(nullable NSError *)error
         _downloadItem.isSuccess = YES;
     }
     
-    NSData* resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData];
-    
-    if (resumeData && resumeData.length!=0)
-    {
-        [resumeData writeToFile:_downloadItem.downloadPath atomically:NO];
+    if (_downloadType == ZJDownloadOutputStream) {
+        // 关闭流
+        [self.stream close];
+        self.stream = nil;
+    }else{
+        
+        NSData* resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData];
+        if (resumeData && resumeData.length!=0)
+        {
+            [resumeData writeToFile:_downloadItem.downloadPath atomically:NO];
+        }
     }
+
     __weak typeof(self) wSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (wSelf.delegate && [wSelf.delegate respondsToSelector:@selector(zjDownloadOperationFinishDownload:)])
@@ -201,15 +239,22 @@ didCompleteWithError:(nullable NSError *)error
             [wSelf.delegate zjDownloadOperationFinishDownload:wSelf.downloadItem];
         }
     });
+    
     [self cancelRequest];
     _isFinished = YES;
 }
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
-    didReceiveData:(NSData *)data
+/**
+ * 接收到服务器返回的数据
+ */
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
-}
 
+    if (_downloadType == ZJDownloadOutputStream) {
+        // 写入数据
+        [self.stream write:data.bytes maxLength:data.length];
+    }
+}
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
       didWriteData:(int64_t)bytesWritten
  totalBytesWritten:(int64_t)totalBytesWritten
@@ -234,7 +279,6 @@ expectedTotalBytes:(int64_t)expectedTotalBytes
     CGFloat progress = 1.0 * _downloadItem.downloadedFileSize / _downloadItem.totalFileSize;
 
     NSLog(@"%f",progress);
-    
 }
 
 #pragma mark - 外部调用

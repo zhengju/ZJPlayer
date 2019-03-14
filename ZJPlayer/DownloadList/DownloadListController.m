@@ -12,10 +12,13 @@
 #import "ZJDownloadManager.h"
 #import "DownloadList.h"
 #import "ZJCustomTools.h"
-@interface DownloadListController ()<UITableViewDelegate,UITableViewDataSource>
+#import "ZJDownloaderItem.h"
+
+@interface DownloadListController ()<UITableViewDelegate,UITableViewDataSource,ZJDownloadManagerDelegate>
 @property(strong,nonatomic) UITableView * tableView;
 @property(strong,nonatomic) ZJDownloadManager * downloadManager;
 @property(strong,nonatomic) NSMutableArray * datas;
+@property(nonatomic, strong) NSMutableDictionary * downLists;
 @end
 
 @implementation DownloadListController
@@ -32,8 +35,11 @@
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     self.downloadManager = [ZJDownloadManager sharedInstance];
+    self.downloadManager.delegate = self;
     [self configDatas];
     [self configureTableView];
+    
+    self.downLists = [NSMutableDictionary dictionaryWithCapacity:0];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]bk_initWithTitle:@"clean" style:UIBarButtonItemStylePlain handler:^(id sender) {
         
@@ -52,11 +58,13 @@
 - (void)configDatas{
     
     NSArray * titles = @[
-                         @"许家印讲话"
+                         @"许家印讲话",
+                         @"融创中国宣传片"
                          ];
     
     NSArray * urls = @[
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"http://img.house.china.com.cn/voice/rongch.mp4"
                        ];
     
     for (int i = 0; i < urls.count; i++) {
@@ -65,6 +73,12 @@
         list.urlString = urls[i];
         list.progress = [self.downloadManager progress:urls[i]];
         list.ratio = [NSString stringWithFormat:@"%.1fM/%.1fM",[self.downloadManager downloadLength:urls[i]],[self.downloadManager totalLength:urls[i]]];
+        
+        ZJDownloaderItem * item = [[ZJDownloaderItem alloc]init];
+        item.downloadUrl = list.urlString;
+        
+        list.downloaderItem = item;
+        
         [self.datas addObject:list];
     }
 }
@@ -86,34 +100,15 @@
     
     DownloadListCell * cell = [tableView dequeueReusableCellWithIdentifier:@"DownloadListCell" forIndexPath:indexPath];
     cell.model = self.datas[indexPath.row];
+    cell.model.indexPath = indexPath;
     cell.suspendBlock = ^(BOOL isSuspend){
         
         DownloadList * model = self.datas[indexPath.row];
         
-        dispatch_async(dispatch_queue_create("com.ee", DISPATCH_QUEUE_SERIAL), ^{
+        [self.downLists setObject:model forKey:model.downloaderItem.downloadUrl];
 
-            [self.downloadManager downloadDataWithURL:model.urlString resume:YES totalLength:^(CGFloat totalLength) {
-                
-                model.ratio = [NSString stringWithFormat:@"%.1fM/%.1fM",[self.downloadManager downloadLength:model.urlString],totalLength];
-                
-            }progress:^(CGFloat progress) {
-            
-                NSLog(@"controller:%ld->%f",(long)indexPath.row,progress);
-            
-                model.progress = progress;
+        [self.downloadManager downloadWithItem:model.downloaderItem];
 
-                dispatch_async(dispatch_get_main_queue(), ^{
-              
-                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            
-               });
-            
-        } state:^(ZJDownloadState state) {
-            NSLog(@"controller:%u",state);
-        }];
-            
-        });
-        
     };
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
@@ -144,5 +139,31 @@
     //[self.navigationController presentViewController:controller animated:YES completion:nil];
 
 }
+
+#pragma mark - ZJDownloadManagerDelegate
+- (void)zjDownloadOperationStartDownloading:(ZJDownloaderItem *)dItem{
+    
+}
+- (void)zjDownloadOperationFinishDownload:(ZJDownloaderItem *)dItem{
+    
+    [self.downLists removeObjectForKey:dItem.downloadUrl];
+    
+}
+- (void)zjDownloadOperationDownloading:(ZJDownloaderItem *)dItem downloadPercentage:(float)percentage velocity:(float)velocity{
+    
+    CGFloat progress = 1.0 * dItem.downloadedFileSize / dItem.totalFileSize;
+    NSLog(@"%f",progress);
+    
+    DownloadList * model = [self.downLists valueForKey:dItem.downloadUrl];
+    model.progress = progress;
+    
+    model.ratio = [NSString stringWithFormat:@"%.1fM/%.1fM",[self.downloadManager downloadLength:model.urlString],dItem.totalFileSize/1024.0/1024.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [self.tableView reloadRowsAtIndexPaths:@[model.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    });
+}
+
 @end
 

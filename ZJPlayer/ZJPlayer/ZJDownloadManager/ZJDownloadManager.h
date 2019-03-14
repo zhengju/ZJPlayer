@@ -23,6 +23,10 @@
 
 @interface ZJDownloadManager : NSObject
 
+
+@property(nonatomic, weak) id<ZJDownloadManagerDelegate> delegate;
+
+
 /**
  *  初始化
  *
@@ -30,15 +34,8 @@
 
 + (ZJDownloadManager *)sharedInstance;
 
-/**
- *  添加下载任务
- *
- *  @param url           url
- *  @param resume        是否下载
- *  @param progressBlock 下载进度回调
- *  @param stateBlack    下载状态回调
- */
-- (void)downloadDataWithURL:(NSString *)url resume:(BOOL)resume totalLength:(void(^)( CGFloat totalLength)) totalLengthBlock progress: (void(^)( CGFloat progress)) progressBlock state:(void(^)(ZJDownloadState state))stateBlack;
+- (void)downloadWithItem:(ZJDownloaderItem *)item;
+
 /**
  *  查询该资源的下载进度值
  *

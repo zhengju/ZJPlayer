@@ -19,9 +19,12 @@ typedef enum {
 }ZJDownloadState;
 
 
+typedef enum {
+    ZJDownloadwriteToFile = 0,     /** 写文件 */
+    ZJDownloadOutputStream,     /** 文件流 */ //暂时有e问题
+}ZJDownloadType;
+
 NS_ASSUME_NONNULL_BEGIN
-
-
 
 @interface ZJDownloaderItem : NSObject
 /** 流 */
@@ -36,9 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) long long totalLength;
 
-@property (nonatomic, copy) void(^progressBlock)( CGFloat progress);
-@property (nonatomic, copy) void(^totalLengthBlock)( CGFloat totalLength);
-@property (nonatomic, copy) void(^stateBlock)(ZJDownloadState state);
 @property (nonatomic, assign) long long downloadedFileSize; //bytes
 @property (nonatomic, assign) long long totalFileSize;
 @end
