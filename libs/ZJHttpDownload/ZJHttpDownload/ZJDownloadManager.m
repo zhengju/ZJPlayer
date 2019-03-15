@@ -7,7 +7,8 @@
 //实现方法是借鉴他人
 
 #import "ZJDownloadManager.h"
-#import "NSString+Hash.h"
+
+#import "NSString+ZJHash.h"
 
 #import "ZJDownloadOperation.h"
 

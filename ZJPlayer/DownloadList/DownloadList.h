@@ -21,7 +21,7 @@
 @property(copy,nonatomic) NSString * cacheRatio;
 @property(strong,nonatomic) UIImage * img;
 @property(assign,nonatomic) BOOL isDownloading;
-
+@property(nonatomic, strong) UIImage * image;
 @property(nonatomic, strong) NSIndexPath * indexPath;
 
 @end

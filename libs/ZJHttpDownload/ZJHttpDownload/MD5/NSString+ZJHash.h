@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (Hash)
+@interface NSString (ZJHash)
 
 @property (readonly) NSString *md5String;
 @property (readonly) NSString *sha1String;

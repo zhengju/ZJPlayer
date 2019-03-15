@@ -7,7 +7,7 @@
 //
 
 #import "ZJCacheTask.h"
-#import "NSString+Hash.h"
+#import "NSString+ZJHash.h"
 @interface ZJCacheTask()
 
 @end

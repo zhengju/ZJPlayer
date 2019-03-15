@@ -4,12 +4,12 @@
 //  Created by Tom Corwine on 5/30/12.
 //
 
-#import "NSString+Hash.h"
+#import "NSString+ZJHash.h"
 
 #import <CommonCrypto/CommonDigest.h>
 #import <CommonCrypto/CommonHMAC.h>
 
-@implementation NSString (Hash)
+@implementation NSString (ZJHash)
 
 - (NSString *)md5String
 {
