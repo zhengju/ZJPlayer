@@ -14,17 +14,17 @@
 
 #define kMaxDownloadOperation    3
 
-// 缓存主目录
-#define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
+//// 缓存主目录
+//#define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
+//
+//// 保存文件名
+//#define ZJFileName(url)  [self md5String:url]
 
-// 保存文件名
-#define ZJFileName(url)  [self md5String:url]
-
-// 文件的存放路径（caches）
-#define ZJFileFullpath(url) [ZJCachesDirectory stringByAppendingPathComponent:ZJFileName(url)]
-
-// 文件的已下载长度
-#define ZJDownloaderItemLength(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:ZJFileFullpath(url) error:nil][NSFileSize] integerValue]
+//// 文件的存放路径（caches）
+//#define ZJFileFullpath(url) [ZJCachesDirectory stringByAppendingPathComponent:ZJFileName(url)]
+//
+//// 文件的已下载长度
+//#define ZJDownloaderItemLength(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:ZJFileFullpath(url) error:nil][NSFileSize] integerValue]
 
 // 存储文件总长度的文件路径（caches）
 #define ZJTotalLengthFullpath [ZJCachesDirectory stringByAppendingPathComponent:@"totalLength.plist"]
@@ -165,6 +165,7 @@ static ZJDownloadManager *manager = nil;
 - (void)startOperationWithRequestItem:(ZJDownloaderItem *)dItem
 {
     ZJDownloadOperation *  operation = [[ZJDownloadOperation alloc] initWithItem:dItem];
+//    operation.downloadType = ZJDownloadOutputStream;
     operation.delegate = self;
     [_downloadOperationQueue addOperation:operation];
 }

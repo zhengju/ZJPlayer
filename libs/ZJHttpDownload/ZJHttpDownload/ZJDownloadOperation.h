@@ -10,6 +10,21 @@
 #import "ZJDownloaderItem.h"
 NS_ASSUME_NONNULL_BEGIN
 
+
+// 缓存主目录
+#define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
+
+// 保存文件名
+#define ZJFileName(url)  [self md5String:url]
+
+// 文件的存放路径（caches）
+#define ZJFileFullpath(url) [ZJCachesDirectory stringByAppendingPathComponent:ZJFileName(url)]
+
+// 文件的已下载长度
+#define ZJDownloaderItemLength(url) [[[NSFileManager defaultManager] attributesOfItemAtPath:ZJFileFullpath(url) error:nil][NSFileSize] integerValue]
+
+
+
 @protocol ZJDownloadOperationDelegate <NSObject>
 
 @optional
