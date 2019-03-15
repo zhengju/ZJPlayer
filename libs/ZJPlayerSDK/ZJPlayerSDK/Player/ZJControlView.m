@@ -7,7 +7,7 @@
 //
 
 #import "ZJControlView.h"
-
+#import "ZJPlayerSDK.h"
 
 @interface ZJControlView()
 
@@ -52,8 +52,8 @@
         [self.playBtn setImage:[UIImage imageNamed:@"暂停"] forState:UIControlStateNormal];
     }
 }
-- (instancetype)init{
-    if (self = [super init]) {
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
         [self configureUI];
     }
     return self;
@@ -70,16 +70,15 @@
     [self.playBtn addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.playBtn];
-    
-    [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self);
-        make.height.with.mas_equalTo(35);
-        make.centerY.mas_equalTo(self.mas_centerY);
-    }];
+
+    self.playBtn.frame = CGRectMake(0, (self.frameH-35)/2.0, 35, 35);
+
     //放缩按钮
     self.scalingBtn = [[UIButton alloc]init];
     [self.scalingBtn setImage:[UIImage imageNamed:@"放大"] forState:UIControlStateNormal];
     self.scalingBtn.showsTouchWhenHighlighted = YES;
+    
+    
     [self.scalingBtn bk_addEventHandler:^(id sender) {
 
         if ([self.delegate respondsToSelector:@selector(clickFullScreen)]) {
@@ -88,13 +87,11 @@
 
     } forControlEvents:UIControlEventTouchUpInside];
     
+    
     [self addSubview:self.scalingBtn];
     
-    [self.scalingBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self).with.offset(-5);
-        make.height.with.mas_equalTo(35);
-        make.centerY.mas_equalTo(self.mas_centerY);
-    }];
+    self.scalingBtn.frame = CGRectMake(self.frameW-40, (self.frameH-35)/2.0, 35, 35);
+
     
     // 底部进度条
     
@@ -115,13 +112,8 @@
     [self.slider addGestureRecognizer:tapSlider];
     [self addSubview:self.slider];
     
-    [self.slider mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self.mas_centerY);
-        make.height.mas_equalTo(20);
-        make.left.mas_equalTo(self.playBtn.mas_right);
-        make.right.mas_equalTo(self.scalingBtn.mas_left);
-        
-    }];
+    self.slider.frame = CGRectMake(CGRectGetMaxX(self.playBtn.frame), (self.frameH-20)/2.0, self.frameW - CGRectGetMaxX(self.playBtn.frame) - self.scalingBtn.frameW, 20);
+
  // 底部缓存进度条
     self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     self.progressView.progressTintColor = [UIColor blueColor];
@@ -129,12 +121,9 @@
     [self addSubview:self.progressView];
     [self.progressView setProgress:0.0 animated:NO];
     
-    [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.slider).with.offset(0);
-        make.right.equalTo(self.slider);
-        make.height.mas_equalTo(2);
-        make.centerY.equalTo(self.slider).with.offset(1);
-    }];
+    
+    self.progressView.frame = CGRectMake(CGRectGetMinX(self.slider.frame), (self.frameH-2)/2.0, self.slider.frameW, 2);
+
     [self sendSubviewToBack:self.progressView];
     
     // 底部左侧时间轴
@@ -143,23 +132,17 @@
     self.nowLabel.font = [UIFont systemFontOfSize:13];
     self.nowLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:self.nowLabel];
-    [self.nowLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.slider.mas_left).with.offset(0);
-        make.top.equalTo(self.slider.mas_bottom).with.offset(0);
-        make.size.mas_equalTo(CGSizeMake(100, 20));
-    }];
     
+    self.nowLabel.frame = CGRectMake(CGRectGetMinX(self.slider.frame), CGRectGetMaxY(self.slider.frame), 100, 20);
+
     // 底部右侧时间轴
     self.remainLabel = [[UILabel alloc] init];
     self.remainLabel.textColor = [UIColor whiteColor];
     self.remainLabel.font = [UIFont systemFontOfSize:13];
     self.remainLabel.textAlignment = NSTextAlignmentRight;
     [self addSubview:self.remainLabel];
-    [self.remainLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.slider.mas_right).with.offset(0);
-        make.top.equalTo(self.slider.mas_bottom).with.offset(0);
-        make.size.mas_equalTo(CGSizeMake(100, 20));
-    }];
+    
+     self.remainLabel.frame = CGRectMake(CGRectGetMaxX(self.slider.frame)-100, CGRectGetMaxY(self.slider.frame), 100, 20);
 
 }
 - (void)play:(UIButton *)button{
@@ -197,5 +180,13 @@
         [self.delegate touchSlider:tap];
         
     }
+}
+- (void)resetFrame{
+     self.playBtn.frame = CGRectMake(0, (self.frameH-35)/2.0, 35, 35);
+    self.scalingBtn.frame = CGRectMake(self.frameW-40, (self.frameH-35)/2.0, 35, 35);
+    self.slider.frame = CGRectMake(CGRectGetMaxX(self.playBtn.frame), (self.frameH-20)/2.0, self.frameW - CGRectGetMaxX(self.playBtn.frame) - self.scalingBtn.frameW, 20);
+    self.progressView.frame = CGRectMake(CGRectGetMinX(self.slider.frame), (self.frameH-2)/2.0, self.slider.frameW, 2);
+    self.nowLabel.frame = CGRectMake(CGRectGetMinX(self.slider.frame), CGRectGetMaxY(self.slider.frame), 100, 20);
+    self.remainLabel.frame = CGRectMake(CGRectGetMaxX(self.slider.frame)-100, CGRectGetMaxY(self.slider.frame), 100, 20);
 }
 @end

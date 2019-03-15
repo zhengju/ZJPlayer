@@ -7,7 +7,6 @@
 //底部控制栏
 
 #import <UIKit/UIKit.h>
-#import "ZJCommonHeader.h"
 
 @protocol ZJControlViewDelegate <NSObject>
 
@@ -74,5 +73,8 @@
 @property(nonatomic,assign) float progress;
 
 @property(weak,nonatomic) id<ZJControlViewDelegate> delegate;
+
+
+- (void)resetFrame;
 
 @end

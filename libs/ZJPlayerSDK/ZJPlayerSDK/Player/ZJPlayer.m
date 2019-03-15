@@ -9,15 +9,18 @@
 #import "ZJPlayer.h"
 #import "ZJControlView.h"
 #import "ZJTopView.h"
-#import "ZJCustomTools.h"
+#import "ZJProgress.h"
+#import "ZJLoadingIndicator.h"
+#import "ZJBrightness.h"
+//#import "ZJCustomTools.h"
 #import "ZJResourceLoaderManager.h"
 #import "ZJPlayerController.h"
-#import "NSGIF.h"
+//#import "NSGIF.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "InterceptView.h"
-
+//#import "InterceptView.h"
+#import "ZJPlayerSDK.h"
 #import <MediaPlayer/MPVolumeView.h>
-
+#import "UIView+Player.h"
 // 缓存主目录
 #define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
 
@@ -43,7 +46,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     slidingProgress//进度滑动
 };
 
-@interface ZJPlayer()<ZJControlViewDelegate,ZJTopViewDelegate,InterceptViewDelegate>
+@interface ZJPlayer()<ZJControlViewDelegate,ZJTopViewDelegate>//,InterceptViewDelegate>
 
 @property(strong,nonatomic) UIViewController * controller;
 
@@ -328,42 +331,25 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [self addSubview:self.BGImgView];
     
     //顶部栏
-    self.topView = [[ZJTopView alloc]init];
+    self.topView = [[ZJTopView alloc]initWithFrame:CGRectMake(0, 0, self.frameOnFatherView.size.width, 50)];
     self.topView.delegate = self;
     self.topView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
     self.topView.hidden = YES;
     [self addSubview:self.topView];
-    
-    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).with.offset(0);
-        make.right.equalTo(self).with.offset(0);
-        make.top.equalTo(self).with.offset(0);
-        make.height.mas_equalTo(50);
-    }];
 
     //底部
     
-    self.bottomView = [[ZJControlView alloc]init];
+    self.bottomView = [[ZJControlView alloc]initWithFrame:CGRectMake(0, self.frameOnFatherView.size.height-50, self.frameOnFatherView.size.width, 50)];
+    
     self.bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
     self.bottomView.delegate = self;
     [self addSubview:self.bottomView];
-    
-    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self);
-        make.height.mas_equalTo(50);
-        make.left.mas_equalTo(self);
-        make.right.mas_equalTo(self);
-        
-    }];
 
     self.loadingIndicator = [[ZJLoadingIndicator alloc]init];
     [self addSubview:self.loadingIndicator];
     
-    [self.loadingIndicator mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(self.mas_centerX);
-        make.centerY.mas_equalTo(self.mas_centerY);
-        make.height.width.mas_equalTo(35);
-    }];
+    
+    self.loadingIndicator.frame = CGRectMake((self.frameOnFatherView.size.width-35)/2.0, (self.frameOnFatherView.size.height-35)/2.0, 35, 35);
 
     self.loadingIndicator.progress = 0.5;
     
@@ -380,10 +366,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
   //  [self addSwipeGesture];
     
     //给playView加手势
-    [self bk_whenTapped:^{
-        [self singleTap];
-        
-    }];
+    UITapGestureRecognizer * tapGes = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTap)];
+    [self addGestureRecognizer:tapGes];
+    
 }
 #pragma  mark -- 加滑动手势
 - (void)addSwipeGesture{
@@ -962,31 +947,14 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         self.BGImgView.frame = CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height);
     }
         // remark 约束
-        
-        [self.loadingIndicator mas_remakeConstraints:^(MASConstraintMaker *make) {
-            
-            make.top.mas_equalTo(self).offset((self.frameOnFatherView.size.height -35)/2.0);
-            make.left.mas_equalTo(self).offset((self.frameOnFatherView.size.width -35)/2.0);
-            
-            make.width.mas_equalTo(35);
-            make.height.mas_equalTo(35);
-            
-        }];
-        
-        
-        [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(50);
-            make.bottom.mas_equalTo(self);
-            make.left.mas_equalTo(self);
-            make.width.mas_equalTo(kScreenWidth);
-        }];
-        
-        [self.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self).with.offset(0);
-            make.width.mas_equalTo(kScreenWidth);
-            make.top.equalTo(self).with.offset(0);
-            make.height.mas_equalTo(50);
-        }];
+    
+    self.loadingIndicator.frame = CGRectMake((self.frameOnFatherView.size.width -35)/2.0, (self.frameOnFatherView.size.height -35)/2.0, 35, 35);
+
+    self.bottomView.frame = CGRectMake(0, self.frameH-50, kScreenWidth, 50);
+    [self.bottomView resetFrame];
+    self.topView.frame = CGRectMake(0, 0, kScreenWidth, 50);
+    [self.topView resetFrame];
+
 
 }
 
@@ -1224,29 +1192,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (self.BGImgView.hidden == NO) {
         self.BGImgView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     }
-    [self.loadingIndicator mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self).offset((height -35)/2.0);
-        make.left.mas_equalTo(self).offset((width -35)/2.0);
-        
-        make.width.mas_equalTo(35);
-        make.height.mas_equalTo(35);
-        
-    }];
     
-    // remark 约束
-    [self.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(50);
-        make.bottom.mas_equalTo(self);
-        make.left.mas_equalTo(self);
-        make.width.mas_equalTo(width);
-    }];
+    self.loadingIndicator.frame = CGRectMake((width -35)/2.0, (height -35)/2.0, 35, 35);
 
-    [self.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).with.offset(0);
-        make.width.mas_equalTo(width);
-        make.top.equalTo(self).with.offset(0);
-        make.height.mas_equalTo(50);
-    }];
+    self.bottomView.frame = CGRectMake(0, self.frameH-50, self.frameW, 50);
+    [self.bottomView resetFrame];
+    self.topView.frame = CGRectMake(0, 0, self.frameW, 50);
+    [self.topView resetFrame];
 
     //获取到当前状态条的方向
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -1318,7 +1270,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     if (error == nil) {
        
-        HUDNormal(@"保存成功");
+//        HUDNormal(@"保存成功");
     } else {
         NSLog(@"false");
     }
@@ -1387,19 +1339,19 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)gifScreenshot{
 
     [self pause];
-    
-    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem currentTime:self.playerItem.currentTime];
-    view.currentTtime = self.playerItem.currentTime;
-    view.playerItem = self.player.currentItem;
-    view.delegate = self;
-    [self addSubview:view];
+//
+//    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem currentTime:self.playerItem.currentTime];
+//    view.currentTtime = self.playerItem.currentTime;
+//    view.playerItem = self.player.currentItem;
+//    view.delegate = self;
+//    [self addSubview:view];
     
 }
 
-#pragma mark -InterceptViewDelegate
--(void)interceptViewToback{
-    [self play];
-}
+//#pragma mark -InterceptViewDelegate
+//-(void)interceptViewToback{
+//    [self play];
+//}
 
 
 @end

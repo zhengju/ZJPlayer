@@ -7,7 +7,7 @@
 //调节亮度的视图
 
 #import <UIKit/UIKit.h>
-#import "ZJCommonHeader.h"
+
 @interface ZJBrightness : UIView
 
 /**

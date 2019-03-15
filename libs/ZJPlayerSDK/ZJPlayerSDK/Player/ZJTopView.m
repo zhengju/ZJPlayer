@@ -7,7 +7,7 @@
 //
 
 #import "ZJTopView.h"
-
+#import "ZJPlayerSDK.h"
 @interface ZJTopView()
 {
     int _rateIndex;
@@ -48,8 +48,8 @@
     }
     return _rates;
 }
-- (instancetype)init{
-    if (self = [super init]) {
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
         [self configureUI];
     }
     return self;
@@ -72,15 +72,9 @@
     } forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.closeButton];
-    [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.left.equalTo(self).with.offset(5);
-        make.centerY.equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(35, 35));
-        
-        
-    }];
     
+    self.closeButton.frame = CGRectMake(5, (self.frameH-35)/2.0, 35, 35);
+
     self.rateBtn = [[UIButton alloc]init];
     [self.rateBtn setTitle:[NSString stringWithFormat:@"%@X",self.rates[_rateIndex]] forState:UIControlStateNormal];
     WeakObj(self);
@@ -112,13 +106,9 @@
     } forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.rateBtn];
-    [self.rateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.right.equalTo(self.mas_right).offset(-5);
-        make.centerY.equalTo(self);
-        make.height.mas_equalTo(25);
-        make.width.mas_equalTo(50);
-    }];
+    
+    self.rateBtn.frame = CGRectMake(self.frameW-50-5, (self.frameH-25)/2.0, 50, 25);
+
     //截屏
     self.captureBtn = [[UIButton alloc]init];
     self.captureBtn.showsTouchWhenHighlighted = YES;
@@ -135,15 +125,8 @@
     
     [self addSubview:self.captureBtn];
 
-    [self.captureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.right.equalTo(self.rateBtn.mas_left).offset(-5);
-        make.centerY.equalTo(self);
-        make.height.mas_equalTo(35);
-        make.width.mas_equalTo(35);
-        
-        
-    }];
+    self.captureBtn.frame = CGRectMake(CGRectGetMinX(self.rateBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+
     //GIF截屏
     self.gifScreenshotBtn = [[UIButton alloc]init];
     self.gifScreenshotBtn.showsTouchWhenHighlighted = YES;
@@ -160,24 +143,15 @@
     
     [self addSubview:self.gifScreenshotBtn];
     
-    [self.gifScreenshotBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.right.equalTo(self.captureBtn.mas_left).offset(-5);
-        make.centerY.equalTo(self);
-        make.height.mas_equalTo(35);
-        make.width.mas_equalTo(35);
-        
-        
-    }];
+    self.gifScreenshotBtn.frame = CGRectMake(CGRectGetMinX(self.captureBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+
     self.titleLabel = [[UILabel alloc]init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:self.titleLabel];
-    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self.mas_centerY);
-        make.left.mas_equalTo(self.closeButton.mas_right).offset(5);
-        make.right.mas_equalTo(self.gifScreenshotBtn.mas_left).offset(-5);
-    }];
+    
+    
+    self.titleLabel.frame = CGRectMake(CGRectGetMinX(self.closeButton.frame)+5, (self.frameH-25)/2.0, self.frameW-CGRectGetMinX(self.closeButton.frame)-5-CGRectGetMinX(self.gifScreenshotBtn.frame)-5, 25);
 
 }
 
@@ -198,6 +172,13 @@
     [self.rateBtn setTitle:[NSString stringWithFormat:@"%@X",self.rates[_rateIndex]] forState:UIControlStateNormal];
 }
 
+- (void)resetFrame{
+      self.closeButton.frame = CGRectMake(5, (self.frameH-35)/2.0, 35, 35);
+    self.rateBtn.frame = CGRectMake(self.frameW-50-5, (self.frameH-25)/2.0, 50, 25);
+    self.captureBtn.frame = CGRectMake(CGRectGetMinX(self.rateBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+    self.gifScreenshotBtn.frame = CGRectMake(CGRectGetMinX(self.captureBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+    self.titleLabel.frame = CGRectMake(CGRectGetMinX(self.closeButton.frame)+5, (self.frameH-25)/2.0, self.frameW-CGRectGetMinX(self.closeButton.frame)-5-CGRectGetMinX(self.gifScreenshotBtn.frame)-5, 25);
 
+}
 
 @end

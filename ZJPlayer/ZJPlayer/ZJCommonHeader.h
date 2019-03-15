@@ -14,7 +14,6 @@
 #import "UIView+Frame.h"
 #import "ZJCacheTask.h"
 #import "ZJAlertView.h"
-#import "ZJLoadingIndicator.h"
 #import "ZJProgress.h"
 #import "ZJBrightness.h"
 #import "UIViewController+Player.h"

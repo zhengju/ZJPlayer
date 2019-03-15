@@ -8,6 +8,7 @@
 
 #import "ZJBrightness.h"
 
+#import "ZJPlayerSDK.h"
 
 @interface ZJBrightness()
 @property(strong,nonatomic) UIImageView * brightnessImg;
@@ -46,27 +47,34 @@
     [self addSubview:self.brightnessImg];
     self.frame = CGRectMake(0, 0, 150, 150);
     //frame
-    [self mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(self.superView);
-        make.centerY.mas_equalTo(self.superView);
-        make.width.mas_equalTo(150);
-        make.height.mas_equalTo(150);
-        
-    }];
-    [self.brightL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self);
-        make.centerX.mas_equalTo(self);
-        make.height.mas_equalTo(25);
-        
-    }];
+//    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.mas_equalTo(self.superView);
+//        make.centerY.mas_equalTo(self.superView);
+//        make.width.mas_equalTo(150);
+//        make.height.mas_equalTo(150);
+//
+//    }];
     
-    [self.brightnessImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self);
-        make.centerX.mas_equalTo(self);
-        make.width.mas_equalTo(75);
-        make.height.mas_equalTo(75);
-        
-    }];
+    self.frame = CGRectMake((self.superView.frameW-150)/2.0, (self.superView.frameH-150)/2.0, 150, 150);
+    
+    self.brightL.frame = CGRectMake(0, 0, self.frameW, 25);
+    self.brightL.centerX = self.centerX;
+//    [self.brightL mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(self);
+//        make.centerX.mas_equalTo(self);
+//        make.height.mas_equalTo(25);
+//
+//    }];
+    
+    self.brightnessImg.frame = CGRectMake((self.frameW-75)/2.0, (self.frameH-75)/2.0, 75, 75);
+    
+//    [self.brightnessImg mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.mas_equalTo(self);
+//        make.centerX.mas_equalTo(self);
+//        make.width.mas_equalTo(75);
+//        make.height.mas_equalTo(75);
+//
+//    }];
     
     for (int i = 0; i < 16; i++) {
         CGFloat width = 9;
@@ -128,14 +136,18 @@
         width = kScreenHeight;
     }
     
-    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.superView).offset((height -160)/2.0);
-        make.left.mas_equalTo(self.superView).offset((width -200)/2.0);
-        
-        make.width.mas_equalTo(150);
-        make.height.mas_equalTo(150);
-        
-    }];
+    
+    self.frame = CGRectMake((self.superView.frameW-150)/2.0, (self.superView.frameH-150)/2.0, 150, 150);
+    
+    
+//    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(self.superView).offset((height -160)/2.0);
+//        make.left.mas_equalTo(self.superView).offset((width -200)/2.0);
+//
+//        make.width.mas_equalTo(150);
+//        make.height.mas_equalTo(150);
+//
+//    }];
 }
 - (void)setProgress:(float)progress{
     _progress = progress;

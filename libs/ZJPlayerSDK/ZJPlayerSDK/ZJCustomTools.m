@@ -139,7 +139,6 @@ typedef NS_ENUM(NSInteger, GIFSize) {
     return url;
 }
 
-
 #pragma mark -截取视频
 - (void)interceptVideoAndVideoUrl:(NSURL *)videoUrl withOutPath:(NSString *)outPath outputFileType:(NSString *)outputFileType range:(NSRange)videoRange compositionProgressBlock:(void(^)(CGFloat progress))compositionProgressBlock intercept:(InterceptBlock)interceptBlock {
     

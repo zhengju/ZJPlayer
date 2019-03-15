@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ZJPlayer/DownloadList/DownloadListCell.m"
-            timestampString = "574310081.8972991"
+            filePath = "libs/ZJPlayerSDK/ZJPlayerSDK/Player/ZJTopView.m"
+            timestampString = "574325245.009431"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
-            landmarkName = "-setModel:"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
+            landmarkName = "-setTitle:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

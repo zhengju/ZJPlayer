@@ -8,7 +8,7 @@
 
 
 #import <UIKit/UIKit.h>
-#import "ZJCommonHeader.h"
+
 @interface ZJProgress : UIView
 /**
  调整的时间点

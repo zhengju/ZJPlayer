@@ -26,7 +26,7 @@
  */
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import "ZJCommonHeader.h"
+//#import "ZJCommonHeader.h"
 
 @class ZJControlView;
 @class ZJTopView;

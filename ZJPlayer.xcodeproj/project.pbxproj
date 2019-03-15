@@ -20,22 +20,15 @@
 		1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830FDA51F72566B00097115 /* CoreGraphics.framework */; };
 		18318B65216E45D4006507B6 /* InterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18318B63216E45D4006507B6 /* InterceptView.m */; };
 		184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829B41F79E99200BF2BDB /* ZJSuperViewController.m */; };
-		184829C11F7A05A600BF2BDB /* ZJCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829C01F7A05A600BF2BDB /* ZJCustomTools.m */; };
 		185364342172ED5200EAD522 /* ZJDisplayVideoToSaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 185364332172ED5200EAD522 /* ZJDisplayVideoToSaveView.m */; };
 		1877119721733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1877119621733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m */; };
-		1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */; };
-		1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */; };
 		18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204CE1F68FFFD0043A18E /* ZJNavigationController.m */; };
 		18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204D01F68FFFD0043A18E /* ZJTabBar.m */; };
 		18C204D91F68FFFD0043A18E /* ZJTabBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204D21F68FFFD0043A18E /* ZJTabBarButton.m */; };
 		18C204DA1F68FFFD0043A18E /* ZJTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204D41F68FFFD0043A18E /* ZJTabBarController.m */; };
 		18C204DB1F68FFFD0043A18E /* ZJTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204D61F68FFFD0043A18E /* ZJTabBarItem.m */; };
 		18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204DD1F6900260043A18E /* MyTabBarController.m */; };
-		18C204ED1F692AC60043A18E /* UIView+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204EC1F692AC60043A18E /* UIView+Player.m */; };
-		18C205371F6B6B4C0043A18E /* ZJLoadingIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C205361F6B6B4C0043A18E /* ZJLoadingIndicator.m */; };
 		18C2053A1F6B71F30043A18E /* UIViewController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C205391F6B71F30043A18E /* UIViewController+Player.m */; };
-		18C2053D1F6BA30C0043A18E /* ZJProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C2053C1F6BA30C0043A18E /* ZJProgress.m */; };
-		18C205401F6BE3030043A18E /* ZJTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C2053F1F6BE3030043A18E /* ZJTopView.m */; };
 		18C4B5F21F5FF025002430E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F11F5FF025002430E4 /* main.m */; };
 		18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F41F5FF025002430E4 /* AppDelegate.m */; };
 		18C4B5F81F5FF025002430E4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C4B5F71F5FF025002430E4 /* ViewController.m */; };
@@ -43,10 +36,7 @@
 		18C4B5FD1F5FF025002430E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5FC1F5FF025002430E4 /* Assets.xcassets */; };
 		18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C4B5FE1F5FF025002430E4 /* LaunchScreen.storyboard */; };
 		18D574171F7DF15700E77007 /* UITabBarController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D574161F7DF15700E77007 /* UITabBarController+Player.m */; };
-		18D5741A1F7E2D2600E77007 /* ZJPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D574191F7E2D2600E77007 /* ZJPlayerController.m */; };
 		18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */; };
-		18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */; };
-		18EE509B1F6FD82900A5C606 /* ZJBrightness.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EE509A1F6FD82900A5C606 /* ZJBrightness.m */; };
 		18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
 		7A05D6312175D4EF0077728B /* ZJGlKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05D62F2175D4EF0077728B /* ZJGlKImageView.m */; };
@@ -62,7 +52,7 @@
 		7A6DA0B02171A29B008C02CB /* UIButton+ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0AF2171A29B008C02CB /* UIButton+ZJPlayer.m */; };
 		7A6DA0B32171D773008C02CB /* ZJInterceptBottomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DA0B22171D773008C02CB /* ZJInterceptBottomTools.m */; };
 		7A72136C223B3CCC00B7C02E /* libZJHttpDownload.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A721365223A6F4300B7C02E /* libZJHttpDownload.a */; };
-		7A721391223B440100B7C02E /* ZJCacheTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A72138F223B440000B7C02E /* ZJCacheTask.m */; };
+		7A7213D3223B4A4B00B7C02E /* libZJPlayerSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A7213D2223B49DA00B7C02E /* libZJPlayerSDK.a */; };
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
 		7AA4F374216C46C70091094C /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F373216C46C60091094C /* NSGIF.m */; };
 		7AA4F37C216C8AA30091094C /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4F37B216C8AA30091094C /* UIView+Frame.m */; };
@@ -76,6 +66,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 7A72132E223A6A9000B7C02E;
 			remoteInfo = ZJHttpDownload;
+		};
+		7A7213D1223B49DA00B7C02E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A7213CD223B49DA00B7C02E /* ZJPlayerSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7A72139B223B491800B7C02E;
+			remoteInfo = ZJPlayerSDK;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -117,17 +114,11 @@
 		18318B64216E45D4006507B6 /* InterceptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptView.h; sourceTree = "<group>"; };
 		184829B41F79E99200BF2BDB /* ZJSuperViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJSuperViewController.m; sourceTree = "<group>"; };
 		184829B61F79EA6B00BF2BDB /* ZJSuperViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJSuperViewController.h; sourceTree = "<group>"; };
-		184829BF1F7A05A600BF2BDB /* ZJCustomTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJCustomTools.h; sourceTree = "<group>"; };
-		184829C01F7A05A600BF2BDB /* ZJCustomTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJCustomTools.m; sourceTree = "<group>"; };
 		185364322172ED5200EAD522 /* ZJDisplayVideoToSaveView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveView.h; sourceTree = "<group>"; };
 		185364332172ED5200EAD522 /* ZJDisplayVideoToSaveView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDisplayVideoToSaveView.m; sourceTree = "<group>"; };
 		1877119521733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveTopView.h; sourceTree = "<group>"; };
 		1877119621733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDisplayVideoToSaveTopView.m; sourceTree = "<group>"; };
-		1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayer.h; sourceTree = "<group>"; };
-		1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayer.m; sourceTree = "<group>"; };
 		1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCommonHeader.h; sourceTree = "<group>"; };
-		1895D6D01F64E6BD00A3D3CD /* ZJControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJControlView.h; sourceTree = "<group>"; };
-		1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJControlView.m; sourceTree = "<group>"; };
 		18C204CD1F68FFFD0043A18E /* ZJNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJNavigationController.h; sourceTree = "<group>"; };
 		18C204CE1F68FFFD0043A18E /* ZJNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJNavigationController.m; sourceTree = "<group>"; };
 		18C204CF1F68FFFD0043A18E /* ZJTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJTabBar.h; sourceTree = "<group>"; };
@@ -140,17 +131,9 @@
 		18C204D61F68FFFD0043A18E /* ZJTabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJTabBarItem.m; sourceTree = "<group>"; };
 		18C204DC1F6900260043A18E /* MyTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTabBarController.h; sourceTree = "<group>"; };
 		18C204DD1F6900260043A18E /* MyTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTabBarController.m; sourceTree = "<group>"; };
-		18C204EB1F692AC60043A18E /* UIView+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Player.h"; sourceTree = "<group>"; };
-		18C204EC1F692AC60043A18E /* UIView+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Player.m"; sourceTree = "<group>"; };
 		18C205261F6A8CA80043A18E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		18C205351F6B6B4C0043A18E /* ZJLoadingIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJLoadingIndicator.h; sourceTree = "<group>"; };
-		18C205361F6B6B4C0043A18E /* ZJLoadingIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJLoadingIndicator.m; sourceTree = "<group>"; };
 		18C205381F6B71F30043A18E /* UIViewController+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Player.h"; sourceTree = "<group>"; };
 		18C205391F6B71F30043A18E /* UIViewController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Player.m"; sourceTree = "<group>"; };
-		18C2053B1F6BA30C0043A18E /* ZJProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJProgress.h; sourceTree = "<group>"; };
-		18C2053C1F6BA30C0043A18E /* ZJProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJProgress.m; sourceTree = "<group>"; };
-		18C2053E1F6BE3030043A18E /* ZJTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJTopView.h; sourceTree = "<group>"; };
-		18C2053F1F6BE3030043A18E /* ZJTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJTopView.m; sourceTree = "<group>"; };
 		18C4B5ED1F5FF025002430E4 /* ZJPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZJPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C4B5F11F5FF025002430E4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		18C4B5F31F5FF025002430E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -163,14 +146,8 @@
 		18C4B6011F5FF025002430E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D574151F7DF15700E77007 /* UITabBarController+Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Player.h"; sourceTree = "<group>"; };
 		18D574161F7DF15700E77007 /* UITabBarController+Player.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+Player.m"; sourceTree = "<group>"; };
-		18D574181F7E2D2600E77007 /* ZJPlayerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayerController.h; sourceTree = "<group>"; };
-		18D574191F7E2D2600E77007 /* ZJPlayerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJPlayerController.m; sourceTree = "<group>"; };
 		18EE50931F6FAD5F00A5C606 /* ZJAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJAlertView.h; sourceTree = "<group>"; };
 		18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJAlertView.m; sourceTree = "<group>"; };
-		18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJResourceLoaderManager.h; sourceTree = "<group>"; };
-		18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJResourceLoaderManager.m; sourceTree = "<group>"; };
-		18EE50991F6FD82900A5C606 /* ZJBrightness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJBrightness.h; sourceTree = "<group>"; };
-		18EE509A1F6FD82900A5C606 /* ZJBrightness.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJBrightness.m; sourceTree = "<group>"; };
 		18FBE06E1F6F7ABE00133732 /* UINavigationController+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Player.h"; sourceTree = "<group>"; };
 		18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Player.m"; sourceTree = "<group>"; };
 		361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZJPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,8 +177,7 @@
 		7A6DA0B12171D773008C02CB /* ZJInterceptBottomTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptBottomTools.h; sourceTree = "<group>"; };
 		7A6DA0B22171D773008C02CB /* ZJInterceptBottomTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptBottomTools.m; sourceTree = "<group>"; };
 		7A721360223A6F4200B7C02E /* ZJHttpDownload.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJHttpDownload.xcodeproj; path = ZJHttpDownload/ZJHttpDownload.xcodeproj; sourceTree = "<group>"; };
-		7A72138F223B440000B7C02E /* ZJCacheTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJCacheTask.m; sourceTree = "<group>"; };
-		7A721390223B440100B7C02E /* ZJCacheTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCacheTask.h; sourceTree = "<group>"; };
+		7A7213CD223B49DA00B7C02E /* ZJPlayerSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJPlayerSDK.xcodeproj; path = ZJPlayerSDK/ZJPlayerSDK.xcodeproj; sourceTree = "<group>"; };
 		7AA4F36E216B6E590091094C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		7AA4F372216C46C60091094C /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
@@ -219,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A7213D3223B4A4B00B7C02E /* libZJPlayerSDK.a in Frameworks */,
 				7A72136C223B3CCC00B7C02E /* libZJHttpDownload.a in Frameworks */,
 				7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */,
 				1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */,
@@ -293,25 +270,6 @@
 			path = VideoScreenshot;
 			sourceTree = "<group>";
 		};
-		18318B66216E4671006507B6 /* Player */ = {
-			isa = PBXGroup;
-			children = (
-				1895D6CC1F64BD0B00A3D3CD /* ZJPlayer.h */,
-				1895D6CD1F64BD0B00A3D3CD /* ZJPlayer.m */,
-				18D574181F7E2D2600E77007 /* ZJPlayerController.h */,
-				18D574191F7E2D2600E77007 /* ZJPlayerController.m */,
-				1895D6D01F64E6BD00A3D3CD /* ZJControlView.h */,
-				1895D6D11F64E6BD00A3D3CD /* ZJControlView.m */,
-				18C2053E1F6BE3030043A18E /* ZJTopView.h */,
-				18C2053F1F6BE3030043A18E /* ZJTopView.m */,
-				18C2053B1F6BA30C0043A18E /* ZJProgress.h */,
-				18C2053C1F6BA30C0043A18E /* ZJProgress.m */,
-				18EE50991F6FD82900A5C606 /* ZJBrightness.h */,
-				18EE509A1F6FD82900A5C606 /* ZJBrightness.m */,
-			);
-			path = Player;
-			sourceTree = "<group>";
-		};
 		18318B67216E4751006507B6 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,8 +281,6 @@
 				18FBE06F1F6F7ABE00133732 /* UINavigationController+Player.m */,
 				18D574151F7DF15700E77007 /* UITabBarController+Player.h */,
 				18D574161F7DF15700E77007 /* UITabBarController+Player.m */,
-				18C204EB1F692AC60043A18E /* UIView+Player.h */,
-				18C204EC1F692AC60043A18E /* UIView+Player.m */,
 				1811D0F21F74D59A00352CB2 /* AppDelegate+Player.h */,
 				1811D0F31F74D59A00352CB2 /* AppDelegate+Player.m */,
 				7A6DA0AE2171A29B008C02CB /* UIButton+ZJPlayer.h */,
@@ -353,17 +309,8 @@
 			isa = PBXGroup;
 			children = (
 				18318B67216E4751006507B6 /* Category */,
-				18318B66216E4671006507B6 /* Player */,
 				18318B62216E45D4006507B6 /* VideoScreenshot */,
-				18C205351F6B6B4C0043A18E /* ZJLoadingIndicator.h */,
-				18C205361F6B6B4C0043A18E /* ZJLoadingIndicator.m */,
-				184829BF1F7A05A600BF2BDB /* ZJCustomTools.h */,
-				184829C01F7A05A600BF2BDB /* ZJCustomTools.m */,
 				1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */,
-				7A721390223B440100B7C02E /* ZJCacheTask.h */,
-				7A72138F223B440000B7C02E /* ZJCacheTask.m */,
-				18EE50961F6FBB9500A5C606 /* ZJResourceLoaderManager.h */,
-				18EE50971F6FBB9500A5C606 /* ZJResourceLoaderManager.m */,
 				18EE50931F6FAD5F00A5C606 /* ZJAlertView.h */,
 				18EE50941F6FAD5F00A5C606 /* ZJAlertView.m */,
 			);
@@ -461,6 +408,7 @@
 		7A721347223A6F3000B7C02E /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				7A7213CD223B49DA00B7C02E /* ZJPlayerSDK.xcodeproj */,
 				7A721360223A6F4200B7C02E /* ZJHttpDownload.xcodeproj */,
 			);
 			path = libs;
@@ -470,6 +418,14 @@
 			isa = PBXGroup;
 			children = (
 				7A721365223A6F4300B7C02E /* libZJHttpDownload.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7A7213CE223B49DA00B7C02E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7A7213D2223B49DA00B7C02E /* libZJPlayerSDK.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -538,6 +494,10 @@
 					ProductGroup = 7A721361223A6F4200B7C02E /* Products */;
 					ProjectRef = 7A721360223A6F4200B7C02E /* ZJHttpDownload.xcodeproj */;
 				},
+				{
+					ProductGroup = 7A7213CE223B49DA00B7C02E /* Products */;
+					ProjectRef = 7A7213CD223B49DA00B7C02E /* ZJPlayerSDK.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -552,6 +512,13 @@
 			fileType = archive.ar;
 			path = libZJHttpDownload.a;
 			remoteRef = 7A721364223A6F4300B7C02E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7A7213D2223B49DA00B7C02E /* libZJPlayerSDK.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libZJPlayerSDK.a;
+			remoteRef = 7A7213D1223B49DA00B7C02E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -637,40 +604,29 @@
 				18D574171F7DF15700E77007 /* UITabBarController+Player.m in Sources */,
 				18FBE0701F6F7ABE00133732 /* UINavigationController+Player.m in Sources */,
 				1877119721733F8B0086DE5C /* ZJDisplayVideoToSaveTopView.m in Sources */,
-				18C205401F6BE3030043A18E /* ZJTopView.m in Sources */,
 				7A6DA0A92170973D008C02CB /* UIImage+ZJSaveToCameraRoll.m in Sources */,
 				18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */,
 				7A6DA09C216F784B008C02CB /* ZJScreenCaptureToolBox.m in Sources */,
 				7A6DA0B02171A29B008C02CB /* UIButton+ZJPlayer.m in Sources */,
-				7A721391223B440100B7C02E /* ZJCacheTask.m in Sources */,
 				184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */,
 				18318B65216E45D4006507B6 /* InterceptView.m in Sources */,
 				182273E51F7907D700156FDA /* DownloadList.m in Sources */,
 				182273E71F7907DB00156FDA /* DownloadListController.m in Sources */,
 				1811D0F41F74D59A00352CB2 /* AppDelegate+Player.m in Sources */,
-				18D5741A1F7E2D2600E77007 /* ZJPlayerController.m in Sources */,
-				18EE50981F6FBB9500A5C606 /* ZJResourceLoaderManager.m in Sources */,
-				184829C11F7A05A600BF2BDB /* ZJCustomTools.m in Sources */,
 				18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */,
-				18C205371F6B6B4C0043A18E /* ZJLoadingIndicator.m in Sources */,
 				18EE50951F6FAD5F00A5C606 /* ZJAlertView.m in Sources */,
 				7A6DA088216EE12D008C02CB /* ZJInterceptTopView.m in Sources */,
 				7A6DA0AC21709799008C02CB /* NSURL+ZJSaveToCameraRoll.m in Sources */,
 				18C204DB1F68FFFD0043A18E /* ZJTabBarItem.m in Sources */,
 				18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */,
-				1895D6D21F64E6BD00A3D3CD /* ZJControlView.m in Sources */,
 				182273E41F7907B700156FDA /* VideoController.m in Sources */,
 				18C2053A1F6B71F30043A18E /* UIViewController+Player.m in Sources */,
-				18EE509B1F6FD82900A5C606 /* ZJBrightness.m in Sources */,
 				7A6DA0A32170896F008C02CB /* ZJVideoTools.m in Sources */,
-				18C2053D1F6BA30C0043A18E /* ZJProgress.m in Sources */,
 				7A6DA0A6217095EE008C02CB /* ZJSaveToCameraRollOperation.m in Sources */,
 				7AA4F37F216CA8590091094C /* UIImage+Crop.m in Sources */,
 				7A6DA08B216F2071008C02CB /* ZJSelectFrameView.m in Sources */,
 				7A05D6312175D4EF0077728B /* ZJGlKImageView.m in Sources */,
-				1895D6CE1F64BD0B00A3D3CD /* ZJPlayer.m in Sources */,
 				182273E31F7907B500156FDA /* VideoList.m in Sources */,
-				18C204ED1F692AC60043A18E /* UIView+Player.m in Sources */,
 				18C4B5F21F5FF025002430E4 /* main.m in Sources */,
 				18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */,
 				7A6DA0B32171D773008C02CB /* ZJInterceptBottomTools.m in Sources */,
@@ -801,7 +757,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2FFNFZE3QD;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/libs/ZJHttpDownload/ZJHttpDownload\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/libs/ZJHttpDownload/ZJHttpDownload\"/**",
+					"\"$(SRCROOT)/libs/ZJPlayerSDK/ZJPlayerSDK\"/**",
+				);
 				INFOPLIST_FILE = ZJPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -829,7 +788,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2FFNFZE3QD;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/libs/ZJHttpDownload/ZJHttpDownload\"/**";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/libs/ZJHttpDownload/ZJHttpDownload\"/**",
+					"\"$(SRCROOT)/libs/ZJPlayerSDK/ZJPlayerSDK\"/**",
+				);
 				INFOPLIST_FILE = ZJPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

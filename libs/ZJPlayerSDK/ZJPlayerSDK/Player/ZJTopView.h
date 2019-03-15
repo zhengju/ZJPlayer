@@ -7,7 +7,6 @@
 //顶部控件
 
 #import <UIKit/UIKit.h>
-#import "ZJCommonHeader.h"
 @protocol ZJTopViewDelegate <NSObject>
 
 /**
@@ -32,4 +31,6 @@
  倍速归1.0X
  */
 - (void)resetRate;
+- (void)resetFrame;
+
 @end
