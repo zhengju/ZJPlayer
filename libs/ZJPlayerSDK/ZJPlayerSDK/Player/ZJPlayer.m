@@ -273,9 +273,12 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         _url = url;
         self.controller = controller;
         self.fatherView = superView;
-        self.frameOnFatherView = frame;
-        [self configureUI];
         
+        if (!CGRectEqualToRect(frame, CGRectZero)) {
+            self.frameOnFatherView = frame;
+            [self configureUI];
+        }
+
         [self setupObservers];//监听应用状态
     }
     return self;
@@ -287,6 +290,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
 - (void)deallocSelf{
     self.fatherView = nil;
+    [self.player pause];
     self.player = nil;
     self.playerLayer  = nil;
     self.playerItem = nil;
@@ -294,7 +298,12 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
      [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
+- (void)setPlayerFrame:(CGRect)frame{
+    
+    self.frameOnFatherView = frame;
+    [self configureUI];
+    
+}
 - (void)configureUI{
     self.isFullScreen = NO;
     self.isPlayAfterPause = NO;
@@ -1184,8 +1193,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     CGFloat width = kScreenWidth;
     CGFloat height = kScreenHeight;
 
-    [self.progress resetFrameisFullScreen:NO];
-    [self.brightness resetFrameisFullScreen:NO];
+    [self.progress resetFrameisFullScreen:YES];
+    [self.brightness resetFrameisFullScreen:YES];
 
     
     self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);

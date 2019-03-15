@@ -131,23 +131,15 @@
     CGFloat width = self.superView.bounds.size.width;
     if (isFullScreen) {
         
-        height = kScreenWidth;
+        height = kScreenHeight;
         
-        width = kScreenHeight;
+        width = kScreenWidth;
+        
+        self.frame = CGRectMake((width-150)/2.0, (height-150)/2.0, 150, 150);
+    }else{
+        self.frame = CGRectMake((self.superView.frameW-150)/2.0, (self.superView.frameH-150)/2.0, 150, 150);
     }
-    
-    
-    self.frame = CGRectMake((self.superView.frameW-150)/2.0, (self.superView.frameH-150)/2.0, 150, 150);
-    
-    
-//    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(self.superView).offset((height -160)/2.0);
-//        make.left.mas_equalTo(self.superView).offset((width -200)/2.0);
-//
-//        make.width.mas_equalTo(150);
-//        make.height.mas_equalTo(150);
-//
-//    }];
+
 }
 - (void)setProgress:(float)progress{
     _progress = progress;

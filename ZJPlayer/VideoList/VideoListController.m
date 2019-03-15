@@ -84,6 +84,9 @@
     
     self.player = [ZJPlayer sharePlayer];
     
+    [self.player deallocSelf];
+    [self.player removeFromSuperview];
+
     self.player.indexPath = indexPath;
     
     self.player.url = [NSURL URLWithString:cell.model.url];
@@ -94,14 +97,8 @@
 
     [cell addSubview:self.player];
     
-    self.player.frame = CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height);
-//    [self.player mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(cell.topView.mas_bottom).offset(0);
-//        make.left.mas_equalTo(cell);
-//        make.right.mas_equalTo(cell);
-//        make.bottom.mas_equalTo(cell.bottomView.mas_top).offset(0);
-//    }];
-    
+    [self.player setPlayerFrame:CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height)];
+
     [self.player play];
     
 }
@@ -159,6 +156,7 @@
     
     return  cell;
 }
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }

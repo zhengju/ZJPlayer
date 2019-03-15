@@ -40,4 +40,5 @@
  旋转之后重新调整约束
  */
 - (void)resetFrameisFullScreen:(BOOL)isFullScreen;
+
 @end

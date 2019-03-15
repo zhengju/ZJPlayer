@@ -30,10 +30,10 @@
     
     
     
-//    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/rongch.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
-//    player.isRotatingSmallScreen = YES;
-//
-//    [self.view addSubview:player];
+    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/rongch.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
+    player.isRotatingSmallScreen = YES;
+
+    [self.view addSubview:player];
 
 //    ZJPlayGIFView * view = [[ZJPlayGIFView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
 //    [self.view addSubview:view];

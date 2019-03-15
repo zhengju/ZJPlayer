@@ -119,6 +119,9 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
  单例生成player
  */
 + (id)sharePlayer;
+
+- (void)setPlayerFrame:(CGRect)frame;
+
 /**
  与url初始化
  */
