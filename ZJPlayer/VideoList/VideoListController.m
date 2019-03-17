@@ -60,14 +60,14 @@
     NSArray * titles = @[
                          @"共享新时代 共赢新发展",
                          @"兴隆。国际城",
-                         @"海妖宝藏",
+                         @"苹果",
                          @"共享新时代 共赢新发展",
                          ];
 
     NSArray * urls = @[
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
                        @"http://img.house.china.com.cn/voice/rongch.mp4",
-                       @"http://vf1.mtime.cn/Video/2012/04/23/mp4/120423212602431929.mp4",
+                       @"https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4",
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
                        ];
     
@@ -82,9 +82,9 @@
 #pragma 加载视频player
 - (void)initPlayer:(NSIndexPath *)indexPath cell:(VideoListCell*)cell{
     
-    self.player = [ZJPlayer sharePlayer];
-    
-    [self.player deallocSelf];
+//    self.player = [ZJPlayer sharePlayer];
+//
+//    [self.player deallocSelf];
     [self.player removeFromSuperview];
 
     self.player.indexPath = indexPath;
@@ -96,7 +96,7 @@
     self.player.delegate = self;
 
     [cell addSubview:self.player];
-    
+
     [self.player setPlayerFrame:CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height)];
 
     [self.player play];
@@ -112,23 +112,13 @@
     self.tableView.delegate = self;
     
     [self.view addSubview:self.tableView];
+    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    NSArray * cells = [self.tableView visibleCells];
-    
-    if (cells.count == 3) {
-        
-        VideoListCell * cell = cells[1];
-        if (cell.indexPath != self.player.indexPath) {//
-            [self initPlayer:cell.indexPath cell:cell];
-        }
-    }else if (cells.count == 2) {
-        VideoListCell * cell = cells[0];
-        if (cell.indexPath.row == 0 && cell.indexPath != self.player.indexPath) {
-            [self initPlayer:cell.indexPath cell:cell];
-        }
-    }
+
+    [self.player pause];
+
 }
 
 #pragma UITableViewDataSource

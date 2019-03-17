@@ -62,6 +62,8 @@
                 _model.image = image;
             });
         });
+    }else{
+        self.icon.image = _model.image;
     }
 }
 

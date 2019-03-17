@@ -280,6 +280,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
 
         [self setupObservers];//监听应用状态
+        [self addNotificationCenter];
+        
+        //  [self addSwipeGesture];
+        
+        //给playView加手势
+        UITapGestureRecognizer * tapGes = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTap)];
+        [self addGestureRecognizer:tapGes];
     }
     return self;
 }
@@ -296,14 +303,66 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     self.playerItem = nil;
     self.asset = nil;
 
+    for (UIView * view in self.subviews) {
+        [view removeFromSuperview];
+    }
+    
      [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 - (void)setPlayerFrame:(CGRect)frame{
-    
+
     self.frameOnFatherView = frame;
+
     [self configureUI];
-    
+
 }
+
+- (AVPlayer *)player{
+    if (_player == nil) {
+        _player = [[AVPlayer alloc] init];
+    }
+    return _player;
+}
+- (AVPlayerLayer *)playerLayer{
+    if (_playerLayer == nil) {
+        _playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+        // 把Layer加到底部View上 //放到最下面，防止遮挡
+        [self.layer insertSublayer:_playerLayer atIndex:1];
+    }
+    return _playerLayer;
+}
+- (UIImageView *)BGImgView{
+    if (_BGImgView == nil) {
+        _BGImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height)];
+        [self addSubview:_BGImgView];
+    }
+    return _BGImgView;
+}
+- (ZJTopView *)topView{
+    if (_topView == nil) {
+        _topView = [[ZJTopView alloc]initWithFrame:CGRectMake(0, 0, self.frameOnFatherView.size.width, 50)];
+        _topView.delegate = self;
+        _topView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
+        [self addSubview:_topView];
+    }
+    return _topView;
+}
+- (ZJControlView *)bottomView{
+    if (_bottomView == nil) {
+        _bottomView =[[ZJControlView alloc]initWithFrame:CGRectMake(0, self.frameOnFatherView.size.height-50, self.frameOnFatherView.size.width, 50)];
+        _bottomView.delegate = self;
+        [self addSubview:_bottomView];
+    }
+    return _bottomView;
+}
+- (ZJLoadingIndicator *)loadingIndicator{
+    if (_loadingIndicator == nil) {
+        _loadingIndicator = [[ZJLoadingIndicator alloc]init];
+        [self addSubview:_loadingIndicator];
+    }
+    return _loadingIndicator;
+}
+
 - (void)configureUI{
     self.isFullScreen = NO;
     self.isPlayAfterPause = NO;
@@ -312,13 +371,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     // 初始化播放器item
 //    self.asset=[[AVURLAsset alloc]initWithURL:_url options:nil];
 //    self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
-
-    self.player = [[AVPlayer alloc] init];
     
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
-    // 初始化播放器的Layer
-    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-    
     /*
      * layer的填充属性 和UIImageView的填充属性类似
      * AVLayerVideoGravityResizeAspect 等比例拉伸，会留白
@@ -326,57 +380,38 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
      * AVLayerVideoGravityResize // 保持原有大小拉伸
      */
     self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    // 把Layer加到底部View上 //放到最下面，防止遮挡
-    [self.layer insertSublayer:self.playerLayer atIndex:1];
+
   
     self.layer.backgroundColor = [UIColor blackColor].CGColor;
     
     if (_url.absoluteString.length > 0) {
         self.url = _url;
     }
-    
-    self.BGImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height)];
+
     self.BGImgView.image = [ZJCustomTools thumbnailImageRequest:10.5 url:self.url.absoluteString];
-    [self addSubview:self.BGImgView];
+    
     
     //顶部栏
-    self.topView = [[ZJTopView alloc]initWithFrame:CGRectMake(0, 0, self.frameOnFatherView.size.width, 50)];
-    self.topView.delegate = self;
-    self.topView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
-    self.topView.hidden = YES;
-    [self addSubview:self.topView];
 
+     self.topView.hidden = YES;
+    
     //底部
-    
-    self.bottomView = [[ZJControlView alloc]initWithFrame:CGRectMake(0, self.frameOnFatherView.size.height-50, self.frameOnFatherView.size.width, 50)];
-    
     self.bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
-    self.bottomView.delegate = self;
-    [self addSubview:self.bottomView];
 
-    self.loadingIndicator = [[ZJLoadingIndicator alloc]init];
-    [self addSubview:self.loadingIndicator];
-    
-    
     self.loadingIndicator.frame = CGRectMake((self.frameOnFatherView.size.width-35)/2.0, (self.frameOnFatherView.size.height-35)/2.0, 35, 35);
 
     self.loadingIndicator.progress = 0.5;
     
-    self.progress = [[ZJProgress alloc]initWithSuperView:self];
-    self.brightness = [[ZJBrightness alloc]initWithSuperView:self];
-    
-    
-  
-    self.volumeViewSlider.frame = CGRectMake(-1000, -1000, 100, 100);
-    
+    if (self.progress == nil) {
+         self.progress = [[ZJProgress alloc]initWithSuperView:self];
+    }
+    if (self.brightness == nil) {
+        self.brightness = [[ZJBrightness alloc]initWithSuperView:self];
 
-    [self addNotificationCenter];
-    
-  //  [self addSwipeGesture];
-    
-    //给playView加手势
-    UITapGestureRecognizer * tapGes = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTap)];
-    [self addGestureRecognizer:tapGes];
+    }
+
+    self.volumeViewSlider.frame = CGRectMake(-1000, -1000, 100, 100);
+
     
 }
 #pragma  mark -- 加滑动手势
