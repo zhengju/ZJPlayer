@@ -9,15 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
-
+#import "ZJPlayerProtocol.h"
 @protocol InterceptViewDelegate <NSObject>
 
 - (void)interceptViewToback;
 
 @end
 
-
-@interface InterceptView : UIView
+@interface InterceptView : UIView<ZJPlayerProtocolDelegate>
 
 @property(strong,nonatomic) AVPlayerItem * playerItem;
 

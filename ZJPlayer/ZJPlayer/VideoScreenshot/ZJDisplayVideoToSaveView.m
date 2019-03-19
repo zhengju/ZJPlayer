@@ -9,7 +9,7 @@
 #import "ZJDisplayVideoToSaveView.h"
 #import "ZJCommonHeader.h"
 #import "ZJDisplayVideoToSaveTopView.h"
-#import "LYOpenGLView.h"
+#import "ZJOpenGLView.h"
 #import "ZJGlKImageView.h"
 #import "ZJPlayGIFView.h"
 #define ZJHeight kScreenHeight/2.0
@@ -21,9 +21,7 @@
 {
   
     CGRect   _videoCroppingFrame;
-    
-//    AVPlayerItemVideoOutput *_videoOutPut;
-    
+
     dispatch_queue_t _renderQueue;
     
     dispatch_queue_t _videoCroppingQueue;
@@ -62,7 +60,7 @@
 
 @property(nonatomic,strong) UIVisualEffectView *effectView;
 
-@property (nonatomic , strong) LYOpenGLView *mOpenGLView;
+@property (nonatomic , strong) ZJOpenGLView *mOpenGLView;
 
 @end
 
@@ -167,14 +165,15 @@
 
     _playLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(playerRender)];
     [_playLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    _playLink.frameInterval = 2;
+    _playLink.frameInterval = 1;
     
-//    self.mOpenGLView =
-//    [[LYOpenGLView alloc]initWithFrame:CGRectMake((kScreenWidth - _playFrame.size.width)/2.0, CGRectGetMaxY(self.topView.frame), _playFrame.size.width, _playFrame.size.height)];
-//    self.mOpenGLView.backgroundColor = [UIColor redColor];
-//    [self.mOpenGLView setupGL];
-//
-//    [self addSubview:self.mOpenGLView];
+    self.mOpenGLView =
+    [[ZJOpenGLView alloc]initWithFrame:CGRectMake((kScreenWidth - _playFrame.size.width)/2.0, CGRectGetMaxY(self.topView.frame), _playFrame.size.width, _playFrame.size.height)];
+    self.mOpenGLView.backgroundColor = [UIColor redColor];
+    
+    [self.mOpenGLView setupGL];
+
+    [self addSubview:self.mOpenGLView];
     
     
     _glkImgView = [[ZJGlKImageView alloc] init];
@@ -402,16 +401,19 @@
             if ([_videoOutPut hasNewPixelBufferForItemTime:itemTime]) {
                 CVPixelBufferRef pixelBuffer = [_videoOutPut copyPixelBufferForItemTime:itemTime itemTimeForDisplay:nil];
                 CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
-                CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
+//                CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    self.glkImgView.renderImg = outPutImg;
+                    //self.glkImgView.renderImg = outPutImg;
                     
-                    //[self.mOpenGLView displayPixelBuffer:pixelBuffer];
+                    self.mOpenGLView.isFullYUVRange = YES;
+                    [self.mOpenGLView displayPixelBuffer:pixelBuffer];
+                    
+                    CVBufferRelease(pixelBuffer);
                     
                 });
                 
-                CVBufferRelease(pixelBuffer);
+                
             }else{
                 NSLog(@"没有。。。");
             }

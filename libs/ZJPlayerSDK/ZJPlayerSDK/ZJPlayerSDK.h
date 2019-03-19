@@ -13,6 +13,7 @@
 #import "ZJCustomTools.h"
 #import "ZJCacheTask.h"
 #import "UIControl+ZJBlocksKit.h"
+#import "ZJPlayerProtocol.h"
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 

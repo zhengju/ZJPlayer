@@ -1,23 +1,15 @@
-//
-//  ViewController.m
-//  LearnOpenGLESWithGPUImage
-//
-//  Created by loyinglin on 16/5/10.
-//  Copyright © 2016年 loyinglin. All rights reserved.
-//
 
-#import "LYOpenGLView.h"
+#import "ZJOpenGLView.h"
 #import <QuartzCore/QuartzCore.h>
 #import <AVFoundation/AVUtilities.h>
 #import <mach/mach_time.h>
 #import <GLKit/GLKit.h>
+
+// Uniform index.
 enum
 {
     UNIFORM_Y,
     UNIFORM_UV,
-    UNIFORM_LUMA_THRESHOLD,
-    UNIFORM_CHROMA_THRESHOLD,
-    UNIFORM_ROTATION_ANGLE,
     UNIFORM_COLOR_CONVERSION_MATRIX,
     NUM_UNIFORMS
 };
@@ -47,7 +39,15 @@ static const GLfloat kColorConversion709[] = {
     1.793, -0.533,   0.0,
 };
 
-@interface LYOpenGLView ()
+// BT.601 full range (ref: http://www.equasys.de/colorconversion.html)
+const GLfloat kColorConversion601FullRange[] = {
+    1.0,    1.0,    1.0,
+    0.0,    -0.343, 1.765,
+    1.4,    -0.711, 0.0,
+};
+
+
+@interface ZJOpenGLView ()
 {
     // The pixel dimensions of the CAEAGLLayer.
     GLint _backingWidth;
@@ -76,7 +76,7 @@ static const GLfloat kColorConversion709[] = {
 
 @end
 
-@implementation LYOpenGLView
+@implementation ZJOpenGLView
 
 + (Class)layerClass
 {
@@ -87,28 +87,46 @@ static const GLfloat kColorConversion709[] = {
 {
     if ((self = [super initWithCoder:aDecoder]))
     {
-        // Use 2x scale factor on Retina displays.
         self.contentScaleFactor = [[UIScreen mainScreen] scale];
         
-        // Get and configure the layer.
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         
         eaglLayer.opaque = TRUE;
         eaglLayer.drawableProperties = @{ kEAGLDrawablePropertyRetainedBacking :[NSNumber numberWithBool:NO],
                                           kEAGLDrawablePropertyColorFormat : kEAGLColorFormatRGBA8};
         
-        // Set the context into which the frames will be drawn.
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         
         if (!_context || ![EAGLContext setCurrentContext:_context] || ![self loadShaders]) {
             return nil;
         }
         
-        // Set the default conversion to BT.709, which is the standard for HDTV.
         _preferredConversion = kColorConversion709;
     }
     return self;
 }
+
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+        self.contentScaleFactor = [[UIScreen mainScreen] scale];
+        
+        CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+        
+        eaglLayer.opaque = TRUE;
+        eaglLayer.drawableProperties = @{ kEAGLDrawablePropertyRetainedBacking :[NSNumber numberWithBool:NO],
+                                          kEAGLDrawablePropertyColorFormat : kEAGLColorFormatRGBA8};
+        
+        _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+        
+        if (!_context || ![EAGLContext setCurrentContext:_context] || ![self loadShaders]) {
+            return nil;
+        }
+        
+        _preferredConversion = kColorConversion709;
+    }
+    return self;
+}
+
 
 # pragma mark - OpenGL setup
 
@@ -120,12 +138,9 @@ static const GLfloat kColorConversion709[] = {
     
     glUseProgram(self.program);
     
-    // 0 and 1 are the texture IDs of _lumaTexture and _chromaTexture respectively.
     glUniform1i(uniforms[UNIFORM_Y], 0);
     glUniform1i(uniforms[UNIFORM_UV], 1);
-    glUniform1f(uniforms[UNIFORM_LUMA_THRESHOLD], self.lumaThreshold);
-    glUniform1f(uniforms[UNIFORM_CHROMA_THRESHOLD], self.chromaThreshold);
-    glUniform1f(uniforms[UNIFORM_ROTATION_ANGLE], self.preferredRotation);
+    
     glUniformMatrix3fv(uniforms[UNIFORM_COLOR_CONVERSION_MATRIX], 1, GL_FALSE, _preferredConversion);
     
     // Create CVOpenGLESTextureCacheRef for optimal CVPixelBufferRef to GLES texture conversion.
@@ -204,7 +219,9 @@ static const GLfloat kColorConversion709[] = {
             NSLog(@"No video texture cache");
             return;
         }
-        
+        if ([EAGLContext currentContext] != _context) {
+            [EAGLContext setCurrentContext:_context]; // 非常重要的一行代码
+        }
         [self cleanUpTextures];
         
         
@@ -214,12 +231,18 @@ static const GLfloat kColorConversion709[] = {
         CFTypeRef colorAttachments = CVBufferGetAttachment(pixelBuffer, kCVImageBufferYCbCrMatrixKey, NULL);
         
         if (colorAttachments == kCVImageBufferYCbCrMatrix_ITU_R_601_4) {
-            _preferredConversion = kColorConversion601;
+            if (self.isFullYUVRange) {
+                _preferredConversion = kColorConversion601FullRange;
+            }
+            else {
+                _preferredConversion = kColorConversion601;
+            }
         }
         else {
             _preferredConversion = kColorConversion709;
         }
         
+        //        _preferredConversion = kColorConversion601FullRange;
         /*
          CVOpenGLESTextureCacheCreateTextureFromImage will create GLES texture optimally from CVPixelBufferRef.
          */
@@ -233,10 +256,10 @@ static const GLfloat kColorConversion709[] = {
                                                            pixelBuffer,
                                                            NULL,
                                                            GL_TEXTURE_2D,
-                                                           GL_RED_EXT,
+                                                           GL_LUMINANCE,
                                                            frameWidth,
                                                            frameHeight,
-                                                           GL_RED_EXT,
+                                                           GL_LUMINANCE,
                                                            GL_UNSIGNED_BYTE,
                                                            0,
                                                            &_lumaTexture);
@@ -257,10 +280,10 @@ static const GLfloat kColorConversion709[] = {
                                                            pixelBuffer,
                                                            NULL,
                                                            GL_TEXTURE_2D,
-                                                           GL_RG_EXT,
+                                                           GL_LUMINANCE_ALPHA,
                                                            frameWidth / 2,
                                                            frameHeight / 2,
-                                                           GL_RG_EXT,
+                                                           GL_LUMINANCE_ALPHA,
                                                            GL_UNSIGNED_BYTE,
                                                            1,
                                                            &_chromaTexture);
@@ -269,7 +292,7 @@ static const GLfloat kColorConversion709[] = {
         }
         
         glBindTexture(CVOpenGLESTextureGetTarget(_chromaTexture), CVOpenGLESTextureGetName(_chromaTexture));
-        NSLog(@"id %d", CVOpenGLESTextureGetName(_chromaTexture));
+        //        NSLog(@"id %d", CVOpenGLESTextureGetName(_chromaTexture));
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -281,18 +304,15 @@ static const GLfloat kColorConversion709[] = {
         glViewport(0, 0, _backingWidth, _backingHeight);
     }
     
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.1f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Use shader program.
     glUseProgram(self.program);
-    glUniform1f(uniforms[UNIFORM_LUMA_THRESHOLD], self.lumaThreshold);
-    glUniform1f(uniforms[UNIFORM_CHROMA_THRESHOLD], self.chromaThreshold);
-    glUniform1f(uniforms[UNIFORM_ROTATION_ANGLE], self.preferredRotation);
     glUniformMatrix3fv(uniforms[UNIFORM_COLOR_CONVERSION_MATRIX], 1, GL_FALSE, _preferredConversion);
     
     // Set up the quad vertices with respect to the orientation and aspect ratio of the video.
-    CGRect vertexSamplingRect = AVMakeRectWithAspectRatioInsideRect(self.presentationRect, self.layer.bounds);
+    CGRect vertexSamplingRect = AVMakeRectWithAspectRatioInsideRect(CGSizeMake(_backingWidth, _backingHeight), self.layer.bounds);
     
     // Compute normalized quad coordinates to draw the frame into.
     CGSize normalizedSamplingSize = CGSizeMake(0.0, 0.0);
@@ -319,19 +339,15 @@ static const GLfloat kColorConversion709[] = {
         normalizedSamplingSize.width, normalizedSamplingSize.height,
     };
     
-    // Update attribute values.
+    // 更新顶点数据
     glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, 0, 0, quadVertexData);
     glEnableVertexAttribArray(ATTRIB_VERTEX);
     
-    /*
-     The texture vertices are set up such that we flip the texture vertically. This is so that our top left origin buffers match OpenGL's bottom left texture coordinate system.
-     */
-    CGRect textureSamplingRect = CGRectMake(0, 0, 1, 1);
-    GLfloat quadTextureData[] =  {
-        CGRectGetMinX(textureSamplingRect), CGRectGetMaxY(textureSamplingRect),
-        CGRectGetMaxX(textureSamplingRect), CGRectGetMaxY(textureSamplingRect),
-        CGRectGetMinX(textureSamplingRect), CGRectGetMinY(textureSamplingRect),
-        CGRectGetMaxX(textureSamplingRect), CGRectGetMinY(textureSamplingRect)
+    GLfloat quadTextureData[] =  { // 正常坐标
+        0, 1,
+        1, 1,
+        0, 0,
+        1, 0
     };
     
     glVertexAttribPointer(ATTRIB_TEXCOORD, 2, GL_FLOAT, 0, 0, quadTextureData);
@@ -340,7 +356,11 @@ static const GLfloat kColorConversion709[] = {
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     glBindRenderbuffer(GL_RENDERBUFFER, _colorBufferHandle);
-    [_context presentRenderbuffer:GL_RENDERBUFFER];
+    
+    if ([EAGLContext currentContext] == _context) {
+        [_context presentRenderbuffer:GL_RENDERBUFFER];
+    }
+    
 }
 
 #pragma mark -  OpenGL ES 2 shader compilation
@@ -350,7 +370,7 @@ static const GLfloat kColorConversion709[] = {
     GLuint vertShader, fragShader;
     NSURL *vertShaderURL, *fragShaderURL;
     
-    // Create the shader program.
+    
     self.program = glCreateProgram();
     
     // Create and compile the vertex shader.
@@ -400,9 +420,6 @@ static const GLfloat kColorConversion709[] = {
     // Get uniform locations.
     uniforms[UNIFORM_Y] = glGetUniformLocation(self.program, "SamplerY");
     uniforms[UNIFORM_UV] = glGetUniformLocation(self.program, "SamplerUV");
-    uniforms[UNIFORM_LUMA_THRESHOLD] = glGetUniformLocation(self.program, "lumaThreshold");
-    uniforms[UNIFORM_CHROMA_THRESHOLD] = glGetUniformLocation(self.program, "chromaThreshold");
-    uniforms[UNIFORM_ROTATION_ANGLE] = glGetUniformLocation(self.program, "preferredRotation");
     uniforms[UNIFORM_COLOR_CONVERSION_MATRIX] = glGetUniformLocation(self.program, "colorConversionMatrix");
     
     // Release vertex and fragment shaders.

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A7213A1223B491800B7C02E /* ZJPlayerSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A72139E223B491800B7C02E /* ZJPlayerSDK.h */; };
+		7A1A3CEF223F99C0001E2994 /* ZJPlayerProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */; };
 		7A7213C7223B498C00B7C02E /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BC223B498C00B7C02E /* ZJPlayer.m */; };
 		7A7213C8223B498C00B7C02E /* ZJProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BD223B498C00B7C02E /* ZJProgress.m */; };
 		7A7213C9223B498C00B7C02E /* ZJTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BE223B498C00B7C02E /* ZJTopView.m */; };
@@ -30,13 +30,14 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				7A7213A1223B491800B7C02E /* ZJPlayerSDK.h in CopyFiles */,
+				7A1A3CEF223F99C0001E2994 /* ZJPlayerProtocol.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayerProtocol.h; sourceTree = "<group>"; };
 		7A72139B223B491800B7C02E /* libZJPlayerSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZJPlayerSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A72139E223B491800B7C02E /* ZJPlayerSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayerSDK.h; sourceTree = "<group>"; };
 		7A7213BB223B498C00B7C02E /* ZJBrightness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJBrightness.h; sourceTree = "<group>"; };
@@ -132,6 +133,7 @@
 				7A7213EA223B72CC00B7C02E /* ZJCustomTools.m */,
 				7A7213ED223B73B800B7C02E /* ZJCacheTask.h */,
 				7A7213EC223B73B800B7C02E /* ZJCacheTask.m */,
+				7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */,
 			);
 			path = Player;
 			sourceTree = "<group>";

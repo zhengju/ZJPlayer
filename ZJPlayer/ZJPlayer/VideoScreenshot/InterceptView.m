@@ -89,6 +89,16 @@
     _playerItem = playerItem;
     
 }
+#pragma mark - ZJPlayerProtocolDelegate
+- (void)setFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime{
+    
+    self.frame = frame;
+    self.videoUrl = videoUrl;
+    self.playerItem = playerItem;
+    self.currentTtime = currentTime;
+    [self loadData];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame url:(NSURL *)videoUrl playerItem:(AVPlayerItem *)playerItem currentTime:(CMTime)currentTime{
     
     if (self = [super initWithFrame:frame]) {

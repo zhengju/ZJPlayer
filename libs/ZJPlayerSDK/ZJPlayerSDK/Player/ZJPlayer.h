@@ -26,7 +26,7 @@
  */
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-//#import "ZJCommonHeader.h"
+#import "ZJPlayerProtocol.h"
 
 @class ZJControlView;
 @class ZJTopView;
@@ -57,6 +57,9 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 @property(strong,nonatomic) ZJTopView * topView;
 
 @property(strong,nonatomic) ZJControlView * bottomView;
+
+@property(nonatomic, strong) UIView<ZJPlayerProtocolDelegate> * interceptView;
+
 /**
  默认背景图
  */

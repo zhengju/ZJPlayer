@@ -13,6 +13,7 @@
 #import "Masonry.h"
 #import "ZJDownloadManager.h"
 #import "ZJPlayGIFView.h"
+#import "InterceptView.h"
 @interface ViewController ()
 
 @end
@@ -29,8 +30,11 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
-    
+    InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
+
     ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/rongch.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
+    
+    player.interceptView  = interceptView;
     
     player.isRotatingSmallScreen = YES;
 
