@@ -14,6 +14,9 @@
 #import "ZJDownloadManager.h"
 #import "ZJPlayGIFView.h"
 #import "InterceptView.h"
+
+#import "MainViewController.h"
+#import <BlocksKit/BlocksKit.h>
 @interface ViewController ()
 
 @end
@@ -47,7 +50,27 @@
 
     [self.view addSubview:bgView];
     
+    
+    
+    //----看直播按钮
+    
+    UIButton * liveBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, kScreenHeight-150, kScreenWidth-100, 40)];
+    
+    [liveBtn setTitle:@"看直播" forState:UIControlStateNormal];
+
+    [liveBtn setBackgroundColor:[UIColor blueColor]];
+    
+    [liveBtn addTarget:self action:@selector(liveVideo) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:liveBtn];
+    
+    
 }
+- (void)liveVideo{
+    MainViewController * vc = [[MainViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     NSLog(@"原始controller消失");
