@@ -23,6 +23,51 @@ enum
     NUM_ATTRIBUTES
 };
 
+#define STRINGIZE(x) #x
+#define STRINGIZE2(x) STRINGIZE(x)
+#define SHADER_STRING(text) @ STRINGIZE2(text)
+
+NSString *const vertexShaderString1 = SHADER_STRING//顶点着色器
+(
+ attribute vec4 position;
+ attribute vec2 texCoord;
+ 
+ varying vec2 texCoordVarying;
+ 
+ void main()
+{
+    gl_Position = position;
+    texCoordVarying = texCoord;
+}
+ 
+);
+
+NSString *const fragmentShaderString = SHADER_STRING
+(
+ varying highp vec2 texCoordVarying;
+ precision mediump float;
+ 
+ uniform sampler2D SamplerY;
+ uniform sampler2D SamplerUV;
+ uniform mat3 colorConversionMatrix;
+ 
+ void main()
+{
+    mediump vec3 yuv;
+    lowp vec3 rgb;
+    
+    // Subtract constants to map the video range start at 0
+    yuv.x = (texture2D(SamplerY, texCoordVarying).r);// - (16.0/255.0));
+    yuv.yz = (texture2D(SamplerUV, texCoordVarying).ra - vec2(0.5, 0.5));
+    
+    rgb = colorConversionMatrix * yuv;
+    
+    gl_FragColor = vec4(rgb, 1);
+    //    gl_FragColor = vec4(1, 0, 0, 1);
+}
+ );
+
+
 // Color Conversion Constants (YUV to RGB) including adjustment from 16-235/16-240 (video range)
 
 // BT.601, which is the standard for SDTV.
@@ -374,15 +419,19 @@ const GLfloat kColorConversion601FullRange[] = {
     self.program = glCreateProgram();
     
     // Create and compile the vertex shader.
-    vertShaderURL = [[NSBundle mainBundle] URLForResource:@"Shader" withExtension:@"vsh"];
-    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER URL:vertShaderURL]) {
+//    vertShaderURL = [[NSBundle mainBundle] URLForResource:@"Shader" withExtension:@"vsh"];
+    
+    
+    
+    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER URL:vertexShaderString1]) {
         NSLog(@"Failed to compile vertex shader");
         return NO;
     }
     
     // Create and compile fragment shader.
-    fragShaderURL = [[NSBundle mainBundle] URLForResource:@"Shader" withExtension:@"fsh"];
-    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER URL:fragShaderURL]) {
+//    fragShaderURL = [[NSBundle mainBundle] URLForResource:@"Shader" withExtension:@"fsh"];
+    
+    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER URL:fragmentShaderString]) {
         NSLog(@"Failed to compile fragment shader");
         return NO;
     }
@@ -435,18 +484,18 @@ const GLfloat kColorConversion601FullRange[] = {
     return YES;
 }
 
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type URL:(NSURL *)URL
+- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type URL:(NSString *)URL
 {
     NSError *error;
-    NSString *sourceString = [[NSString alloc] initWithContentsOfURL:URL encoding:NSUTF8StringEncoding error:&error];
-    if (sourceString == nil) {
-        NSLog(@"Failed to load vertex shader: %@", [error localizedDescription]);
-        return NO;
-    }
-    
+//    NSString *sourceString = [[NSString alloc] initWithContentsOfURL:URL encoding:NSUTF8StringEncoding error:&error];
+//    if (sourceString == nil) {
+//        NSLog(@"Failed to load vertex shader: %@", [error localizedDescription]);
+//        return NO;
+//    }
+//    const GLchar *sources = (GLchar *)shaderString.UTF8String;
     GLint status;
     const GLchar *source;
-    source = (GLchar *)[sourceString UTF8String];
+    source = (GLchar *)URL.UTF8String;
     
     *shader = glCreateShader(type);
     glShaderSource(*shader, 1, &source, NULL);

@@ -749,7 +749,7 @@
 					"\"$(SRCROOT)/libs/ZJToolsSDK/ZJToolsSDK\"",
 				);
 				INFOPLIST_FILE = ZJPlayer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -783,7 +783,7 @@
 					"\"$(SRCROOT)/libs/ZJToolsSDK/ZJToolsSDK\"",
 				);
 				INFOPLIST_FILE = ZJPlayer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",

@@ -60,14 +60,12 @@
 		7AEF923A2249C26D00D32B19 /* ZJOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJOpenGLView.m; sourceTree = "<group>"; };
 		7AEF923B2249C26D00D32B19 /* ZJInterceptBottomTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptBottomTools.m; sourceTree = "<group>"; };
 		7AEF923C2249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveTopView.h; sourceTree = "<group>"; };
-		7AEF923D2249C26D00D32B19 /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
 		7AEF923E2249C26D00D32B19 /* InterceptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptView.m; sourceTree = "<group>"; };
 		7AEF923F2249C26D00D32B19 /* ZJInterceptTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJInterceptTopView.h; sourceTree = "<group>"; };
 		7AEF92402249C26D00D32B19 /* ZJSelectFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJSelectFrameView.m; sourceTree = "<group>"; };
 		7AEF92412249C26D00D32B19 /* ZJScreenCaptureToolBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJScreenCaptureToolBox.m; sourceTree = "<group>"; };
 		7AEF92422249C26D00D32B19 /* ZJDisplayVideoToSaveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveView.h; sourceTree = "<group>"; };
 		7AEF92432249C26D00D32B19 /* ZJOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJOpenGLView.h; sourceTree = "<group>"; };
-		7AEF92442249C26D00D32B19 /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		7AEF92452249C26D00D32B19 /* ZJPlayGIFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayGIFView.m; sourceTree = "<group>"; };
 		7AEF92462249C26D00D32B19 /* ZJGlKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJGlKImageView.m; sourceTree = "<group>"; };
 		7AEF92472249C26D00D32B19 /* InterceptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptView.h; sourceTree = "<group>"; };
@@ -124,8 +122,6 @@
 				7AEF922D2249C26D00D32B19 /* Tools */,
 				7AEF92432249C26D00D32B19 /* ZJOpenGLView.h */,
 				7AEF923A2249C26D00D32B19 /* ZJOpenGLView.m */,
-				7AEF92442249C26D00D32B19 /* Shader.vsh */,
-				7AEF923D2249C26D00D32B19 /* Shader.fsh */,
 				7AEF92472249C26D00D32B19 /* InterceptView.h */,
 				7AEF923E2249C26D00D32B19 /* InterceptView.m */,
 				7AEF923F2249C26D00D32B19 /* ZJInterceptTopView.h */,
