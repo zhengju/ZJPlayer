@@ -351,7 +351,7 @@
         NSLog(@"%f", end- start);
         NSLog(@"----++%@",url);//本地视频记得删除
 
-        [NSGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
+        [ZJGIF optimalGIFfromURL:url loopCount:0 completion:^(NSURL *GifURL) {
             
             self.slider.progress = 1.0;
             
@@ -405,14 +405,14 @@
             if ([_videoOutPut hasNewPixelBufferForItemTime:itemTime]) {
                 CVPixelBufferRef pixelBuffer = [_videoOutPut copyPixelBufferForItemTime:itemTime itemTimeForDisplay:nil];
                 CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
-//                CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
+                CIImage *outPutImg = [ciImage imageByCroppingToRect:_videoCroppingFrame];//有些吃性能
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    //self.glkImgView.renderImg = outPutImg;
+                   self.glkImgView.renderImg = outPutImg;
                     
-                    self.mOpenGLView.isFullYUVRange = YES;
-                    [self.mOpenGLView displayPixelBuffer:pixelBuffer];
-                    
+//                    self.mOpenGLView.isFullYUVRange = YES;
+//                    [self.mOpenGLView displayPixelBuffer:pixelBuffer];
+//
                     CVBufferRelease(pixelBuffer);
                     
                 });

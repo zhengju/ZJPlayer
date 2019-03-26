@@ -378,10 +378,7 @@
     _guideBg = [[UIView alloc] init];
     [self addSubview:_guideBg];
     [_guideBg addGestureRecognizer:tap];
-//    [_guideBg mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.center.equalTo(self);
-//        make.width.height.equalTo(self);
-//    }];
+
     
     _guideBg.frame = CGRectMake(0, 0, self.frameW, self.frameH);
     
@@ -393,10 +390,7 @@
     [_guideBg addSubview:guideImgView];
     [guideImgView addGestureRecognizer:tap0];
     
-//    [guideImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(_guideBg);
-//        make.bottom.equalTo(_guideBg).with.offset(-72);
-//    }];
+
     
     guideImgView.frame = CGRectMake((_guideBg.frameW-guideImg.size.width)/2.0, _guideBg.frameH-72, guideImg.size.width, guideImg.size.height);
     
@@ -410,10 +404,7 @@
     [_guideBg addSubview:imgview];
     [imgview setUserInteractionEnabled:YES];
     [imgview addGestureRecognizer:tap2];
-//    [imgview mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(_guideBg);
-//        make.top.equalTo(self).with.offset(CGRectGetMaxY(_clipView.frame));
-//    }];
+
     
     imgview.frame = CGRectMake((_guideBg.frameW-picLineImg.size.width)/2.0, CGRectGetMaxY(_clipView.frame), picLineImg.size.width,picLineImg.size.height);
     
@@ -423,10 +414,7 @@
     [topBgView setBackgroundColor:kColorWithRGBA(0, 0, 0, 0.6)];
     [topBgView addGestureRecognizer:tap1];
     [_guideBg addSubview:topBgView];
-//    [topBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.width.left.equalTo(self);
-//        make.bottom.equalTo(imgview.mas_top);
-//    }];
+
     
     topBgView.frame = CGRectMake(0, 0, self.frameW, self.frameH-CGRectGetMinY(imgview.frame));
     

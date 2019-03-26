@@ -4,9 +4,9 @@
 //  Created by Sebastian Dobrincu
 //
 
-#import "NSGIF.h"
+#import "ZJGIF.h"
 
-@implementation NSGIF
+@implementation ZJGIF
 
 // Declare constants
 #define fileName     @"NSGIF"

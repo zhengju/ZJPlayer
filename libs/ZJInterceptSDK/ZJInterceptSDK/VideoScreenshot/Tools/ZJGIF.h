@@ -17,7 +17,7 @@
     #import <WebKit/WebKit.h>
 #endif
 
-@interface NSGIF : NSObject
+@interface ZJGIF : NSObject
 
 + (void)optimalGIFfromURL:(NSURL*)videoURL loopCount:(int)loopCount completion:(void(^)(NSURL *GifURL))completionBlock;
 

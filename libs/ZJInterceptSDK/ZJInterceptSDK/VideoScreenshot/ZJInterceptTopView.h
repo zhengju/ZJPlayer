@@ -7,7 +7,7 @@
 //顶部工具条
 
 #import <UIKit/UIKit.h>
-//#import "ZJCommonHeader.h"
+
 
 typedef NS_ENUM(NSInteger, ZJInterceptTopViewType) {
     ZJInterceptTopViewVideo,

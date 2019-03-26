@@ -45,17 +45,7 @@
 
 //    ZJPlayGIFView * view = [[ZJPlayGIFView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
 //    [self.view addSubview:view];
-    
-    UIImageView * bgView = [[UIImageView alloc]initWithFrame:self.view.bounds];
 
-    [self.view addSubview:bgView];
-    
-    
-    
-    
-    
-    
-    
     //----看直播按钮
     
     UIButton * liveBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, kScreenHeight-150, kScreenWidth-100, 40)];

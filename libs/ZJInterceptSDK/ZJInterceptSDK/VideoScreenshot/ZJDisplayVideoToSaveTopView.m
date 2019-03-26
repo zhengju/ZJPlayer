@@ -60,14 +60,11 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.cancelButton];
-//    [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.left.equalTo(self.mas_left).with.offset(5);
-//        make.centerY.equalTo(self);
-//        make.size.mas_equalTo(CGSizeMake(50, 35));
-//
-//    }];
     
+    
+    self.cancelButton.frame = CGRectMake(5, (self.frameH-35)/2.0, 50, 35);
+    
+
     //完成
     self.exitBtn = [[UIButton alloc]init];
     [self.exitBtn setTitle:@"退出" forState:UIControlStateNormal];
@@ -84,14 +81,8 @@
     
     [self addSubview:self.exitBtn];
     
-//    [self.exitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        
-//        make.right.equalTo(self.mas_right).offset(-10);
-//        make.centerY.equalTo(self);
-//        make.height.mas_equalTo(35);
-//        make.width.mas_equalTo(50);
-//        
-//    }];
+    self.exitBtn.frame = CGRectMake(self.frameW-50-10, (self.frameH-35)/2.0, 50, 35);
+
 }
 
 

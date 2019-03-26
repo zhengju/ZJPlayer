@@ -12,5 +12,5 @@
 #import "ZJToolsSDK.h"
 #import "ZJVideoTools.h"
 #import "ZJCustomTools.h"
-#import "NSGIF.h"
+#import "ZJGIF.h"
 #import "NSURL+ZJSaveToCameraRoll.h"

@@ -149,14 +149,13 @@
     
     
     self.selDurationLabel.text = @"当前截取10.0s秒";
-    
+    self.selDurationLabel.textAlignment = NSTextAlignmentCenter;
     [self.selDurationLabel sizeToFit];
+    
     [self addSubview:self.selDurationLabel];
     
-//    [self.selDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(self.mas_centerX);
-//        make.top.equalTo(self.mas_top).with.offset(5);
-//    }];
+    self.selDurationLabel.frame = CGRectMake(0, 5, self.frameW, 25);
+
 }
 - (void)addImg:(UIImage *)image{
     

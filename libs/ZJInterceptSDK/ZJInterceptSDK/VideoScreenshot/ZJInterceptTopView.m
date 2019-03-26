@@ -68,14 +68,10 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.cancelButton];
-//    [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.left.equalTo(self.mas_left).with.offset(5);
-//        make.centerY.equalTo(self);
-//        make.size.mas_equalTo(CGSizeMake(50, 35));
-//
-//    }];
     
+    
+    self.cancelButton.frame = CGRectMake(5, (self.frameH-35)/2.0, 50, 35);
+
     //截屏
     self.captureBtn = [UIButton buttonWithTitle:@"截视频" normalTitleColor:[UIColor whiteColor] selectedTitleColor:[UIColor grayColor]];
     [self.captureBtn bk_addEventHandler:^(id sender) {
@@ -95,15 +91,8 @@
 
     [self addSubview:self.captureBtn];
 
-//    [self.captureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.right.equalTo(self.mas_centerX).offset(-2.5);
-//        make.centerY.equalTo(self);
-//        make.height.mas_equalTo(35);
-//        make.width.mas_equalTo(70);
-//
-//    }];
- 
+    self.captureBtn.frame = CGRectMake(self.frameW/2.0-2.5-70, (self.frameH-35)/2.0, 70, 35);
+
     _selectedBtn = self.captureBtn;
     _selectedBtn.selected = YES;
 
@@ -125,14 +114,8 @@
 
     [self addSubview:self.gifScreenshotBtn];
 
-//    [self.gifScreenshotBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.left.equalTo(self.mas_centerX).offset(2.5);
-//        make.centerY.equalTo(self);
-//        make.height.mas_equalTo(35);
-//        make.width.mas_equalTo(70);
-//
-//    }];
+    self.gifScreenshotBtn.frame = CGRectMake(self.frameW/2.0+2.5, (self.frameH-35)/2.0, 70, 35);
+
     //完成
     self.finishBtn = [[UIButton alloc]init];
     [self.finishBtn setTitle:@"完成" forState:UIControlStateNormal];
@@ -149,14 +132,8 @@
     
     [self addSubview:self.finishBtn];
     
-//    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.right.equalTo(self.mas_right).offset(-10);
-//        make.centerY.equalTo(self);
-//        make.height.mas_equalTo(35);
-//        make.width.mas_equalTo(50);
-//
-//    }];
+    self.finishBtn.frame = CGRectMake(self.frameW-10-50, (self.frameH-35)/2.0, 50, 35);
+
 }
 
 

@@ -50,13 +50,8 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.originalBtn];
-//    [self.originalBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.left.equalTo(self.mas_left).with.offset(5);
-//        make.top.equalTo(self.mas_top).offset(10);
-//        make.size.mas_equalTo(CGSizeMake(50, 35));
-//
-//    }];
+    
+    self.originalBtn.frame = CGRectMake(5, 10, 50, 35);
     
     //
     self.verticalPlateBtn = [[UIButton alloc]init];
@@ -72,14 +67,9 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.verticalPlateBtn];
-//    [self.verticalPlateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.right.equalTo(self.mas_right).with.offset(-5);
-//        make.top.equalTo(self.mas_top).offset(10);
-//        make.size.mas_equalTo(CGSizeMake(50, 35));
-//
-//    }];
     
+    self.verticalPlateBtn.frame = CGRectMake(self.frameW-50-5, 10, 50, 35);
+
     //
     self.filmBtn = [[UIButton alloc]init];
     [self.filmBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
@@ -94,14 +84,9 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.filmBtn];
-//    [self.filmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//
-//        make.left.equalTo(self.mas_left).with.offset(5);
-//        make.bottom.equalTo(self.mas_bottom).offset(-10);
-//        make.size.mas_equalTo(CGSizeMake(50, 35));
-//
-//    }];
-    //
+    
+    self.filmBtn.frame = CGRectMake(5, self.frameH-35-10, 50, 35);
+
     self.squareBtn = [[UIButton alloc]init];
     [self.squareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [self.squareBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
@@ -115,12 +100,9 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.squareBtn];
-//    [self.squareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        
-//        make.right.equalTo(self.mas_right).with.offset(-5);
-//        make.bottom.equalTo(self.mas_bottom).offset(-10);
-//        make.size.mas_equalTo(CGSizeMake(50, 35));
-//    }];
+    
+    self.squareBtn.frame = CGRectMake(self.frameW-50-5, self.frameH-10-35, 50, 35);
+
 }
 - (void)setSelectedBtnWithBtn:(UIButton *)btn{
     if (self.selectedBtn != btn) {
