@@ -198,6 +198,9 @@
     [self addSubview:self.desLabel];
     
     self.saveBtn = [[UIButton alloc]initWithFrame:CGRectMake((kScreenWidth - imgW)/2.0, CGRectGetMaxY(self.desLabel.frame), imgW, 30)];
+    
+    [self.saveBtn setBackgroundColor:[UIColor greenColor]];
+    
     [self.saveBtn setTitle:@"保存本地" forState:UIControlStateNormal];
     
     [self.saveBtn bk_addEventHandler:^(id sender) {
@@ -211,9 +214,7 @@
     } forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.saveBtn];
-    
-    
-    
+
     self.playGIFBtn = [[UIButton alloc]initWithFrame:CGRectMake(kScreenWidth - 100, (kScreenHeight - 30)/2.0, 100, 30)];
 
     [self.playGIFBtn setTitle:@"玩GIF" forState:UIControlStateNormal];

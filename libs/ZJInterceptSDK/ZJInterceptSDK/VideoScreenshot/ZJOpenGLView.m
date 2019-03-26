@@ -65,7 +65,7 @@ NSString *const fragmentShaderString = SHADER_STRING
     gl_FragColor = vec4(rgb, 1);
     //    gl_FragColor = vec4(1, 0, 0, 1);
 }
- );
+);
 
 
 // Color Conversion Constants (YUV to RGB) including adjustment from 16-235/16-240 (video range)

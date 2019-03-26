@@ -231,15 +231,26 @@
 
 - (void)createUI {
     self.backgroundColor = UIColorFromRGB(0x2f2f2f);
-    
-    
-    UIImage * bgImage = [ZJVideoTools getVideoPreViewImageFromVideo:self.playerItem.asset atTime:2+0.01];
-    
+
     self.BGView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-    self.BGView.backgroundColor = [UIColor redColor];
-    self.BGView.image = bgImage;
+//    self.BGView.backgroundColor = [UIColor redColor];
+    
     [self addSubview:self.BGView];
     
+    dispatch_queue_t   queue = dispatch_queue_create("com.queue", DISPATCH_QUEUE_SERIAL);
+    
+    dispatch_async(queue, ^{
+        
+        UIImage * bgImage = [ZJVideoTools getVideoPreViewImageFromVideo:self.playerItem.asset atTime:2+0.01];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.BGView.image = bgImage;
+            
+        });
+        
+    });
+
     //头部确定和取消按钮
     self.topView = [[ZJInterceptTopView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 72)];
     self.topView.delegate = self;
@@ -310,12 +321,7 @@
         [_pullGuideBg setBackgroundColor:kColorWithRGBA(0, 0, 0, 0.6)];
         [self addSubview:_pullGuideBg];
         [_pullGuideBg addGestureRecognizer:tap3];
-        
-//        [_pullGuideBg mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.center.equalTo(self);
-//            make.width.height.equalTo(self);
-//        }];
-        
+
         _pullGuideBg.frame = CGRectMake(0, 0, self.frameW, self.frameH);
         
         
@@ -323,11 +329,7 @@
         
         UIImageView *pullGuideImgView = [[UIImageView alloc] initWithImage:pullGuideImg];
         [_pullGuideBg addSubview:pullGuideImgView];
-//        [pullGuideImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerX.equalTo(_pullGuideBg);
-//            make.centerY.equalTo(_pullGuideBg).with.offset(-50);
-//        }];
-        
+
         CGSize size  = pullGuideImg.size;
         
         pullGuideImgView.frame = CGRectMake((_pullGuideBg.frameW-size.width)/2.0, (_pullGuideBg.frameH-size.height)/2.0-50, size.width, size.height);
