@@ -14,13 +14,10 @@
 		7A7213CA223B498C00B7C02E /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BF223B498C00B7C02E /* ZJControlView.m */; };
 		7A7213CB223B498C00B7C02E /* ZJBrightness.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213C3223B498C00B7C02E /* ZJBrightness.m */; };
 		7A7213CC223B498C00B7C02E /* ZJPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213C6223B498C00B7C02E /* ZJPlayerController.m */; };
-		7A7213D9223B4D5600B7C02E /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213D7223B4D5600B7C02E /* UIView+Frame.m */; };
-		7A7213DC223B51C400B7C02E /* UIControl+ZJBlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213DB223B51C400B7C02E /* UIControl+ZJBlocksKit.m */; };
 		7A7213DF223B598800B7C02E /* ZJLoadingIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213DE223B598800B7C02E /* ZJLoadingIndicator.m */; };
 		7A7213E2223B5A2200B7C02E /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213E1223B5A2200B7C02E /* ZJResourceLoaderManager.m */; };
 		7A7213E8223B725F00B7C02E /* UIView+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213E7223B725F00B7C02E /* UIView+Player.m */; };
-		7A7213EB223B72CC00B7C02E /* ZJCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213EA223B72CC00B7C02E /* ZJCustomTools.m */; };
-		7A7213EE223B73B800B7C02E /* ZJCacheTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213EC223B73B800B7C02E /* ZJCacheTask.m */; };
+		7AEF926E2249C55400D32B19 /* libZJToolsSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,20 +49,13 @@
 		7A7213C4223B498C00B7C02E /* ZJControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJControlView.h; sourceTree = "<group>"; };
 		7A7213C5223B498C00B7C02E /* ZJTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJTopView.h; sourceTree = "<group>"; };
 		7A7213C6223B498C00B7C02E /* ZJPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayerController.m; sourceTree = "<group>"; };
-		7A7213D7223B4D5600B7C02E /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Frame.m"; path = "ZJPlayerSDK/UIView+Frame.m"; sourceTree = "<group>"; };
-		7A7213D8223B4D5600B7C02E /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Frame.h"; path = "ZJPlayerSDK/UIView+Frame.h"; sourceTree = "<group>"; };
-		7A7213DA223B51C400B7C02E /* UIControl+ZJBlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIControl+ZJBlocksKit.h"; path = "ZJPlayerSDK/UIControl+ZJBlocksKit.h"; sourceTree = "<group>"; };
-		7A7213DB223B51C400B7C02E /* UIControl+ZJBlocksKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIControl+ZJBlocksKit.m"; path = "ZJPlayerSDK/UIControl+ZJBlocksKit.m"; sourceTree = "<group>"; };
 		7A7213DD223B598800B7C02E /* ZJLoadingIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZJLoadingIndicator.h; path = ZJPlayerSDK/ZJLoadingIndicator.h; sourceTree = SOURCE_ROOT; };
 		7A7213DE223B598800B7C02E /* ZJLoadingIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZJLoadingIndicator.m; path = ZJPlayerSDK/ZJLoadingIndicator.m; sourceTree = SOURCE_ROOT; };
 		7A7213E0223B5A2100B7C02E /* ZJResourceLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZJResourceLoaderManager.h; path = ZJPlayerSDK/ZJResourceLoaderManager.h; sourceTree = SOURCE_ROOT; };
 		7A7213E1223B5A2200B7C02E /* ZJResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZJResourceLoaderManager.m; path = ZJPlayerSDK/ZJResourceLoaderManager.m; sourceTree = SOURCE_ROOT; };
 		7A7213E6223B725E00B7C02E /* UIView+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Player.h"; path = "ZJPlayerSDK/UIView+Player.h"; sourceTree = SOURCE_ROOT; };
 		7A7213E7223B725F00B7C02E /* UIView+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Player.m"; path = "ZJPlayerSDK/UIView+Player.m"; sourceTree = SOURCE_ROOT; };
-		7A7213E9223B72CC00B7C02E /* ZJCustomTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZJCustomTools.h; path = ZJPlayerSDK/ZJCustomTools.h; sourceTree = SOURCE_ROOT; };
-		7A7213EA223B72CC00B7C02E /* ZJCustomTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZJCustomTools.m; path = ZJPlayerSDK/ZJCustomTools.m; sourceTree = SOURCE_ROOT; };
-		7A7213EC223B73B800B7C02E /* ZJCacheTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZJCacheTask.m; path = ZJPlayerSDK/ZJCacheTask.m; sourceTree = SOURCE_ROOT; };
-		7A7213ED223B73B800B7C02E /* ZJCacheTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZJCacheTask.h; path = ZJPlayerSDK/ZJCacheTask.h; sourceTree = SOURCE_ROOT; };
+		7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZJToolsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AEF926E2249C55400D32B19 /* libZJToolsSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,11 +74,8 @@
 			isa = PBXGroup;
 			children = (
 				7A72139D223B491800B7C02E /* ZJPlayerSDK */,
-				7A7213D8223B4D5600B7C02E /* UIView+Frame.h */,
-				7A7213D7223B4D5600B7C02E /* UIView+Frame.m */,
-				7A7213DA223B51C400B7C02E /* UIControl+ZJBlocksKit.h */,
-				7A7213DB223B51C400B7C02E /* UIControl+ZJBlocksKit.m */,
 				7A72139C223B491800B7C02E /* Products */,
+				7AEF926C2249C55400D32B19 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -129,13 +117,17 @@
 				7A7213DE223B598800B7C02E /* ZJLoadingIndicator.m */,
 				7A7213E0223B5A2100B7C02E /* ZJResourceLoaderManager.h */,
 				7A7213E1223B5A2200B7C02E /* ZJResourceLoaderManager.m */,
-				7A7213E9223B72CC00B7C02E /* ZJCustomTools.h */,
-				7A7213EA223B72CC00B7C02E /* ZJCustomTools.m */,
-				7A7213ED223B73B800B7C02E /* ZJCacheTask.h */,
-				7A7213EC223B73B800B7C02E /* ZJCacheTask.m */,
 				7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */,
 			);
 			path = Player;
+			sourceTree = "<group>";
+		};
+		7AEF926C2249C55400D32B19 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,13 +191,9 @@
 				7A7213CC223B498C00B7C02E /* ZJPlayerController.m in Sources */,
 				7A7213C9223B498C00B7C02E /* ZJTopView.m in Sources */,
 				7A7213E8223B725F00B7C02E /* UIView+Player.m in Sources */,
-				7A7213D9223B4D5600B7C02E /* UIView+Frame.m in Sources */,
-				7A7213EE223B73B800B7C02E /* ZJCacheTask.m in Sources */,
 				7A7213C8223B498C00B7C02E /* ZJProgress.m in Sources */,
 				7A7213CA223B498C00B7C02E /* ZJControlView.m in Sources */,
-				7A7213DC223B51C400B7C02E /* UIControl+ZJBlocksKit.m in Sources */,
 				7A7213DF223B598800B7C02E /* ZJLoadingIndicator.m in Sources */,
-				7A7213EB223B72CC00B7C02E /* ZJCustomTools.m in Sources */,
 				7A7213C7223B498C00B7C02E /* ZJPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,7 +318,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../ZJHttpDownload/ZJHttpDownload/MD5\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK\"",
+					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK/MD5\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -343,7 +334,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				ENABLE_BITCODE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../ZJHttpDownload/ZJHttpDownload/MD5\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK\"",
+					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK/MD5\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

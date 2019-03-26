@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZJCommonHeader.h"
+#import "ZJInterceptSDK.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

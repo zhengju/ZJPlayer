@@ -21,11 +21,11 @@
 #import <BlocksKit/BlocksKit.h>
 #import <BlocksKit/BlocksKit+UIKit.h>
 #import "ZJCustomTools.h"
-#import "NSGIF.h"
-#import "NSURL+ZJSaveToCameraRoll.h"
-#import "UIImage+ZJSaveToCameraRoll.h"
+
+#import "ZJToolsSDK.h"
+
 #import "UIButton+ZJPlayer.h"
-#import "ZJVideoTools.h"
+
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
@@ -36,10 +36,6 @@
 //#else
 //#define NSLog(format, ...)
 //#endif
-
-#define HUDNormal(msg) { ZJAlertView *alert = [[ZJAlertView alloc]init];\
-[alert showAlertWith:msg];\
-}
 
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 

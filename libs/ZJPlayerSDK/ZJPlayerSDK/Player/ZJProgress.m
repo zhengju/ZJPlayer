@@ -8,6 +8,9 @@
 
 #import "ZJProgress.h"
 #import "ZJPlayerSDK.h"
+
+
+
 @interface ZJProgress()
 @property(strong,nonatomic) UIView * bgView;
 @property(strong,nonatomic) UIImageView * speedImg;

@@ -7,11 +7,15 @@
 //
 
 #import "ZJDisplayVideoToSaveView.h"
-#import "ZJCommonHeader.h"
+#import "ZJInterceptSDK.h"
 #import "ZJDisplayVideoToSaveTopView.h"
 #import "ZJOpenGLView.h"
 #import "ZJGlKImageView.h"
 #import "ZJPlayGIFView.h"
+
+#import "ZJInterceptSDK.h"
+
+
 #define ZJHeight kScreenHeight/2.0
 
 #define originRate 16.0/9.0

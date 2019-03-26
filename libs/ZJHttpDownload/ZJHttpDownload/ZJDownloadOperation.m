@@ -7,7 +7,7 @@
 //
 
 #import "ZJDownloadOperation.h"
-#import "NSString+ZJHash.h"
+#import "ZJToolsSDK.h"
 @interface ZJDownloadOperation()<NSURLSessionDelegate,NSURLSessionDownloadDelegate,NSURLSessionDataDelegate,NSURLSessionTaskDelegate>
 {
     __block BOOL _isFinished;

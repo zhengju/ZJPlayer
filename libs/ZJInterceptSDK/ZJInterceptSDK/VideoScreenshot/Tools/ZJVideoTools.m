@@ -8,10 +8,6 @@
 
 #import "ZJVideoTools.h"
 
-
-
-
-
 @implementation ZJVideoTools
 
 + (void)mixVideo:(AVAsset *)videoAsset startTime:(CMTime)startTime WithVideoCroppingFrame:(CGRect)videoCroppingFrame toUrl:(NSURL*)outputUrl outputFileType:(NSString*)outputFileType withMaxDuration:(CMTime)maxDuration compositionProgressBlock:(void(^)(CGFloat progress))compositionProgressBlock withCompletionBlock:(void(^)(NSError *error))completionBlock{

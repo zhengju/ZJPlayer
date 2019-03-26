@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7AEF92142249BE4200D32B19 /* ZJInterceptSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7AEF92112249BE4200D32B19 /* ZJInterceptSDK.h */; };
+		7AEF924E2249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF922E2249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.m */; };
+		7AEF924F2249C26D00D32B19 /* NSGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92312249C26D00D32B19 /* NSGIF.m */; };
+		7AEF92502249C26D00D32B19 /* ZJSaveToCameraRollOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92322249C26D00D32B19 /* ZJSaveToCameraRollOperation.m */; };
+		7AEF92512249C26D00D32B19 /* UIImage+Crop.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92342249C26D00D32B19 /* UIImage+Crop.m */; };
+		7AEF92522249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92362249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.m */; };
+		7AEF92532249C26D00D32B19 /* ZJVideoTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92392249C26D00D32B19 /* ZJVideoTools.m */; };
+		7AEF92542249C26D00D32B19 /* ZJOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF923A2249C26D00D32B19 /* ZJOpenGLView.m */; };
+		7AEF92552249C26D00D32B19 /* ZJInterceptBottomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF923B2249C26D00D32B19 /* ZJInterceptBottomTools.m */; };
+		7AEF92562249C26D00D32B19 /* InterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF923E2249C26D00D32B19 /* InterceptView.m */; };
+		7AEF92572249C26D00D32B19 /* ZJSelectFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92402249C26D00D32B19 /* ZJSelectFrameView.m */; };
+		7AEF92582249C26D00D32B19 /* ZJScreenCaptureToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92412249C26D00D32B19 /* ZJScreenCaptureToolBox.m */; };
+		7AEF92592249C26D00D32B19 /* ZJPlayGIFView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92452249C26D00D32B19 /* ZJPlayGIFView.m */; };
+		7AEF925A2249C26D00D32B19 /* ZJGlKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92462249C26D00D32B19 /* ZJGlKImageView.m */; };
+		7AEF925B2249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92482249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.m */; };
+		7AEF925C2249C26D00D32B19 /* ZJInterceptTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF924A2249C26D00D32B19 /* ZJInterceptTopView.m */; };
+		7AEF925D2249C26D00D32B19 /* ZJDisplayVideoToSaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF924B2249C26D00D32B19 /* ZJDisplayVideoToSaveView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7AEF920C2249BE4200D32B19 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				7AEF92142249BE4200D32B19 /* ZJInterceptSDK.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7AEF920E2249BE4200D32B19 /* libZJInterceptSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZJInterceptSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AEF92112249BE4200D32B19 /* ZJInterceptSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJInterceptSDK.h; sourceTree = "<group>"; };
+		7AEF922B2249C26D00D32B19 /* ZJGlKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJGlKImageView.h; sourceTree = "<group>"; };
+		7AEF922C2249C26D00D32B19 /* ZJPlayGIFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayGIFView.h; sourceTree = "<group>"; };
+		7AEF922E2249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+ZJSaveToCameraRoll.m"; sourceTree = "<group>"; };
+		7AEF922F2249C26D00D32B19 /* UIImage+Crop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Crop.h"; sourceTree = "<group>"; };
+		7AEF92302249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ZJSaveToCameraRoll.h"; sourceTree = "<group>"; };
+		7AEF92312249C26D00D32B19 /* NSGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSGIF.m; sourceTree = "<group>"; };
+		7AEF92322249C26D00D32B19 /* ZJSaveToCameraRollOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJSaveToCameraRollOperation.m; sourceTree = "<group>"; };
+		7AEF92332249C26D00D32B19 /* ZJVideoTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJVideoTools.h; sourceTree = "<group>"; };
+		7AEF92342249C26D00D32B19 /* UIImage+Crop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Crop.m"; sourceTree = "<group>"; };
+		7AEF92352249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+ZJSaveToCameraRoll.h"; sourceTree = "<group>"; };
+		7AEF92362249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZJSaveToCameraRoll.m"; sourceTree = "<group>"; };
+		7AEF92372249C26D00D32B19 /* ZJSaveToCameraRollOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJSaveToCameraRollOperation.h; sourceTree = "<group>"; };
+		7AEF92382249C26D00D32B19 /* NSGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGIF.h; sourceTree = "<group>"; };
+		7AEF92392249C26D00D32B19 /* ZJVideoTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJVideoTools.m; sourceTree = "<group>"; };
+		7AEF923A2249C26D00D32B19 /* ZJOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJOpenGLView.m; sourceTree = "<group>"; };
+		7AEF923B2249C26D00D32B19 /* ZJInterceptBottomTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptBottomTools.m; sourceTree = "<group>"; };
+		7AEF923C2249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveTopView.h; sourceTree = "<group>"; };
+		7AEF923D2249C26D00D32B19 /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
+		7AEF923E2249C26D00D32B19 /* InterceptView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptView.m; sourceTree = "<group>"; };
+		7AEF923F2249C26D00D32B19 /* ZJInterceptTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJInterceptTopView.h; sourceTree = "<group>"; };
+		7AEF92402249C26D00D32B19 /* ZJSelectFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJSelectFrameView.m; sourceTree = "<group>"; };
+		7AEF92412249C26D00D32B19 /* ZJScreenCaptureToolBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJScreenCaptureToolBox.m; sourceTree = "<group>"; };
+		7AEF92422249C26D00D32B19 /* ZJDisplayVideoToSaveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJDisplayVideoToSaveView.h; sourceTree = "<group>"; };
+		7AEF92432249C26D00D32B19 /* ZJOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJOpenGLView.h; sourceTree = "<group>"; };
+		7AEF92442249C26D00D32B19 /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
+		7AEF92452249C26D00D32B19 /* ZJPlayGIFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayGIFView.m; sourceTree = "<group>"; };
+		7AEF92462249C26D00D32B19 /* ZJGlKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJGlKImageView.m; sourceTree = "<group>"; };
+		7AEF92472249C26D00D32B19 /* InterceptView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptView.h; sourceTree = "<group>"; };
+		7AEF92482249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDisplayVideoToSaveTopView.m; sourceTree = "<group>"; };
+		7AEF92492249C26D00D32B19 /* ZJInterceptBottomTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJInterceptBottomTools.h; sourceTree = "<group>"; };
+		7AEF924A2249C26D00D32B19 /* ZJInterceptTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJInterceptTopView.m; sourceTree = "<group>"; };
+		7AEF924B2249C26D00D32B19 /* ZJDisplayVideoToSaveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDisplayVideoToSaveView.m; sourceTree = "<group>"; };
+		7AEF924C2249C26D00D32B19 /* ZJScreenCaptureToolBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJScreenCaptureToolBox.h; sourceTree = "<group>"; };
+		7AEF924D2249C26D00D32B19 /* ZJSelectFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJSelectFrameView.h; sourceTree = "<group>"; };
+		7AEF92702249C58300D32B19 /* libZJToolsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZJToolsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7AEF920B2249BE4200D32B19 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7AEF92052249BE4200D32B19 = {
+			isa = PBXGroup;
+			children = (
+				7AEF92102249BE4200D32B19 /* ZJInterceptSDK */,
+				7AEF920F2249BE4200D32B19 /* Products */,
+				7AEF926F2249C58300D32B19 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		7AEF920F2249BE4200D32B19 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7AEF920E2249BE4200D32B19 /* libZJInterceptSDK.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7AEF92102249BE4200D32B19 /* ZJInterceptSDK */ = {
+			isa = PBXGroup;
+			children = (
+				7AEF922A2249C26D00D32B19 /* VideoScreenshot */,
+			);
+			path = ZJInterceptSDK;
+			sourceTree = "<group>";
+		};
+		7AEF922A2249C26D00D32B19 /* VideoScreenshot */ = {
+			isa = PBXGroup;
+			children = (
+				7AEF922D2249C26D00D32B19 /* Tools */,
+				7AEF922B2249C26D00D32B19 /* ZJGlKImageView.h */,
+				7AEF92432249C26D00D32B19 /* ZJOpenGLView.h */,
+				7AEF923A2249C26D00D32B19 /* ZJOpenGLView.m */,
+				7AEF923B2249C26D00D32B19 /* ZJInterceptBottomTools.m */,
+				7AEF92472249C26D00D32B19 /* InterceptView.h */,
+				7AEF923E2249C26D00D32B19 /* InterceptView.m */,
+				7AEF923F2249C26D00D32B19 /* ZJInterceptTopView.h */,
+				7AEF92402249C26D00D32B19 /* ZJSelectFrameView.m */,
+				7AEF92412249C26D00D32B19 /* ZJScreenCaptureToolBox.m */,
+				7AEF92422249C26D00D32B19 /* ZJDisplayVideoToSaveView.h */,
+				7AEF92442249C26D00D32B19 /* Shader.vsh */,
+				7AEF923D2249C26D00D32B19 /* Shader.fsh */,
+				7AEF922C2249C26D00D32B19 /* ZJPlayGIFView.h */,
+				7AEF92452249C26D00D32B19 /* ZJPlayGIFView.m */,
+				7AEF92462249C26D00D32B19 /* ZJGlKImageView.m */,
+				7AEF923C2249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.h */,
+				7AEF92482249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.m */,
+				7AEF92492249C26D00D32B19 /* ZJInterceptBottomTools.h */,
+				7AEF924A2249C26D00D32B19 /* ZJInterceptTopView.m */,
+				7AEF924B2249C26D00D32B19 /* ZJDisplayVideoToSaveView.m */,
+				7AEF924C2249C26D00D32B19 /* ZJScreenCaptureToolBox.h */,
+				7AEF924D2249C26D00D32B19 /* ZJSelectFrameView.h */,
+				7AEF92112249BE4200D32B19 /* ZJInterceptSDK.h */,
+			);
+			path = VideoScreenshot;
+			sourceTree = "<group>";
+		};
+		7AEF922D2249C26D00D32B19 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				7AEF92382249C26D00D32B19 /* NSGIF.h */,
+				7AEF92312249C26D00D32B19 /* NSGIF.m */,
+				7AEF92332249C26D00D32B19 /* ZJVideoTools.h */,
+				7AEF92392249C26D00D32B19 /* ZJVideoTools.m */,
+				7AEF922F2249C26D00D32B19 /* UIImage+Crop.h */,
+				7AEF92342249C26D00D32B19 /* UIImage+Crop.m */,
+				7AEF92352249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.h */,
+				7AEF922E2249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.m */,
+				7AEF92302249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.h */,
+				7AEF92322249C26D00D32B19 /* ZJSaveToCameraRollOperation.m */,
+				7AEF92362249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.m */,
+				7AEF92372249C26D00D32B19 /* ZJSaveToCameraRollOperation.h */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		7AEF926F2249C58300D32B19 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7AEF92702249C58300D32B19 /* libZJToolsSDK.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7AEF920D2249BE4200D32B19 /* ZJInterceptSDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AEF92172249BE4200D32B19 /* Build configuration list for PBXNativeTarget "ZJInterceptSDK" */;
+			buildPhases = (
+				7AEF920A2249BE4200D32B19 /* Sources */,
+				7AEF920B2249BE4200D32B19 /* Frameworks */,
+				7AEF920C2249BE4200D32B19 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZJInterceptSDK;
+			productName = ZJInterceptSDK;
+			productReference = 7AEF920E2249BE4200D32B19 /* libZJInterceptSDK.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7AEF92062249BE4200D32B19 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = zsw;
+				TargetAttributes = {
+					7AEF920D2249BE4200D32B19 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 7AEF92092249BE4200D32B19 /* Build configuration list for PBXProject "ZJInterceptSDK" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7AEF92052249BE4200D32B19;
+			productRefGroup = 7AEF920F2249BE4200D32B19 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7AEF920D2249BE4200D32B19 /* ZJInterceptSDK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7AEF920A2249BE4200D32B19 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AEF92562249C26D00D32B19 /* InterceptView.m in Sources */,
+				7AEF925C2249C26D00D32B19 /* ZJInterceptTopView.m in Sources */,
+				7AEF925A2249C26D00D32B19 /* ZJGlKImageView.m in Sources */,
+				7AEF925D2249C26D00D32B19 /* ZJDisplayVideoToSaveView.m in Sources */,
+				7AEF92522249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.m in Sources */,
+				7AEF92502249C26D00D32B19 /* ZJSaveToCameraRollOperation.m in Sources */,
+				7AEF92582249C26D00D32B19 /* ZJScreenCaptureToolBox.m in Sources */,
+				7AEF92512249C26D00D32B19 /* UIImage+Crop.m in Sources */,
+				7AEF92572249C26D00D32B19 /* ZJSelectFrameView.m in Sources */,
+				7AEF92552249C26D00D32B19 /* ZJInterceptBottomTools.m in Sources */,
+				7AEF92542249C26D00D32B19 /* ZJOpenGLView.m in Sources */,
+				7AEF92532249C26D00D32B19 /* ZJVideoTools.m in Sources */,
+				7AEF92592249C26D00D32B19 /* ZJPlayGIFView.m in Sources */,
+				7AEF924E2249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.m in Sources */,
+				7AEF924F2249C26D00D32B19 /* NSGIF.m in Sources */,
+				7AEF925B2249C26D00D32B19 /* ZJDisplayVideoToSaveTopView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7AEF92152249BE4200D32B19 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7AEF92162249BE4200D32B19 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7AEF92182249BE4200D32B19 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK\"",
+					"\"$(SRCROOT)/ZJInterceptSDK/VideoScreenshot\"/**",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7AEF92192249BE4200D32B19 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK\"",
+					"\"$(SRCROOT)/ZJInterceptSDK/VideoScreenshot\"/**",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7AEF92092249BE4200D32B19 /* Build configuration list for PBXProject "ZJInterceptSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AEF92152249BE4200D32B19 /* Debug */,
+				7AEF92162249BE4200D32B19 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7AEF92172249BE4200D32B19 /* Build configuration list for PBXNativeTarget "ZJInterceptSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AEF92182249BE4200D32B19 /* Debug */,
+				7AEF92192249BE4200D32B19 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7AEF92062249BE4200D32B19 /* Project object */;
+}

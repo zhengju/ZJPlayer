@@ -7,7 +7,7 @@
 //
 
 #import "ZJSelectFrameView.h"
-#import "ZJCommonHeader.h"
+#import "ZJInterceptSDK.h"
 @interface ZJSelectFrameView()
 @property(nonatomic, strong) UIButton * originalBtn;
 @property(nonatomic, strong) UIButton * verticalPlateBtn;
@@ -50,13 +50,13 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.originalBtn];
-    [self.originalBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.left.equalTo(self.mas_left).with.offset(5);
-        make.top.equalTo(self.mas_top).offset(10);
-        make.size.mas_equalTo(CGSizeMake(50, 35));
-        
-    }];
+//    [self.originalBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.left.equalTo(self.mas_left).with.offset(5);
+//        make.top.equalTo(self.mas_top).offset(10);
+//        make.size.mas_equalTo(CGSizeMake(50, 35));
+//
+//    }];
     
     //
     self.verticalPlateBtn = [[UIButton alloc]init];
@@ -72,13 +72,13 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.verticalPlateBtn];
-    [self.verticalPlateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.right.equalTo(self.mas_right).with.offset(-5);
-        make.top.equalTo(self.mas_top).offset(10);
-        make.size.mas_equalTo(CGSizeMake(50, 35));
-        
-    }];
+//    [self.verticalPlateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.right.equalTo(self.mas_right).with.offset(-5);
+//        make.top.equalTo(self.mas_top).offset(10);
+//        make.size.mas_equalTo(CGSizeMake(50, 35));
+//
+//    }];
     
     //
     self.filmBtn = [[UIButton alloc]init];
@@ -94,13 +94,13 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.filmBtn];
-    [self.filmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.left.equalTo(self.mas_left).with.offset(5);
-        make.bottom.equalTo(self.mas_bottom).offset(-10);
-        make.size.mas_equalTo(CGSizeMake(50, 35));
-        
-    }];
+//    [self.filmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.left.equalTo(self.mas_left).with.offset(5);
+//        make.bottom.equalTo(self.mas_bottom).offset(-10);
+//        make.size.mas_equalTo(CGSizeMake(50, 35));
+//
+//    }];
     //
     self.squareBtn = [[UIButton alloc]init];
     [self.squareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
@@ -115,12 +115,12 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.squareBtn];
-    [self.squareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.right.equalTo(self.mas_right).with.offset(-5);
-        make.bottom.equalTo(self.mas_bottom).offset(-10);
-        make.size.mas_equalTo(CGSizeMake(50, 35));
-    }];
+//    [self.squareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        
+//        make.right.equalTo(self.mas_right).with.offset(-5);
+//        make.bottom.equalTo(self.mas_bottom).offset(-10);
+//        make.size.mas_equalTo(CGSizeMake(50, 35));
+//    }];
 }
 - (void)setSelectedBtnWithBtn:(UIButton *)btn{
     if (self.selectedBtn != btn) {

@@ -12,8 +12,8 @@
 #import "ZJPlayer.h"
 #import "Masonry.h"
 #import "ZJDownloadManager.h"
-#import "ZJPlayGIFView.h"
-#import "InterceptView.h"
+//#import "ZJPlayGIFView.h"
+#import "ZJInterceptSDK.h"
 
 #import "MainViewController.h"
 #import <BlocksKit/BlocksKit.h>
@@ -49,6 +49,10 @@
     UIImageView * bgView = [[UIImageView alloc]initWithFrame:self.view.bounds];
 
     [self.view addSubview:bgView];
+    
+    
+    
+    
     
     
     

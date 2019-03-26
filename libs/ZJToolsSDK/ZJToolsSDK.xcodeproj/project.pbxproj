@@ -7,8 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A7213FF223B764D00B7C02E /* ZJToolsSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213FE223B764D00B7C02E /* ZJToolsSDK.m */; };
 		7A721400223B764D00B7C02E /* ZJToolsSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A7213FD223B764D00B7C02E /* ZJToolsSDK.h */; };
+		7AEF926A2249C53300D32B19 /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92662249C53300D32B19 /* UIView+Frame.m */; };
+		7AEF926B2249C53300D32B19 /* UIControl+ZJBlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92692249C53300D32B19 /* UIControl+ZJBlocksKit.m */; };
+		7AEF92742249C6BA00D32B19 /* UIButton+ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92722249C6BA00D32B19 /* UIButton+ZJPlayer.m */; };
+		7AEF92772249C92E00D32B19 /* ZJCustomTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92762249C92E00D32B19 /* ZJCustomTools.m */; };
+		7AEF927A2249C9A100D32B19 /* ZJCacheTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92782249C9A100D32B19 /* ZJCacheTask.m */; };
+		7AEF927E2249C9D800D32B19 /* NSString+ZJHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF927D2249C9D800D32B19 /* NSString+ZJHash.m */; };
+		7AEF92942249D33700D32B19 /* ZJAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEF92922249D33700D32B19 /* ZJAlertView.m */; };
+		7AEF92952249D34500D32B19 /* ZJAlertView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7AEF92932249D33700D32B19 /* ZJAlertView.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,6 +25,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				7AEF92952249D34500D32B19 /* ZJAlertView.h in CopyFiles */,
 				7A721400223B764D00B7C02E /* ZJToolsSDK.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -27,7 +35,20 @@
 /* Begin PBXFileReference section */
 		7A7213FA223B764D00B7C02E /* libZJToolsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZJToolsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A7213FD223B764D00B7C02E /* ZJToolsSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJToolsSDK.h; sourceTree = "<group>"; };
-		7A7213FE223B764D00B7C02E /* ZJToolsSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJToolsSDK.m; sourceTree = "<group>"; };
+		7AEF92662249C53300D32B19 /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
+		7AEF92672249C53300D32B19 /* UIControl+ZJBlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+ZJBlocksKit.h"; sourceTree = "<group>"; };
+		7AEF92682249C53300D32B19 /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
+		7AEF92692249C53300D32B19 /* UIControl+ZJBlocksKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+ZJBlocksKit.m"; sourceTree = "<group>"; };
+		7AEF92722249C6BA00D32B19 /* UIButton+ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ZJPlayer.m"; sourceTree = "<group>"; };
+		7AEF92732249C6BA00D32B19 /* UIButton+ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ZJPlayer.h"; sourceTree = "<group>"; };
+		7AEF92752249C92E00D32B19 /* ZJCustomTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCustomTools.h; sourceTree = "<group>"; };
+		7AEF92762249C92E00D32B19 /* ZJCustomTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJCustomTools.m; sourceTree = "<group>"; };
+		7AEF92782249C9A100D32B19 /* ZJCacheTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJCacheTask.m; sourceTree = "<group>"; };
+		7AEF92792249C9A100D32B19 /* ZJCacheTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCacheTask.h; sourceTree = "<group>"; };
+		7AEF927C2249C9D800D32B19 /* NSString+ZJHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ZJHash.h"; sourceTree = "<group>"; };
+		7AEF927D2249C9D800D32B19 /* NSString+ZJHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ZJHash.m"; sourceTree = "<group>"; };
+		7AEF92922249D33700D32B19 /* ZJAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJAlertView.m; sourceTree = "<group>"; };
+		7AEF92932249D33700D32B19 /* ZJAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJAlertView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +81,21 @@
 		7A7213FC223B764D00B7C02E /* ZJToolsSDK */ = {
 			isa = PBXGroup;
 			children = (
+				7AEF927C2249C9D800D32B19 /* NSString+ZJHash.h */,
+				7AEF927D2249C9D800D32B19 /* NSString+ZJHash.m */,
+				7AEF92732249C6BA00D32B19 /* UIButton+ZJPlayer.h */,
+				7AEF92722249C6BA00D32B19 /* UIButton+ZJPlayer.m */,
+				7AEF92672249C53300D32B19 /* UIControl+ZJBlocksKit.h */,
+				7AEF92692249C53300D32B19 /* UIControl+ZJBlocksKit.m */,
+				7AEF92682249C53300D32B19 /* UIView+Frame.h */,
+				7AEF92662249C53300D32B19 /* UIView+Frame.m */,
+				7AEF92752249C92E00D32B19 /* ZJCustomTools.h */,
+				7AEF92762249C92E00D32B19 /* ZJCustomTools.m */,
+				7AEF92792249C9A100D32B19 /* ZJCacheTask.h */,
+				7AEF92782249C9A100D32B19 /* ZJCacheTask.m */,
+				7AEF92932249D33700D32B19 /* ZJAlertView.h */,
+				7AEF92922249D33700D32B19 /* ZJAlertView.m */,
 				7A7213FD223B764D00B7C02E /* ZJToolsSDK.h */,
-				7A7213FE223B764D00B7C02E /* ZJToolsSDK.m */,
 			);
 			path = ZJToolsSDK;
 			sourceTree = "<group>";
@@ -122,7 +156,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A7213FF223B764D00B7C02E /* ZJToolsSDK.m in Sources */,
+				7AEF926B2249C53300D32B19 /* UIControl+ZJBlocksKit.m in Sources */,
+				7AEF927E2249C9D800D32B19 /* NSString+ZJHash.m in Sources */,
+				7AEF927A2249C9A100D32B19 /* ZJCacheTask.m in Sources */,
+				7AEF92942249D33700D32B19 /* ZJAlertView.m in Sources */,
+				7AEF926A2249C53300D32B19 /* UIView+Frame.m in Sources */,
+				7AEF92772249C92E00D32B19 /* ZJCustomTools.m in Sources */,
+				7AEF92742249C6BA00D32B19 /* UIButton+ZJPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +285,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -256,6 +297,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

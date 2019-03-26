@@ -14,8 +14,6 @@
 		7A721367223B397300B7C02E /* ZJDownloaderItem.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A72133A223A6AC500B7C02E /* ZJDownloaderItem.h */; };
 		7A721368223B397300B7C02E /* ZJDownloadManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A72133B223A6AC500B7C02E /* ZJDownloadManager.h */; };
 		7A721369223B397300B7C02E /* ZJDownloadOperation.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A72133C223A6AC500B7C02E /* ZJDownloadOperation.h */; };
-		7A72138A223B41B900B7C02E /* NSString+ZJHash.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A721388223B41B900B7C02E /* NSString+ZJHash.m */; };
-		7A72138B223B422500B7C02E /* NSString+ZJHash.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A721389223B41B900B7C02E /* NSString+ZJHash.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,7 +23,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				7A72138B223B422500B7C02E /* NSString+ZJHash.h in CopyFiles */,
 				7A721367223B397300B7C02E /* ZJDownloaderItem.h in CopyFiles */,
 				7A721368223B397300B7C02E /* ZJDownloadManager.h in CopyFiles */,
 				7A721369223B397300B7C02E /* ZJDownloadOperation.h in CopyFiles */,
@@ -44,8 +41,7 @@
 		7A72133D223A6AC500B7C02E /* ZJDownloaderItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDownloaderItem.m; sourceTree = "<group>"; };
 		7A72133E223A6AC500B7C02E /* ZJDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDownloadOperation.m; sourceTree = "<group>"; };
 		7A72133F223A6AC500B7C02E /* ZJDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDownloadManager.m; sourceTree = "<group>"; };
-		7A721388223B41B900B7C02E /* NSString+ZJHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ZJHash.m"; sourceTree = "<group>"; };
-		7A721389223B41B900B7C02E /* NSString+ZJHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ZJHash.h"; sourceTree = "<group>"; };
+		7AEF92802249CAA800D32B19 /* libZJToolsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZJToolsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +60,7 @@
 			children = (
 				7A721330223A6A9000B7C02E /* ZJHttpDownload */,
 				7A72132F223A6A9000B7C02E /* Products */,
+				7AEF927F2249CAA800D32B19 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,18 +82,16 @@
 				7A72133E223A6AC500B7C02E /* ZJDownloadOperation.m */,
 				7A72133A223A6AC500B7C02E /* ZJDownloaderItem.h */,
 				7A72133D223A6AC500B7C02E /* ZJDownloaderItem.m */,
-				7A721343223A6ADF00B7C02E /* MD5 */,
 			);
 			path = ZJHttpDownload;
 			sourceTree = "<group>";
 		};
-		7A721343223A6ADF00B7C02E /* MD5 */ = {
+		7AEF927F2249CAA800D32B19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7A721389223B41B900B7C02E /* NSString+ZJHash.h */,
-				7A721388223B41B900B7C02E /* NSString+ZJHash.m */,
+				7AEF92802249CAA800D32B19 /* libZJToolsSDK.a */,
 			);
-			path = MD5;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,7 +150,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A72138A223B41B900B7C02E /* NSString+ZJHash.m in Sources */,
 				7A721342223A6AC500B7C02E /* ZJDownloadManager.m in Sources */,
 				7A721340223A6AC500B7C02E /* ZJDownloaderItem.m in Sources */,
 				7A721341223A6AC500B7C02E /* ZJDownloadOperation.m in Sources */,
@@ -281,7 +275,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK\"/**";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -293,7 +287,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK\"/**";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

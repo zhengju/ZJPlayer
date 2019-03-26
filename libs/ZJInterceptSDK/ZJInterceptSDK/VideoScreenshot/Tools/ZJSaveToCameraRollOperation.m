@@ -8,7 +8,7 @@
 
 #import "ZJSaveToCameraRollOperation.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-
+#import "ZJToolsSDK.h"
 @interface ZJSaveToCameraRollOperation()
 
 @property (strong, nonatomic) void (^videoCompletion)(NSString *, NSError *);
@@ -42,7 +42,7 @@
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
     [library writeImageDataToSavedPhotosAlbum:data metadata:nil completionBlock:^(NSURL *assetURL,
                                                                                   NSError *error) {
-//        HUDNormal(@"保存成功");
+        HUDNormal(@"保存成功");
 //        NSLog(@"Success at %@", [assetURL path] );
         
         completion(assetURL.path,error);

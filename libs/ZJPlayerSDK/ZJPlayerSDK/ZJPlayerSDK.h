@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 
 #import "ZJPlayer.h"
-#import "UIView+Frame.h"
+#import "ZJToolsSDk.h"
+
+#import "ZJCustomTools.h"
 #import "ZJCustomTools.h"
 #import "ZJCacheTask.h"
-#import "UIControl+ZJBlocksKit.h"
 #import "ZJPlayerProtocol.h"
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height

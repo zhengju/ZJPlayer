@@ -7,7 +7,7 @@
 //
 
 #import "ZJScreenCaptureToolBox.h"
-#import "ZJCommonHeader.h"
+#import "ZJInterceptSDK.h"
 
 
 @interface ZJScreenCaptureToolBox()

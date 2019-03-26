@@ -9,9 +9,8 @@
 #import "InterceptView.h"
 #import "UIView+Frame.h"
 #import "UIImage+Crop.h"
-#import "Masonry.h"
 #import <Photos/Photos.h>
-#import "ZJCommonHeader.h"
+#import "ZJInterceptSDK.h"
 #import "ZJDisplayVideoToSaveView.h"
 #import "ZJInterceptTopView.h"
 #import "ZJSelectFrameView.h"
@@ -311,16 +310,28 @@
         [_pullGuideBg setBackgroundColor:kColorWithRGBA(0, 0, 0, 0.6)];
         [self addSubview:_pullGuideBg];
         [_pullGuideBg addGestureRecognizer:tap3];
-        [_pullGuideBg mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.center.equalTo(self);
-            make.width.height.equalTo(self);
-        }];
-        UIImageView *pullGuideImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic_clip_tips"]];
+        
+//        [_pullGuideBg mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.center.equalTo(self);
+//            make.width.height.equalTo(self);
+//        }];
+        
+        _pullGuideBg.frame = CGRectMake(0, 0, self.frameW, self.frameH);
+        
+        
+        UIImage * pullGuideImg = [UIImage imageNamed:@"pic_clip_tips"];
+        
+        UIImageView *pullGuideImgView = [[UIImageView alloc] initWithImage:pullGuideImg];
         [_pullGuideBg addSubview:pullGuideImgView];
-        [pullGuideImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(_pullGuideBg);
-            make.centerY.equalTo(_pullGuideBg).with.offset(-50);
-        }];
+//        [pullGuideImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.centerX.equalTo(_pullGuideBg);
+//            make.centerY.equalTo(_pullGuideBg).with.offset(-50);
+//        }];
+        
+        CGSize size  = pullGuideImg.size;
+        
+        pullGuideImgView.frame = CGRectMake((_pullGuideBg.frameW-size.width)/2.0, (_pullGuideBg.frameH-size.height)/2.0-50, size.width, size.height);
+        
         
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kYZCropVideoFirstTime"];
     }
@@ -367,41 +378,58 @@
     _guideBg = [[UIView alloc] init];
     [self addSubview:_guideBg];
     [_guideBg addGestureRecognizer:tap];
-    [_guideBg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self);
-        make.width.height.equalTo(self);
-    }];
+//    [_guideBg mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.center.equalTo(self);
+//        make.width.height.equalTo(self);
+//    }];
+    
+    _guideBg.frame = CGRectMake(0, 0, self.frameW, self.frameH);
     
     UITapGestureRecognizer *tap0 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissGuide:)];
-    UIImageView *guideImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"resume_pic_guide"]];
+    
+    UIImage * guideImg = [UIImage imageNamed:@"resume_pic_guide"];
+    
+    UIImageView *guideImgView = [[UIImageView alloc] initWithImage:guideImg];
     [_guideBg addSubview:guideImgView];
     [guideImgView addGestureRecognizer:tap0];
     
-    [guideImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(_guideBg);
-        make.bottom.equalTo(_guideBg).with.offset(-72);
-    }];
+//    [guideImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(_guideBg);
+//        make.bottom.equalTo(_guideBg).with.offset(-72);
+//    }];
+    
+    guideImgView.frame = CGRectMake((_guideBg.frameW-guideImg.size.width)/2.0, _guideBg.frameH-72, guideImg.size.width, guideImg.size.height);
+    
     
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissGuide:)];
-    UIImageView *imgview = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video_pic_line"]];
+    
+    UIImage * picLineImg = [UIImage imageNamed:@"video_pic_line"];
+    
+    UIImageView *imgview = [[UIImageView alloc] initWithImage:picLineImg];
     imgview.tag = 10000;
     [_guideBg addSubview:imgview];
     [imgview setUserInteractionEnabled:YES];
     [imgview addGestureRecognizer:tap2];
-    [imgview mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(_guideBg);
-        make.top.equalTo(self).with.offset(CGRectGetMaxY(_clipView.frame));
-    }];
+//    [imgview mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(_guideBg);
+//        make.top.equalTo(self).with.offset(CGRectGetMaxY(_clipView.frame));
+//    }];
+    
+    imgview.frame = CGRectMake((_guideBg.frameW-picLineImg.size.width)/2.0, CGRectGetMaxY(_clipView.frame), picLineImg.size.width,picLineImg.size.height);
+    
     
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissGuide:)];
     UIView *topBgView = [[UIView alloc] init];
     [topBgView setBackgroundColor:kColorWithRGBA(0, 0, 0, 0.6)];
     [topBgView addGestureRecognizer:tap1];
     [_guideBg addSubview:topBgView];
-    [topBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.width.left.equalTo(self);
-        make.bottom.equalTo(imgview.mas_top);
-    }];
+//    [topBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.width.left.equalTo(self);
+//        make.bottom.equalTo(imgview.mas_top);
+//    }];
+    
+    topBgView.frame = CGRectMake(0, 0, self.frameW, self.frameH-CGRectGetMinY(imgview.frame));
+    
 }
 
 ///获取本地视频的时长

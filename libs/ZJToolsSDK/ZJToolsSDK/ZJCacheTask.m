@@ -158,6 +158,7 @@
     [self.cacheImageDic writeToFile:filepath atomically:YES];
   
 }
+
 /**
  缓存图片
  */

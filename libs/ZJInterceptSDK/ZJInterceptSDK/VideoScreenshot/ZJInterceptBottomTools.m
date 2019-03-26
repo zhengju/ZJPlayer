@@ -7,7 +7,7 @@
 //
 
 #import "ZJInterceptBottomTools.h"
-#import "ZJCommonHeader.h"
+#import "ZJInterceptSDK.h"
 
 #define kClipTimeScrollTag  20
 
@@ -153,10 +153,10 @@
     [self.selDurationLabel sizeToFit];
     [self addSubview:self.selDurationLabel];
     
-    [self.selDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.mas_centerX);
-        make.top.equalTo(self.mas_top).with.offset(5);
-    }];
+//    [self.selDurationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(self.mas_centerX);
+//        make.top.equalTo(self.mas_top).with.offset(5);
+//    }];
 }
 - (void)addImg:(UIImage *)image{
     

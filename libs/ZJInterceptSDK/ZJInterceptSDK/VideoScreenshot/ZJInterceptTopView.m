@@ -7,7 +7,7 @@
 //
 
 #import "ZJInterceptTopView.h"
-
+#import "ZJInterceptSDK.h"
 @interface ZJInterceptTopView()
 {
     ZJInterceptTopViewType _actionType;
@@ -68,13 +68,13 @@
         }
     } forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.cancelButton];
-    [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-
-        make.left.equalTo(self.mas_left).with.offset(5);
-        make.centerY.equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(50, 35));
-
-    }];
+//    [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.left.equalTo(self.mas_left).with.offset(5);
+//        make.centerY.equalTo(self);
+//        make.size.mas_equalTo(CGSizeMake(50, 35));
+//
+//    }];
     
     //截屏
     self.captureBtn = [UIButton buttonWithTitle:@"截视频" normalTitleColor:[UIColor whiteColor] selectedTitleColor:[UIColor grayColor]];
@@ -95,14 +95,14 @@
 
     [self addSubview:self.captureBtn];
 
-    [self.captureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-
-        make.right.equalTo(self.mas_centerX).offset(-2.5);
-        make.centerY.equalTo(self);
-        make.height.mas_equalTo(35);
-        make.width.mas_equalTo(70);
-
-    }];
+//    [self.captureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.right.equalTo(self.mas_centerX).offset(-2.5);
+//        make.centerY.equalTo(self);
+//        make.height.mas_equalTo(35);
+//        make.width.mas_equalTo(70);
+//
+//    }];
  
     _selectedBtn = self.captureBtn;
     _selectedBtn.selected = YES;
@@ -125,14 +125,14 @@
 
     [self addSubview:self.gifScreenshotBtn];
 
-    [self.gifScreenshotBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-
-        make.left.equalTo(self.mas_centerX).offset(2.5);
-        make.centerY.equalTo(self);
-        make.height.mas_equalTo(35);
-        make.width.mas_equalTo(70);
-
-    }];
+//    [self.gifScreenshotBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.left.equalTo(self.mas_centerX).offset(2.5);
+//        make.centerY.equalTo(self);
+//        make.height.mas_equalTo(35);
+//        make.width.mas_equalTo(70);
+//
+//    }];
     //完成
     self.finishBtn = [[UIButton alloc]init];
     [self.finishBtn setTitle:@"完成" forState:UIControlStateNormal];
@@ -149,14 +149,14 @@
     
     [self addSubview:self.finishBtn];
     
-    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.right.equalTo(self.mas_right).offset(-10);
-        make.centerY.equalTo(self);
-        make.height.mas_equalTo(35);
-        make.width.mas_equalTo(50);
-        
-    }];
+//    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//
+//        make.right.equalTo(self.mas_right).offset(-10);
+//        make.centerY.equalTo(self);
+//        make.height.mas_equalTo(35);
+//        make.width.mas_equalTo(50);
+//
+//    }];
 }
 
 

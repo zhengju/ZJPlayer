@@ -1314,7 +1314,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     if (error == nil) {
        
-//        HUDNormal(@"保存成功");
+        HUDNormal(@"保存成功");
     } else {
         NSLog(@"false");
     }

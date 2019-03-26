@@ -42,7 +42,7 @@
             //@"http://santai.tv/vod/test/BigBuckBunny_175k.mov",
         
 //            @"rtmp://aragontvlivefs.fplive.net/aragontvlive-live/stream_normal_abt",
-//            @"rtmp://ucaster.eu:1935/live/_definst_/discoverylacajatv",
+            @"http://img.house.china.com.cn/voice/rongch.mp4",
             @"rtmp://58.200.131.2:1935/livetv/hunantv"
         ];
         

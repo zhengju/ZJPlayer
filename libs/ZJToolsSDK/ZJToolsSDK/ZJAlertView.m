@@ -7,7 +7,6 @@
 //
 
 #import "ZJAlertView.h"
-#import "AppDelegate.h"
 
 //整个view的展示宽度
 #define    ZJfadeWidth          [UIScreen mainScreen].bounds.size.width - 120
@@ -70,7 +69,9 @@
     [self addSubview:tmpLabel];
     
     
-    [((AppDelegate *)[[UIApplication sharedApplication] delegate]).window addSubview:self];
+    
+    
+    [([[UIApplication sharedApplication] delegate]).window addSubview:self];
     
     
     [UIView beginAnimations:nil context:nil];
@@ -95,5 +96,19 @@
 {
     [self removeFromSuperview];
 }
+
++ (UIWindow *)mainWindow
+{
+    UIApplication *app = [UIApplication sharedApplication];
+    if ([app.delegate respondsToSelector:@selector(window)])
+    {
+        return [app.delegate window];
+    }
+    
+    {
+        return [app keyWindow];
+    }
+}
+
 
 @end
