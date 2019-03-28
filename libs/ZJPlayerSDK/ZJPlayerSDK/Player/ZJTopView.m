@@ -151,8 +151,8 @@
     [self addSubview:self.titleLabel];
     
     
-    self.titleLabel.frame = CGRectMake(CGRectGetMinX(self.closeButton.frame)+5, (self.frameH-25)/2.0, self.frameW-CGRectGetMinX(self.closeButton.frame)-5-CGRectGetMinX(self.gifScreenshotBtn.frame)-5, 25);
-
+    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.closeButton.frame)+50, (self.frameH-25)/2.0, self.frameW-CGRectGetMaxX(self.closeButton.frame)-5-self.gifScreenshotBtn.frameW-5, 25);
+   
 }
 
 - (void)setTitle:(NSString *)title{
@@ -177,7 +177,8 @@
     self.rateBtn.frame = CGRectMake(self.frameW-50-5, (self.frameH-25)/2.0, 50, 25);
     self.captureBtn.frame = CGRectMake(CGRectGetMinX(self.rateBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
     self.gifScreenshotBtn.frame = CGRectMake(CGRectGetMinX(self.captureBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
-    self.titleLabel.frame = CGRectMake(CGRectGetMinX(self.closeButton.frame)+5, (self.frameH-25)/2.0, self.frameW-CGRectGetMinX(self.closeButton.frame)-5-CGRectGetMinX(self.gifScreenshotBtn.frame)-5, 25);
+    
+    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.closeButton.frame)+50, (self.frameH-25)/2.0, self.frameW-CGRectGetMaxX(self.closeButton.frame)-5-self.gifScreenshotBtn.frameW-5, 25);
 
 }
 

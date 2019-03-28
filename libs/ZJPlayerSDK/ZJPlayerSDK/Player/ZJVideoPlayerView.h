@@ -27,14 +27,14 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ZJPlayerProtocol.h"
-
+#import "ZJJPlayer.h"
 @class ZJControlView;
 @class ZJTopView;
-@class ZJPlayer;
+@class ZJVideoPlayerView;
 
 @protocol ZJPlayerDelegate <NSObject>
 
-- (void)playFinishedPlayer:(ZJPlayer *)player;
+- (void)playFinishedPlayer:(ZJVideoPlayerView *)player;
 
 
 @end
@@ -44,11 +44,11 @@ extern NSString *const ZJViewControllerWillDisappear; // 一个控制器即将�
 extern NSString *const ZJContinuousVideoPlayback; // 连续播放视频通知
 extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 
-@interface ZJPlayer : UIView <UIApplicationDelegate>
+@interface ZJVideoPlayerView : UIView <UIApplicationDelegate>
 
 @property(weak,nonatomic) id<ZJPlayerDelegate> delegate;
 
-@property(strong,nonatomic) AVPlayer * player;
+@property(strong,nonatomic) ZJJPlayer * player;
 
 @property(strong,nonatomic) AVPlayerLayer * playerLayer;
 
@@ -117,6 +117,13 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
  父视图
  */
 @property(strong,nonatomic) UIView * fatherView;
+
+/**
+ 全屏时的父视图
+ */
+@property (nonatomic, strong) UIView *fullScreenContainerView;
+
+@property (nonatomic, copy, nullable) void(^orientationWillChange)(ZJVideoPlayerView *player, BOOL isFullScreen);
 
 /**
  单例生成player

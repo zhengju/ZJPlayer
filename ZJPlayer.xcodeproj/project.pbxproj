@@ -363,14 +363,14 @@
 		7A721419223B923300B7C02E /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				7A721421223B923300B7C02E /* UITabBarController+Player.h */,
 				7A72141A223B923300B7C02E /* UITabBarController+Player.m */,
-				7A72141B223B923300B7C02E /* UIViewController+Player.h */,
 				7A72141D223B923300B7C02E /* UINavigationController+Player.h */,
+				7A721422223B923300B7C02E /* UINavigationController+Player.m */,
 				7A721425223B923300B7C02E /* AppDelegate+Player.h */,
 				7A72141E223B923300B7C02E /* AppDelegate+Player.m */,
+				7A72141B223B923300B7C02E /* UIViewController+Player.h */,
 				7A721420223B923300B7C02E /* UIViewController+Player.m */,
-				7A721421223B923300B7C02E /* UITabBarController+Player.h */,
-				7A721422223B923300B7C02E /* UINavigationController+Player.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";

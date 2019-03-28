@@ -9,7 +9,7 @@
 #ifndef ZJCommonHeader_h
 #define ZJCommonHeader_h
 
-#import "ZJPlayer.h"
+#import "ZJVideoPlayerView.h"
 #import "UIView+Player.h"
 #import "UIView+Frame.h"
 #import "ZJCacheTask.h"

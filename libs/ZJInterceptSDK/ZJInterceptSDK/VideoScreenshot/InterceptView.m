@@ -7,7 +7,6 @@
 //
 
 #import "InterceptView.h"
-#import "UIView+Frame.h"
 #import "UIImage+Crop.h"
 #import <Photos/Photos.h>
 #import "ZJInterceptSDK.h"
@@ -233,7 +232,6 @@
     self.backgroundColor = UIColorFromRGB(0x2f2f2f);
 
     self.BGView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-//    self.BGView.backgroundColor = [UIColor redColor];
     
     [self addSubview:self.BGView];
     
@@ -477,8 +475,6 @@
     [self addSubview:self.selectFrameView];
     
 }
-
-
 
 #pragma mark - 视频裁剪
 - (void)videoCropping{

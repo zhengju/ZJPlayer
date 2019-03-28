@@ -7,17 +7,17 @@
 //
 
 #import "VideoController.h"
-#import "ZJPlayer.h"
+#import "ZJVideoPlayerView.h"
 #import "VideoList.h"
 @interface VideoController ()<ZJPlayerDelegate>
-@property(strong,nonatomic) ZJPlayer* player;
+@property(strong,nonatomic) ZJVideoPlayerView* player;
 @end
 
 @implementation VideoController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.player = [ZJPlayer sharePlayer];
+    self.player = [ZJVideoPlayerView sharePlayer];
     self.player.isPushOrPopPlpay = NO;
     self.view.backgroundColor = [UIColor whiteColor];
 
@@ -38,13 +38,12 @@
 }
 
 #pragma mark -- ZJPlayerDelegate
-- (void)playFinishedPlayer:(ZJPlayer *)player{
+- (void)playFinishedPlayer:(ZJVideoPlayerView *)player{
 
 }
 - (BOOL)shouldAutorotate//是否支持旋转屏幕
 {
-    NSLog(@":YES");
-    return YES;
+    return NO;
     
 }
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations//支持哪些方向

@@ -7,16 +7,16 @@
 //
 
 #import "PlayerVideoController.h"
-#import "ZJPlayer.h"
+#import "ZJVideoPlayerView.h"
 @interface PlayerVideoController ()
-@property(strong,nonatomic) ZJPlayer * player;
+@property(strong,nonatomic) ZJVideoPlayerView * player;
 @end
 
 @implementation PlayerVideoController
 
-- (ZJPlayer *)player{
+- (ZJVideoPlayerView *)player{
     if (_player == nil) {
-        _player =   [[ZJPlayer alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view frame:CGRectMake(0, 0, self.view.frame.size.width, 300) controller:self];
+        _player =   [[ZJVideoPlayerView alloc]initWithUrl:[NSURL fileURLWithPath:self.path]  withSuperView:self.view frame:CGRectMake(0, 0, self.view.frame.size.width, 300) controller:self];
         
         _player.isRotatingSmallScreen = YES;
     }
@@ -40,7 +40,7 @@
 - (BOOL)shouldAutorotate//是否支持旋转屏幕
 {
     NSLog(@"PlayerVideoController:YES");
-    return YES;
+    return NO;
     
 }
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations//支持哪些方向

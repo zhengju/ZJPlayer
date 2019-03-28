@@ -9,14 +9,16 @@
 //http://img.house.china.com.cn/voice/hdzxjh.mp4
 
 #import "ViewController.h"
-#import "ZJPlayer.h"
+#import "ZJVideoPlayerView.h"
 #import "Masonry.h"
 #import "ZJDownloadManager.h"
-//#import "ZJPlayGIFView.h"
 #import "ZJInterceptSDK.h"
-
 #import "MainViewController.h"
 #import <BlocksKit/BlocksKit.h>
+
+#import "ZJPlayerController.h"
+
+
 @interface ViewController ()
 
 @end
@@ -35,7 +37,7 @@
     
     InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
 
-    ZJPlayer * player =  [[ZJPlayer alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/rongch.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
+    ZJVideoPlayerView * player =  [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/rongch.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
     
     player.interceptView  = interceptView;
     
@@ -43,11 +45,6 @@
 
     [self.view addSubview:player];
 
-//    ZJPlayGIFView * view = [[ZJPlayGIFView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-//    [self.view addSubview:view];
-
-    //----看直播按钮
-    
     UIButton * liveBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, kScreenHeight-150, kScreenWidth-100, 40)];
     
     [liveBtn setTitle:@"看直播" forState:UIControlStateNormal];
@@ -58,6 +55,13 @@
     
     [self.view addSubview:liveBtn];
     
+    ZJPlayerController * vc = [ZJPlayerController sharePlayerController];
+    
+    
+    player.orientationWillChange = ^(ZJVideoPlayerView *player, BOOL isFullScreen) {
+        
+//        [self setNeedsStatusBarAppearanceUpdate];
+    };
     
 }
 - (void)liveVideo{
@@ -71,7 +75,7 @@
 }
 //Interface的方向是否会跟随设备方向自动旋转，如果返回NO,后两个方法不会再调用
 - (BOOL)shouldAutorotate {
-    return YES;
+    return NO;
 }
 ////返回直接支持的方向
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{

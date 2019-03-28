@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ZJPlayer.h"
+#import "ZJVideoPlayerView.h"
 #import "ZJToolsSDk.h"
 
 #import "ZJCustomTools.h"

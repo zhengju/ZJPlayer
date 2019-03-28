@@ -43,10 +43,11 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect{
     
-    [self.imageContext drawImage:self.renderImg inRect:CGRectMake(0, 0, self.glkView.drawableWidth, self.glkView.drawableHeight) fromRect:[self.renderImg extent]];
+    @autoreleasepool {
+        [self.imageContext drawImage:self.renderImg inRect:CGRectMake(0, 0, self.glkView.drawableWidth, self.glkView.drawableHeight) fromRect:[self.renderImg extent]];
+    }
     
 }
-
 
 - (void)setRenderImg:(CIImage *)renderImg{
     _renderImg = renderImg;

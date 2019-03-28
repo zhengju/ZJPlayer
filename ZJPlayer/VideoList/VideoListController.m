@@ -16,7 +16,7 @@
 @interface VideoListController ()<UITableViewDelegate,UITableViewDataSource,ZJPlayerDelegate>
 @property(strong,nonatomic) UITableView * tableView;
 @property(strong,nonatomic) NSMutableArray * datas;
-@property(strong,nonatomic) ZJPlayer * player;
+@property(strong,nonatomic) ZJVideoPlayerView * player;
 @end
 
 @implementation VideoListController
@@ -37,8 +37,10 @@
     
     [self.tableView reloadData];
     
-    self.player = [ZJPlayer sharePlayer];
+    self.player = [ZJVideoPlayerView sharePlayer];
+    
     self.player.isPlayContinuously = YES;
+    
     //添加自动播放的通知
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(continuousVideoPlayback) name:ZJContinuousVideoPlayback object:self.player];
 }
@@ -81,24 +83,21 @@
 
 #pragma 加载视频player
 - (void)initPlayer:(NSIndexPath *)indexPath cell:(VideoListCell*)cell{
-    
-//    self.player = [ZJPlayer sharePlayer];
-//
-//    [self.player deallocSelf];
+
     [self.player removeFromSuperview];
 
     self.player.indexPath = indexPath;
     
     self.player.url = [NSURL URLWithString:cell.model.url];
-    
-    self.player.title = cell.model.title;
 
     self.player.delegate = self;
 
-    [cell addSubview:self.player];
+    self.player.fatherView  = cell;
 
-    [self.player setPlayerFrame:CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height)];
-
+    [self.player setPlayerFrame:cell.playerView.frame];
+    
+    self.player.title = cell.model.title;
+    
     [self.player play];
     
 }
@@ -107,7 +106,6 @@
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 64 - 49) style:UITableViewStylePlain];
 
     [self.tableView registerClass:[VideoListCell class] forCellReuseIdentifier:@"VideoListCell"];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -117,8 +115,12 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
-    [self.player pause];
+    //判断当前的cell是否在显示
+    if (![self.tableView.visibleCells containsObject:(UITableViewCell *)self.player.fatherView]) {
+         [self.player pause];
+    }else{
 
+    }
 }
 
 #pragma UITableViewDataSource
@@ -172,24 +174,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return CGFLOAT_MIN;
 }
-- (BOOL)shouldAutorotate//是否支持旋转屏幕
-{
-    return YES;
-}
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations//支持哪些方向
-{
-    return UIInterfaceOrientationMaskAll;
-    
-}
-//由模态推出的视图控制器 优先支持的屏幕方向
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation//默认显示的方向
-{
-    
-    return UIInterfaceOrientationPortrait;
-    
-}
+
 #pragma ZJPlayerDelegate
-- (void)playFinishedPlayer:(ZJPlayer *)player{
+- (void)playFinishedPlayer:(ZJVideoPlayerView *)player{
     NSLog(@"播放完毕");
 }
 @end

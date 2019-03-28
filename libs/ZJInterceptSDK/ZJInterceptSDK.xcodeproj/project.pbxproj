@@ -154,12 +154,12 @@
 				7AEF92392249C26D00D32B19 /* ZJVideoTools.m */,
 				7AEF922F2249C26D00D32B19 /* UIImage+Crop.h */,
 				7AEF92342249C26D00D32B19 /* UIImage+Crop.m */,
+				7AEF92372249C26D00D32B19 /* ZJSaveToCameraRollOperation.h */,
+				7AEF92322249C26D00D32B19 /* ZJSaveToCameraRollOperation.m */,
 				7AEF92352249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.h */,
 				7AEF922E2249C26D00D32B19 /* NSURL+ZJSaveToCameraRoll.m */,
 				7AEF92302249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.h */,
-				7AEF92322249C26D00D32B19 /* ZJSaveToCameraRollOperation.m */,
 				7AEF92362249C26D00D32B19 /* UIImage+ZJSaveToCameraRoll.m */,
-				7AEF92372249C26D00D32B19 /* ZJSaveToCameraRollOperation.h */,
 			);
 			path = Tools;
 			sourceTree = "<group>";

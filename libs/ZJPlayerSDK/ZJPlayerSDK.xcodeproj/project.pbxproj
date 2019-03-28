@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7A1A3CEF223F99C0001E2994 /* ZJPlayerProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */; };
-		7A7213C7223B498C00B7C02E /* ZJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BC223B498C00B7C02E /* ZJPlayer.m */; };
+		7A7213C7223B498C00B7C02E /* ZJVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BC223B498C00B7C02E /* ZJVideoPlayerView.m */; };
 		7A7213C8223B498C00B7C02E /* ZJProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BD223B498C00B7C02E /* ZJProgress.m */; };
 		7A7213C9223B498C00B7C02E /* ZJTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BE223B498C00B7C02E /* ZJTopView.m */; };
 		7A7213CA223B498C00B7C02E /* ZJControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BF223B498C00B7C02E /* ZJControlView.m */; };
@@ -17,6 +17,7 @@
 		7A7213DF223B598800B7C02E /* ZJLoadingIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213DE223B598800B7C02E /* ZJLoadingIndicator.m */; };
 		7A7213E2223B5A2200B7C02E /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213E1223B5A2200B7C02E /* ZJResourceLoaderManager.m */; };
 		7A7213E8223B725F00B7C02E /* UIView+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213E7223B725F00B7C02E /* UIView+Player.m */; };
+		7ACF4CF4224A12C0001B0EB4 /* ZJJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */; };
 		7AEF926E2249C55400D32B19 /* libZJToolsSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */; };
 /* End PBXBuildFile section */
 
@@ -38,13 +39,13 @@
 		7A72139B223B491800B7C02E /* libZJPlayerSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZJPlayerSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A72139E223B491800B7C02E /* ZJPlayerSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayerSDK.h; sourceTree = "<group>"; };
 		7A7213BB223B498C00B7C02E /* ZJBrightness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJBrightness.h; sourceTree = "<group>"; };
-		7A7213BC223B498C00B7C02E /* ZJPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPlayer.m; sourceTree = "<group>"; };
+		7A7213BC223B498C00B7C02E /* ZJVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJVideoPlayerView.m; sourceTree = "<group>"; };
 		7A7213BD223B498C00B7C02E /* ZJProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJProgress.m; sourceTree = "<group>"; };
 		7A7213BE223B498C00B7C02E /* ZJTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJTopView.m; sourceTree = "<group>"; };
 		7A7213BF223B498C00B7C02E /* ZJControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJControlView.m; sourceTree = "<group>"; };
 		7A7213C0223B498C00B7C02E /* ZJPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayerController.h; sourceTree = "<group>"; };
 		7A7213C1223B498C00B7C02E /* ZJProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJProgress.h; sourceTree = "<group>"; };
-		7A7213C2223B498C00B7C02E /* ZJPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPlayer.h; sourceTree = "<group>"; };
+		7A7213C2223B498C00B7C02E /* ZJVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJVideoPlayerView.h; sourceTree = "<group>"; };
 		7A7213C3223B498C00B7C02E /* ZJBrightness.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJBrightness.m; sourceTree = "<group>"; };
 		7A7213C4223B498C00B7C02E /* ZJControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJControlView.h; sourceTree = "<group>"; };
 		7A7213C5223B498C00B7C02E /* ZJTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJTopView.h; sourceTree = "<group>"; };
@@ -55,6 +56,8 @@
 		7A7213E1223B5A2200B7C02E /* ZJResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZJResourceLoaderManager.m; path = ZJPlayerSDK/ZJResourceLoaderManager.m; sourceTree = SOURCE_ROOT; };
 		7A7213E6223B725E00B7C02E /* UIView+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Player.h"; path = "ZJPlayerSDK/UIView+Player.h"; sourceTree = SOURCE_ROOT; };
 		7A7213E7223B725F00B7C02E /* UIView+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Player.m"; path = "ZJPlayerSDK/UIView+Player.m"; sourceTree = SOURCE_ROOT; };
+		7ACF4CF2224A12C0001B0EB4 /* ZJJPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJJPlayer.h; sourceTree = "<group>"; };
+		7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJJPlayer.m; sourceTree = "<group>"; };
 		7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZJToolsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -99,8 +102,10 @@
 		7A7213BA223B498C00B7C02E /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				7A7213C2223B498C00B7C02E /* ZJPlayer.h */,
-				7A7213BC223B498C00B7C02E /* ZJPlayer.m */,
+				7ACF4CF2224A12C0001B0EB4 /* ZJJPlayer.h */,
+				7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */,
+				7A7213C2223B498C00B7C02E /* ZJVideoPlayerView.h */,
+				7A7213BC223B498C00B7C02E /* ZJVideoPlayerView.m */,
 				7A7213E6223B725E00B7C02E /* UIView+Player.h */,
 				7A7213E7223B725F00B7C02E /* UIView+Player.m */,
 				7A7213C1223B498C00B7C02E /* ZJProgress.h */,
@@ -190,11 +195,12 @@
 				7A7213CB223B498C00B7C02E /* ZJBrightness.m in Sources */,
 				7A7213CC223B498C00B7C02E /* ZJPlayerController.m in Sources */,
 				7A7213C9223B498C00B7C02E /* ZJTopView.m in Sources */,
+				7ACF4CF4224A12C0001B0EB4 /* ZJJPlayer.m in Sources */,
 				7A7213E8223B725F00B7C02E /* UIView+Player.m in Sources */,
 				7A7213C8223B498C00B7C02E /* ZJProgress.m in Sources */,
 				7A7213CA223B498C00B7C02E /* ZJControlView.m in Sources */,
 				7A7213DF223B598800B7C02E /* ZJLoadingIndicator.m in Sources */,
-				7A7213C7223B498C00B7C02E /* ZJPlayer.m in Sources */,
+				7A7213C7223B498C00B7C02E /* ZJVideoPlayerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
