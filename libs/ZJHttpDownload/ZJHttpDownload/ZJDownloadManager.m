@@ -36,6 +36,7 @@
 
 /** 保存所有下载相关信息 */
 @property (nonatomic, strong) NSMutableDictionary *sessionModels;
+@property(nonatomic, strong) NSCache * operationCaches;
 @property (nonatomic, strong) ZJDownloaderItem * downloadItem;
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 
@@ -46,7 +47,14 @@
 @end
 
 @implementation ZJDownloadManager
-
+- (NSCache *)operationCaches{
+    if (_operationCaches == nil) {
+        _operationCaches = [[NSCache alloc]init];
+        _operationCaches.countLimit = kMaxDownloadOperation;
+        _operationCaches.totalCostLimit = 2014 * 5;
+    }
+    return _operationCaches;
+}
 - (NSMutableDictionary *)sessionModels
 {
     if (!_sessionModels) {
@@ -133,6 +141,21 @@ static ZJDownloadManager *manager = nil;
         [self startOperationWithRequestItem:_downloadItem];
 
 }
+#pragma mark - 队列管理
+- (void)startOperationWithRequestItem:(ZJDownloaderItem *)dItem
+{
+    ZJDownloadOperation *  operation = [[ZJDownloadOperation alloc] initWithItem:dItem];
+    operation.delegate = self;
+    [_downloadOperationQueue addOperation:operation];
+    [self.operationCaches setObject:operation forKey:ZJFileName(dItem.downloadUrl)];//添加到缓存中
+}
+#pragma mark - 取消下载
+- (void)cancelDownloadWithItem:(ZJDownloaderItem *)item{
+    ZJDownloadOperation *  operation = [self.operationCaches objectForKey:ZJFileName(item.downloadUrl)];
+    if (operation) {
+        [operation cancelDownload];
+    }
+}
 
 /**
  *  开启任务下载资源
@@ -161,14 +184,7 @@ static ZJDownloadManager *manager = nil;
 
 }
 
-#pragma mark - 队列管理
-- (void)startOperationWithRequestItem:(ZJDownloaderItem *)dItem
-{
-    ZJDownloadOperation *  operation = [[ZJDownloadOperation alloc] initWithItem:dItem];
-//    operation.downloadType = ZJDownloadOutputStream;
-    operation.delegate = self;
-    [_downloadOperationQueue addOperation:operation];
-}
+
 
 /**
  *  根据url获取对应的下载信息模型
@@ -279,7 +295,6 @@ static ZJDownloadManager *manager = nil;
     if ([self.delegate respondsToSelector:@selector(zjDownloadOperationStartDownloading:)]) {
         [self.delegate zjDownloadOperationStartDownloading:dItem];
     }
-    
 }
 - (void)zjDownloadOperationFinishDownload:(ZJDownloaderItem *)dItem{
     
@@ -289,16 +304,20 @@ static ZJDownloadManager *manager = nil;
     dict[ZJFileName(dItem.downloadUrl)] = @(dItem.totalFileSize);
     [dict writeToFile:ZJTotalLengthFullpath atomically:YES];
     
+    [self.operationCaches removeObjectForKey:ZJFileName(dItem.downloadUrl)];//删除记录
+    
     if ([self.delegate respondsToSelector:@selector(zjDownloadOperationFinishDownload:)]) {
         [self.delegate zjDownloadOperationFinishDownload:dItem];
     }
-    
+
 }
 - (void)zjDownloadOperationDownloading:(ZJDownloaderItem *)dItem downloadPercentage:(float)percentage velocity:(float)velocity{
 
     if ([self.delegate respondsToSelector:@selector(zjDownloadOperationDownloading:downloadPercentage:velocity:)]) {
         [self.delegate zjDownloadOperationDownloading:dItem downloadPercentage:percentage  velocity:velocity];
     }
+    
+   // NSLog(@"self.downloadOperationQueue.operations.count %lu",(unsigned long)self.downloadOperationQueue.operations.count);
     
 }
 

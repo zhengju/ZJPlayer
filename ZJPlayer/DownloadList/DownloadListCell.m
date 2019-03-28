@@ -28,9 +28,11 @@
 }
 - (IBAction)downloadClick:(UIButton *)sender {
     if (self.suspendBlock) {
-        //sender.selected = !sender.selected;
-        self.suspendBlock(sender);
+        
         _model.isDownloading = !_model.isDownloading;
+        
+        self.suspendBlock(sender);
+        
     }
 }
 - (void)setModel:(DownloadList *)model{

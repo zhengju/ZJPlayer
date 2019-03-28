@@ -107,10 +107,15 @@
         
         DownloadList * model = self.datas[indexPath.row];
         
-        [self.downLists setObject:model forKey:model.downloaderItem.downloadUrl];
-
-        [self.downloadManager downloadWithItem:model.downloaderItem];
-
+        if (model.isDownloading) {
+            [self.downLists setObject:model forKey:model.downloaderItem.downloadUrl];
+            
+            [self.downloadManager downloadWithItem:model.downloaderItem];
+        }else{
+            
+            [self.downloadManager cancelDownloadWithItem:model.downloaderItem];
+            
+        }
     };
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;

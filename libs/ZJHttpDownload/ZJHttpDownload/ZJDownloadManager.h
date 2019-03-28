@@ -33,7 +33,9 @@
 
 + (ZJDownloadManager *)sharedInstance;
 
-- (void)downloadWithItem:(ZJDownloaderItem *)item;
+- (void)downloadWithItem:(ZJDownloaderItem *)item;//下载
+
+- (void)cancelDownloadWithItem:(ZJDownloaderItem *)item;//取消
 
 /**
  *  查询该资源的下载进度值
