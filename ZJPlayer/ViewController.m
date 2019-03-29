@@ -13,7 +13,7 @@
 #import "Masonry.h"
 #import "ZJDownloadManager.h"
 #import "ZJInterceptSDK.h"
-#import "MainViewController.h"
+//#import "MainViewController.h"
 #import <BlocksKit/BlocksKit.h>
 
 #import "ZJPlayerController.h"
@@ -65,8 +65,8 @@
     
 }
 - (void)liveVideo{
-    MainViewController * vc = [[MainViewController alloc]init];
-    [self.navigationController pushViewController:vc animated:YES];
+//    MainViewController * vc = [[MainViewController alloc]init];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
