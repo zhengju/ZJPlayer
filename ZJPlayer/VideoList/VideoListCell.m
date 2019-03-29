@@ -58,7 +58,7 @@
     
     _bgView = [[UIImageView alloc]init];
     [self addSubview:_bgView];
-    
+    _bgView.contentMode = UIViewContentModeScaleAspectFit;
     
     
     self.bottomView = [[UIView alloc]init];

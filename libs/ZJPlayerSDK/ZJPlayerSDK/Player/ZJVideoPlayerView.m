@@ -200,7 +200,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
         self.asset = [AVURLAsset URLAssetWithURL:url options:nil];
            
-        self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+        self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset];
            
            if (!self.player) {
                self.player = [ZJJPlayer playerWithPlayerItem:self.playerItem];
@@ -232,7 +232,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
            } self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
 
        }
-
+ 
     [self addObserverToPlayerItem:self.playerItem];
 }
 #pragma  当前播放视频的标题
@@ -266,16 +266,19 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     if (self.isFullScreen) {
 
-        self.playerLayer.frame = self.bounds;
         self.frame = self.fullScreenContainerView.bounds;
-        NSLog(@"进啦了大的");
+        
+        [self.progress resetFrameisFullScreen:YES];
+        [self.brightness resetFrameisFullScreen:YES];
     }else{
 
         self.frame = self.frameOnFatherView;
+        
         [self.progress resetFrameisFullScreen:NO];
         [self.brightness resetFrameisFullScreen:NO];
-        self.playerLayer.frame = self.bounds;
     }
+    
+    self.playerLayer.frame = self.bounds;
     
 }
 - (void)setFatherView:(UIView *)fatherView{
@@ -337,8 +340,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (self.isPushOrPopPlpay == NO) {
         [self configureUI];
     }
+//    [self layoutIfNeeded];
     
     [self configureFrame];
+    
 }
 
 - (ZJJPlayer *)player{
@@ -358,6 +363,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (UIImageView *)BGImgView{
     if (_BGImgView == nil) {
         _BGImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height)];
+        _BGImgView.contentMode = UIViewContentModeScaleAspectFit;
         [self addSubview:_BGImgView];
     }
     return _BGImgView;
@@ -408,7 +414,42 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     self.loadingIndicator.progress = 0.5;
     self.volumeViewSlider.frame = CGRectMake(-1000, -1000, 100, 100);
 
+    if (self.isFullScreen) {
+        
+        self.frame = self.fullScreenContainerView.bounds;
+        
+        [self.progress resetFrameisFullScreen:YES];
+        [self.brightness resetFrameisFullScreen:YES];
+    }else{
+        
+        self.frame = self.frameOnFatherView;
+        
+        [self.progress resetFrameisFullScreen:NO];
+        [self.brightness resetFrameisFullScreen:NO];
+        
+        
+        [self configureSmall];
+    }
+    
+    self.playerLayer.frame = self.bounds;
+
 }
+#pragma mark - 适适配小屏幕
+- (void)configureSmall{
+    if (self.BGImgView.hidden == NO) {
+        self.BGImgView.frame = CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height);
+    }
+    
+    self.loadingIndicator.frame = CGRectMake((self.frameOnFatherView.size.width -35)/2.0, (self.frameOnFatherView.size.height -35)/2.0, 35, 35);
+    
+    self.bottomView.frame = CGRectMake(0, self.frameOnFatherView.size.height-50, self.frameOnFatherView.size.width, 50);
+    [self.bottomView resetFrame];
+    self.topView.frame = CGRectMake(0, 0, self.frameOnFatherView.size.width, 50);
+    [self.topView resetFrame];
+}
+
+
+
 - (void)configureUI{
     self.isFullScreen = NO;
     self.isPlayAfterPause = NO;
@@ -1107,7 +1148,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     }else if ([keyPath isEqualToString:@"playbackBufferEmpty"]){//缓存不足了 //监听播放器在缓冲数据的状态
       
         [self.loadingIndicator show];
-        
+        NSLog(@"缓存不足了,有点卡了额");
     }else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]){//缓存达到可播放程度了
         [self.loadingIndicator dismiss];
         
@@ -1154,24 +1195,32 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     return result;
 }
 
+- (void)displayTime{
+    // 当前时间
+    CGFloat nowTime = CMTimeGetSeconds(self.playerItem.currentTime);
+    // 总时间
+    CGFloat duration = CMTimeGetSeconds(self.playerItem.duration);
+    // sec 转换成时间点
+    
+    self.bottomView.currentTime = [self convertToTime:nowTime];
+    
+    self.bottomView.remainingTime = [self convertToTime:(duration - nowTime)];
+}
+
 #pragma mark -- 调用plaer的对象进行UI更新
 - (void)initTimer
 {
+    
+    
+       [self displayTime];
     // player的定时器
     __weak typeof(self)weakSelf = self;
     // 每秒更新一次UI Slider
     [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
         
-        // 当前时间
-        CGFloat nowTime = CMTimeGetSeconds(weakSelf.playerItem.currentTime);
-        // 总时间
-        CGFloat duration = CMTimeGetSeconds(weakSelf.playerItem.duration);
-        // sec 转换成时间点
+      
+        [weakSelf displayTime];
         
-        weakSelf.bottomView.currentTime = [weakSelf convertToTime:nowTime];
-
-        weakSelf.bottomView.remainingTime = [weakSelf convertToTime:(duration - nowTime)];
-
         // 获取当前播放的时间
         NSTimeInterval currentTime = CMTimeGetSeconds(weakSelf.player.currentItem.currentTime);
         ZJCacheTask * task =  [ZJCacheTask shareTask];
@@ -1253,8 +1302,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
         
         self.topView.hidden = NO;
-        [self.progress resetFrameisFullScreen:YES];
-        [self.brightness resetFrameisFullScreen:YES];
+        
+        
         
         //通知外界
         if (self.orientationWillChange) {
@@ -1268,10 +1317,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 //        [[UIApplication sharedApplication] setStatusBarOrientation:(interfaceOrientation) animated:NO];
         
         [UIView animateWithDuration:0.3 animations:^{
-            
-            self.frame = self.fullScreenContainerView.bounds;
-            
-            self.playerLayer.frame = CGRectMake(0, 0, width, height);
             
             if (self.BGImgView.hidden == NO) {
                 self.BGImgView.frame = CGRectMake(0, 0, width, height);
@@ -1298,7 +1343,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             self.orientationWillChange(self, NO);
         }
 
-        self.frame = self.frameOnFatherView;
+//        self.frame = self.frameOnFatherView;
         
         [self layoutIfNeeded];
         
@@ -1309,16 +1354,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         [UIView animateWithDuration:kVideoControlAnimationTimeInterval animations:^{
             [self setTransform:CGAffineTransformIdentity];
             
-            if (self.BGImgView.hidden == NO) {
-                self.BGImgView.frame = CGRectMake(0, 0, self.frameOnFatherView.size.width, self.frameOnFatherView.size.height);
-            }
-            
-            self.loadingIndicator.frame = CGRectMake((self.frameOnFatherView.size.width -35)/2.0, (self.frameOnFatherView.size.height -35)/2.0, 35, 35);
-            
-            self.bottomView.frame = CGRectMake(0, self.frameOnFatherView.size.height-50, self.frameOnFatherView.size.width, 50);
-            [self.bottomView resetFrame];
-            self.topView.frame = CGRectMake(0, 0, self.frameOnFatherView.size.width, 50);
-            [self.topView resetFrame];
+            [self configureSmall];
 
             self.transform = [self getTransformRotationAngle:interfaceOrientation];
 

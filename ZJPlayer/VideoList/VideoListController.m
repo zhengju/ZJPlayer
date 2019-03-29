@@ -175,7 +175,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     VideoList *   model = self.datas[indexPath.row];
-    
+    self.player.indexPath = indexPath;
     
     VideoController * controller = [[VideoController alloc]init];
     
@@ -194,4 +194,16 @@
 - (void)playFinishedPlayer:(ZJVideoPlayerView *)player{
     NSLog(@"播放完毕");
 }
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    VideoListCell * cell = (VideoListCell *)[self.tableView cellForRowAtIndexPath:self.player.indexPath];
+    if (cell) {
+        self.player.fatherView = cell;
+         [self.player setPlayerFrame:cell.playerView.frame];
+    }
+    self.player.delegate = self;
+}
+
+
 @end

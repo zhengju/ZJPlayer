@@ -78,12 +78,10 @@
 
 - (void)show{
     self.hidden = NO;
-    NSLog(@"加载指示器显示");
     [self setNeedsDisplay];
 }
 
 - (void)dismiss{
-    NSLog(@"加载指示器隐藏");
     self.hidden = YES;
 }
 - (void)setProgress:(CGFloat)progress{

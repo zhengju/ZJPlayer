@@ -55,7 +55,7 @@
     _isPlay = isPlay;
     if (_isPlay) {
         [self.playBtn setImage:[UIImage imageNamed:@"ZJPlayerSource.bundle/btn_player_play"] forState:UIControlStateNormal];
-//        [self.playBtn setImage:[UIImage imageNamed:@"播放"] forState:UIControlStateNormal];
+
     }else{
      
         [self.playBtn setImage:[UIImage imageNamed:@"ZJPlayerSource.bundle/btn_player_pause"] forState:UIControlStateNormal];
