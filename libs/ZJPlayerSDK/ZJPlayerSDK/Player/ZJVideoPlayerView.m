@@ -233,7 +233,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
        }
 
-        [self addObserverToPlayerItem:self.playerItem];
+    [self addObserverToPlayerItem:self.playerItem];
 }
 #pragma  当前播放视频的标题
 - (void)setTitle:(NSString *)title{
@@ -1104,11 +1104,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
        
         [self loadedTimeRanges];
        
-    }else if ([keyPath isEqualToString:@"playbackBufferEmpty"]){
-       // NSLog(@"playbackBufferEmpty");
-    }else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]){
-       // NSLog(@"playbackLikelyToKeepUp");
-
+    }else if ([keyPath isEqualToString:@"playbackBufferEmpty"]){//缓存不足了 //监听播放器在缓冲数据的状态
+      
+        [self.loadingIndicator show];
+        
+    }else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]){//缓存达到可播放程度了
+        [self.loadingIndicator dismiss];
+        
     }else if ([keyPath isEqualToString:@"timeControlStatus"] && object == self.player){
         AVPlayerTimeControlStatus status = [[change objectForKey:NSKeyValueChangeNewKey]integerValue];
         if (status == AVPlayerTimeControlStatusPaused) {//暂停状态
@@ -1242,6 +1244,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeRight || interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
         
+        [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"缩小"] forState:UIControlStateNormal];
+        
+        
         if (height > width) {//左右横屏相互转
             width = kScreenWidth;
             height = kScreenHeight;
@@ -1281,7 +1286,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
             self.transform = [self getTransformRotationAngle:interfaceOrientation];
 
-            
         } completion:^(BOOL finished) {
                     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:(UIStatusBarAnimationFade)];
             
@@ -1289,6 +1293,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     }else if (interfaceOrientation == UIInterfaceOrientationPortrait){//小屏
         self.topView.hidden = YES;
 
+        [self.bottomView.scalingBtn setImage:[UIImage imageNamed:@"放大"] forState:UIControlStateNormal];
         if (self.orientationWillChange) {
             self.orientationWillChange(self, NO);
         }

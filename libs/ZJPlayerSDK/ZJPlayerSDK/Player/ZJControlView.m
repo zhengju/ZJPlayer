@@ -8,6 +8,15 @@
 
 #import "ZJControlView.h"
 #import "ZJPlayerSDK.h"
+@implementation ZJUISlider
+
+//-(CGRect)trackRectForBounds:(CGRect)bounds
+//{
+//    bounds.size.height=6;
+//    return bounds;
+//}
+
+@end
 
 @interface ZJControlView()
 
@@ -93,9 +102,16 @@
     self.scalingBtn.frame = CGRectMake(self.frameW-40, (self.frameH-35)/2.0, 35, 35);
 
     
-    // 底部进度条
+    // 底部左侧时间轴
+    self.nowLabel = [[UILabel alloc] init];
+    self.nowLabel.textColor = [UIColor whiteColor];
+    self.nowLabel.font = [UIFont systemFontOfSize:13];
+    self.nowLabel.textAlignment = NSTextAlignmentLeft;
+    [self addSubview:self.nowLabel];
+    self.nowLabel.frame = CGRectMake(CGRectGetMaxX(self.playBtn.frame), (self.frameH-35)/2.0, 50, 35);
     
-    self.slider = [[UISlider alloc]init];
+    // 底部进度条
+    self.slider = [[ZJUISlider alloc]init];
     self.slider.continuous = YES;
     self.slider.minimumValue = 0.0;
     self.slider.minimumTrackTintColor = [UIColor greenColor];
@@ -108,11 +124,14 @@
     [self.slider addTarget:self action:@selector(sliderTapValueChange:) forControlEvents:UIControlEventTouchUpOutside];
     [self.slider addTarget:self action:@selector(sliderTapValueChange:) forControlEvents:UIControlEventTouchCancel];
     
+    [self.slider setThumbImage:[UIImage imageNamed:@"yuandianxiao"] forState:UIControlStateNormal];
+    
+    
     UITapGestureRecognizer *tapSlider = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchSlider:)];
     [self.slider addGestureRecognizer:tapSlider];
     [self addSubview:self.slider];
     
-    self.slider.frame = CGRectMake(CGRectGetMaxX(self.playBtn.frame), (self.frameH-20)/2.0, self.frameW - CGRectGetMaxX(self.playBtn.frame) - self.scalingBtn.frameW, 20);
+    self.slider.frame = CGRectMake(CGRectGetMaxX(self.nowLabel.frame), (self.frameH-20)/2.0, self.frameW - CGRectGetMaxX(self.nowLabel.frame) - self.scalingBtn.frameW-50, 20);
 
  // 底部缓存进度条
     self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
@@ -121,20 +140,13 @@
     [self addSubview:self.progressView];
     [self.progressView setProgress:0.0 animated:NO];
     
-    
     self.progressView.frame = CGRectMake(CGRectGetMinX(self.slider.frame), (self.frameH-2)/2.0, self.slider.frameW, 2);
-
+    
+//    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 3.0f);
+//    self.progressView.transform = transform;//设定宽高
+    
     [self sendSubviewToBack:self.progressView];
     
-    // 底部左侧时间轴
-    self.nowLabel = [[UILabel alloc] init];
-    self.nowLabel.textColor = [UIColor whiteColor];
-    self.nowLabel.font = [UIFont systemFontOfSize:13];
-    self.nowLabel.textAlignment = NSTextAlignmentLeft;
-    [self addSubview:self.nowLabel];
-    
-    self.nowLabel.frame = CGRectMake(CGRectGetMinX(self.slider.frame), CGRectGetMaxY(self.slider.frame), 100, 20);
-
     // 底部右侧时间轴
     self.remainLabel = [[UILabel alloc] init];
     self.remainLabel.textColor = [UIColor whiteColor];
@@ -142,7 +154,7 @@
     self.remainLabel.textAlignment = NSTextAlignmentRight;
     [self addSubview:self.remainLabel];
     
-     self.remainLabel.frame = CGRectMake(CGRectGetMaxX(self.slider.frame)-100, CGRectGetMaxY(self.slider.frame), 100, 20);
+    self.remainLabel.frame = CGRectMake(CGRectGetMaxX(self.slider.frame), (self.frameH-35)/2.0, 50, 35);
 
 }
 - (void)play:(UIButton *)button{
@@ -183,10 +195,18 @@
 }
 - (void)resetFrame{
      self.playBtn.frame = CGRectMake(0, (self.frameH-35)/2.0, 35, 35);
+   
     self.scalingBtn.frame = CGRectMake(self.frameW-40, (self.frameH-35)/2.0, 35, 35);
-    self.slider.frame = CGRectMake(CGRectGetMaxX(self.playBtn.frame), (self.frameH-20)/2.0, self.frameW - CGRectGetMaxX(self.playBtn.frame) - self.scalingBtn.frameW, 20);
+   
+    self.nowLabel.frame = CGRectMake(CGRectGetMaxX(self.playBtn.frame), (self.frameH-35)/2.0, 50, 35);
+    
+    self.slider.frame = CGRectMake(CGRectGetMaxX(self.nowLabel.frame), (self.frameH-20)/2.0, self.frameW - CGRectGetMaxX(self.nowLabel.frame) - self.scalingBtn.frameW-50, 20);
+
     self.progressView.frame = CGRectMake(CGRectGetMinX(self.slider.frame), (self.frameH-2)/2.0, self.slider.frameW, 2);
-    self.nowLabel.frame = CGRectMake(CGRectGetMinX(self.slider.frame), CGRectGetMaxY(self.slider.frame), 100, 20);
-    self.remainLabel.frame = CGRectMake(CGRectGetMaxX(self.slider.frame)-100, CGRectGetMaxY(self.slider.frame), 100, 20);
+    
+//    CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 3.0f);
+//    self.progressView.transform = transform;//设定宽高
+
+    self.remainLabel.frame = CGRectMake(CGRectGetMaxX(self.slider.frame), (self.frameH-35)/2.0, 50, 35);
 }
 @end

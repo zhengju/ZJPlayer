@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@interface ZJUISlider : UISlider
+
+@end
+
+
+
 @protocol ZJControlViewDelegate <NSObject>
 
 /**
@@ -32,7 +38,7 @@
 
 @interface ZJControlView : UIView
 
-@property(strong,nonatomic) UISlider * slider;
+@property(strong,nonatomic) ZJUISlider * slider;
 
 @property (nonatomic,strong) UIProgressView *progressView;
 /**

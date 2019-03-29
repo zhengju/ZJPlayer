@@ -64,6 +64,11 @@
                          @"兴隆。国际城",
                          @"苹果",
                          @"共享新时代 共赢新发展",
+                         @"1",
+                         @"2",
+                         @"3",
+                         @"4",
+                         @"5",
                          ];
 
     NSArray * urls = @[
@@ -71,6 +76,12 @@
                        @"http://img.house.china.com.cn/voice/rongch.mp4",
                        @"https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4",
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
+                       @"https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4",
+                       @"https://www.apple.com/105/media/cn/mac/family/2018/46c4b917_abfd_45a3_9b51_4e3054191797/films/bruce/mac-bruce-tpl-cn-2018_1280x720h.mp4",
+                       @"http://tb-video.bdstatic.com/tieba-smallvideo/5_6d3243c354755b781f6cc80f60756ee5.mp4",
+                       @"http://tb-video.bdstatic.com/tieba-smallvideo/12_cc75b3fb04b8a23546d62e3f56619e85.mp4",
+                       @"http://tb-video.bdstatic.com/tieba-smallvideo/15_ad895ac5fb21e5e7655556abee3775f8.mp4"
+                       
                        ];
     
     for (int i = 0; i < urls.count; i++) {
