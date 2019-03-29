@@ -48,10 +48,12 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 };
 
 @interface ZJVideoPlayerView()<ZJControlViewDelegate,ZJTopViewDelegate>//,InterceptViewDelegate>
+/**
+ 默认背景图
+ */
+@property(strong,nonatomic) UIImageView * BGImgView;
 
 @property(strong,nonatomic) UIViewController * controller;
-
-@property(nonatomic) CGRect  currentFrame;//遗弃
 /**
  在父类上的frame
  */
@@ -181,10 +183,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
     }
 }
-/**
- 因复用，移除监听，重新监听
- */
-#pragma 设置当前url
+
+#pragma mark -设置当前url
 - (void)setUrl:(NSURL *)url{
     
     //初始化
@@ -224,8 +224,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
            self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
            
            if (!self.player) {
+
                self.player = [ZJJPlayer playerWithPlayerItem:self.playerItem];
            } else {
+               [self.player pause];
                [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
            } self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
 
@@ -295,6 +297,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         if (!CGRectEqualToRect(frame, CGRectZero)) {
             self.frameOnFatherView = frame;
             [self configureUI];
+            [self configureFrame];
         }
 
         [self setupObservers];//监听应用状态
@@ -331,8 +334,11 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     self.frameOnFatherView = frame;
 
-    [self configureUI];
-
+    if (self.isPushOrPopPlpay == NO) {
+        [self configureUI];
+    }
+    
+    [self configureFrame];
 }
 
 - (ZJJPlayer *)player{
@@ -380,7 +386,29 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     }
     return _loadingIndicator;
 }
+- (void)configureFrame{
+    if (self.placeholderImage) {
+        
+        self.BGImgView.image = self.placeholderImage;
+    }else{
+        
+        self.BGImgView.image = [ZJCustomTools thumbnailImageRequest:10.5 url:self.url.absoluteString];
+    }
+    
+    if (self.isPushOrPopPlpay == NO) {
+        self.BGImgView.hidden = NO;
+    }
 
+    self.topView.hidden = YES;
+    
+    //底部
+    self.bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
+    
+    self.loadingIndicator.frame = CGRectMake((self.frameOnFatherView.size.width-35)/2.0, (self.frameOnFatherView.size.height-35)/2.0, 35, 35);
+    self.loadingIndicator.progress = 0.5;
+    self.volumeViewSlider.frame = CGRectMake(-1000, -1000, 100, 100);
+
+}
 - (void)configureUI{
     self.isFullScreen = NO;
     self.isPlayAfterPause = NO;
@@ -399,38 +427,19 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
      */
     self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
 
-  
-    
-    
     if (_url.absoluteString.length > 0) {
         self.url = _url;
     }
 
-    self.BGImgView.image = [ZJCustomTools thumbnailImageRequest:10.5 url:self.url.absoluteString];
-    
-    
-    //顶部栏
-
-     self.topView.hidden = YES;
-    
-    //底部
-    self.bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
-
-    self.loadingIndicator.frame = CGRectMake((self.frameOnFatherView.size.width-35)/2.0, (self.frameOnFatherView.size.height-35)/2.0, 35, 35);
-
-    self.loadingIndicator.progress = 0.5;
     
     if (self.progress == nil) {
          self.progress = [[ZJProgress alloc]initWithSuperView:self];
     }
     if (self.brightness == nil) {
         self.brightness = [[ZJBrightness alloc]initWithSuperView:self];
-
     }
 
-    self.volumeViewSlider.frame = CGRectMake(-1000, -1000, 100, 100);
 
-    
 }
 #pragma  mark -- 加滑动手势
 - (void)addSwipeGesture{
@@ -512,18 +521,21 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     CGFloat width = kScreenWidth;
     CGFloat x = self.gestureStartPoint.x;
     
-//     if (self.isFullScreen) {//大屏，x和y互换
-//
-//         pointY=(self.gestureStartPoint.x-currentPoint.x);
-//         pointX=(self.gestureStartPoint.y-currentPoint.y);
-//         isPlusTime = NO;
-//         width = kScreenHeight;
-//         x = self.gestureStartPoint.y;
-//         if (!self.isLandscapeLeft) {
-//             isPlusTime = YES;
-//             x = width - x;
-//         }
-//     }
+     if (self.isFullScreen) {//大屏，x和y互换
+
+         pointY=(self.gestureStartPoint.x-currentPoint.x);
+         pointX=(self.gestureStartPoint.y-currentPoint.y);
+         isPlusTime = NO;
+         width = kScreenHeight;
+         x = self.gestureStartPoint.y;
+         if (!self.isLandscapeLeft) {
+             isPlusTime = YES;
+             x = width - x;
+         }
+     }
+    
+    NSLog(@"%f %f %f %f",pointY,pointY,width,x);
+    
     
     switch (self.slidingStyle) {
         case slidingDefault:
@@ -820,7 +832,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             
             [UIView animateWithDuration:1 animations:^{
                 [self.player play];
-                self.BGImgView.hidden = YES;
                 self.bottomView.isPlay  = YES;
             }];
 
@@ -877,6 +888,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [playerItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
     //缓存可以播放的时候调用 // 缓冲区有足够数据可以播放了
     [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
+    
+    [self.player addObserver:self forKeyPath:@"timeControlStatus" options:NSKeyValueObservingOptionNew context:nil];
+    
 }
 
 - (void)removeObserverFromPlayerItem:(AVPlayerItem *)playerItem{
@@ -884,6 +898,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [playerItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
     [playerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
     [playerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+    [self.player removeObserver:self forKeyPath:@"timeControlStatus"];
 }
 //注册通知
 - (void)setupObservers
@@ -898,7 +913,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (self.player.rate == 0 && self.isPlayAfterPause) {
 
         [self.player play];
-        self.BGImgView.hidden = YES;
         self.bottomView.isPlay  = YES;
     }
 }
@@ -1053,9 +1067,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
                 // 最大值直接用sec，以前都是
                 // CMTimeMake(帧数（slider.value * timeScale）, 帧/sec)
                 self.bottomView.sliderMaximumValue = CMTimeGetSeconds(self.playerItem.duration);
-                
-                [self.loadingIndicator dismiss];
-               
+
                 [self initTimer];
                 
                 self.player.volume = 0.4;
@@ -1096,9 +1108,17 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
        // NSLog(@"playbackBufferEmpty");
     }else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]){
        // NSLog(@"playbackLikelyToKeepUp");
-        
-        [self.loadingIndicator dismiss];
 
+    }else if ([keyPath isEqualToString:@"timeControlStatus"] && object == self.player){
+        AVPlayerTimeControlStatus status = [[change objectForKey:NSKeyValueChangeNewKey]integerValue];
+        if (status == AVPlayerTimeControlStatusPaused) {//暂停状态
+
+        }else if (status == AVPlayerTimeControlStatusWaitingToPlayAtSpecifiedRate) {//准备播放
+            
+        }else if (status == AVPlayerTimeControlStatusPlaying) {//正在播放了，隐藏加载指示器和背景图片
+            self.BGImgView.hidden = YES;
+            [self.loadingIndicator dismiss];
+        }
     }
 }
 #pragma mark -- 监听缓存进度
@@ -1112,6 +1132,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     //        // 监听到了给进度条赋值
     
     self.bottomView.progress = timeInterval / durationTime;
+    
+    if (timeInterval > 0) {
+        [self.loadingIndicator dismiss];
+    }
     
 }
 /**
@@ -1143,14 +1167,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         // sec 转换成时间点
         
         weakSelf.bottomView.currentTime = [weakSelf convertToTime:nowTime];
-        
-        
+
         weakSelf.bottomView.remainingTime = [weakSelf convertToTime:(duration - nowTime)];
-        
-        
-        //当已经开始播放之后，隐藏指示器
-        [weakSelf.loadingIndicator dismiss];
-        
+
         // 获取当前播放的时间
         NSTimeInterval currentTime = CMTimeGetSeconds(weakSelf.player.currentItem.currentTime);
         ZJCacheTask * task =  [ZJCacheTask shareTask];
@@ -1218,6 +1237,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     CGFloat width = kScreenHeight;
     CGFloat height = kScreenWidth;
 
+    
+    [[UIApplication sharedApplication] setStatusBarOrientation:(interfaceOrientation) animated:NO];
+    
     if (interfaceOrientation == UIInterfaceOrientationLandscapeRight || interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
         
         if (height > width) {//左右横屏相互转
@@ -1235,8 +1257,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
         
 //        [self layoutIfNeeded];
-        
+
         [self.fullScreenContainerView addSubview:self];
+        
+//        [[UIApplication sharedApplication] setStatusBarOrientation:(interfaceOrientation) animated:NO];
         
         [UIView animateWithDuration:0.3 animations:^{
             
@@ -1256,9 +1280,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             [self.topView resetFrame];
 
             self.transform = [self getTransformRotationAngle:interfaceOrientation];
-            
-            [[UIApplication sharedApplication] setStatusBarOrientation:(interfaceOrientation) animated:YES];
 
+            
         } completion:^(BOOL finished) {
                     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:(UIStatusBarAnimationFade)];
             
@@ -1276,6 +1299,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         
         [self.fatherView addSubview:self];
 
+        
+
         [UIView animateWithDuration:kVideoControlAnimationTimeInterval animations:^{
             [self setTransform:CGAffineTransformIdentity];
             
@@ -1292,7 +1317,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
             self.transform = [self getTransformRotationAngle:interfaceOrientation];
 
-            [[UIApplication sharedApplication] setStatusBarOrientation:(interfaceOrientation) animated:YES];
+            
             //        [[UIApplication sharedApplication] setStatusBarStyle:(UIStatusBarStyleDefault)];
             
         } completion:^(BOOL finished) {
@@ -1339,8 +1364,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 }
 #pragma 视频播放
 - (void)play{
-
-    self.BGImgView.hidden = YES;
     
     self.bottomView.isPlay  = YES;
     
@@ -1361,9 +1384,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         self.player.rate = self.topView.rate;
     }
     
-    if (self.isPlayAfterPause == NO) {
-         [self.loadingIndicator show];//可以播放就隐藏
-    }
+//    if (self.isPlayAfterPause == NO) {
+         [self.loadingIndicator show];
+//    }
     if (self.isPlayContinuously && self.isFullScreen) {//连续播放
         //如果上个是全屏，连续播放也是全屏
         
@@ -1405,7 +1428,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
 - (void)sliderTapValueChange:(UISlider *)slider
 {
-    self.BGImgView.hidden = YES;
     self.isDragSlider = NO;
     // CMTimeMake(帧数（slider.value * timeScale）, 帧/sec)
     // 直接用秒来获取CMTime
@@ -1424,7 +1446,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (self.player.rate == 0)
     {
         self.bottomView.isPlay  = YES;
-        self.BGImgView.hidden = YES;
         [self.player play];
     }
 }

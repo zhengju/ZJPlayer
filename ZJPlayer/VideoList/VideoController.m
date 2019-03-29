@@ -17,22 +17,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.player = [ZJVideoPlayerView sharePlayer];
-    self.player.isPushOrPopPlpay = NO;
-    self.view.backgroundColor = [UIColor whiteColor];
-
-    [self.player removeFromSuperview];
     
-    self.player.delegate = nil;
+    self.title = @"视频详情";
+    
+    self.player = [ZJVideoPlayerView sharePlayer];
+    
+    self.player.isPushOrPopPlpay = YES;
+    
+    self.view.backgroundColor = [UIColor whiteColor];
     
     self.player.delegate = self;
-    
-    [self.view addSubview:self.player];
-    
+
     self.player.fatherView = self.view;
 
     [self.player setPlayerFrame:CGRectMake(0, 0, kScreenWidth, 300)];
-    
+
     NSLog(@"%@",self.player);
     
 }

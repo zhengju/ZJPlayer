@@ -88,12 +88,16 @@
 
     self.player.indexPath = indexPath;
     
+    self.player.isPushOrPopPlpay = NO;
+    
     self.player.url = [NSURL URLWithString:cell.model.url];
 
     self.player.delegate = self;
 
     self.player.fatherView  = cell;
 
+    self.player.placeholderImage = cell.model.image;
+    
     [self.player setPlayerFrame:cell.playerView.frame];
     
     self.player.title = cell.model.title;
