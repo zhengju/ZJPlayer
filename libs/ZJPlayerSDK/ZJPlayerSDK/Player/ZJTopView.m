@@ -34,6 +34,12 @@
  */
 @property(strong,nonatomic) UIButton * gifScreenshotBtn;
 
+
+/**
+ 下载视频
+ */
+@property(strong,nonatomic) UIButton * downloadBtn;
+
 @property(strong,nonatomic) NSArray * rates;
 @end
 
@@ -144,14 +150,32 @@
     [self addSubview:self.gifScreenshotBtn];
     
     self.gifScreenshotBtn.frame = CGRectMake(CGRectGetMinX(self.captureBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
-
+//下载
+    self.downloadBtn = [[UIButton alloc]init];
+    self.downloadBtn.showsTouchWhenHighlighted = YES;
+    [self.downloadBtn setImage:[UIImage imageNamed:@"下载"] forState:UIControlStateNormal];
+    
+    [self.downloadBtn bk_addEventHandler:^(id sender) {
+        
+        if ([self.delegate respondsToSelector:@selector(downloadVideo)]) {
+            [self.delegate downloadVideo];
+            
+        }
+        
+    } forControlEvents:UIControlEventTouchUpInside];
+    
+    [self addSubview:self.downloadBtn];
+    
+    self.downloadBtn.frame = CGRectMake(CGRectGetMinX(self.gifScreenshotBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+    
+    
     self.titleLabel = [[UILabel alloc]init];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:self.titleLabel];
     
     
-    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.closeButton.frame)+50, (self.frameH-25)/2.0, self.frameW-CGRectGetMaxX(self.closeButton.frame)-5-self.gifScreenshotBtn.frameW-5, 25);
+    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.closeButton.frame)+50, (self.frameH-25)/2.0, self.frameW-CGRectGetMaxX(self.closeButton.frame)-5-self.gifScreenshotBtn.frameW*2-5, 25);
    
 }
 
@@ -178,8 +202,12 @@
     self.captureBtn.frame = CGRectMake(CGRectGetMinX(self.rateBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
     self.gifScreenshotBtn.frame = CGRectMake(CGRectGetMinX(self.captureBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
     
+     self.downloadBtn.frame = CGRectMake(CGRectGetMinX(self.gifScreenshotBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+    
     self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.closeButton.frame)+50, (self.frameH-25)/2.0, self.frameW-CGRectGetMaxX(self.closeButton.frame)-5-self.gifScreenshotBtn.frameW-5, 25);
 
 }
-
+- (void)downloadFinish{
+     [self.downloadBtn setImage:[UIImage imageNamed:@"download_finish"] forState:UIControlStateNormal];
+}
 @end

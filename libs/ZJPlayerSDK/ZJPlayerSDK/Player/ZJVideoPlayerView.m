@@ -18,6 +18,7 @@
 #import "ZJPlayerSDK.h"
 #import <MediaPlayer/MPVolumeView.h>
 #import "UIView+Player.h"
+#import "ZJDownloadManager.h"
 
 static const CGFloat kVideoControlAnimationTimeInterval = 0.3;
 
@@ -193,12 +194,19 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
     self.isPlayAfterPause = NO;
     
+    //判断是否有缓存
+    if ([[ZJDownloadManager sharedInstance]isCompletion:_url.absoluteString]) {//有缓存
+        _url = [NSURL fileURLWithPath:[[ZJDownloadManager sharedInstance] path:_url.absoluteString]];
+
+        [self.topView downloadFinish];
+    }
+
     if (![_url.absoluteString hasPrefix:@"http"])
     {
         
         self.isLocalVideo = YES;
 
-        self.asset = [AVURLAsset URLAssetWithURL:url options:nil];
+        self.asset = [AVURLAsset URLAssetWithURL:_url options:nil];
            
         self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset];
            
@@ -296,7 +304,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         self.fatherView = superView;
         
         self.layer.backgroundColor = [UIColor blackColor].CGColor;
-        
+        self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+
         if (!CGRectEqualToRect(frame, CGRectZero)) {
             self.frameOnFatherView = frame;
             [self configureUI];
@@ -472,7 +481,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         self.url = _url;
     }
 
-    
     if (self.progress == nil) {
          self.progress = [[ZJProgress alloc]initWithSuperView:self];
     }
@@ -1403,7 +1411,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     [self clickFullScreen:nil];
 }
-#pragma 视频播放
+#pragma mark -视频播放
 - (void)play{
     
     self.bottomView.isPlay  = YES;
@@ -1528,7 +1536,14 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     [self addSubview:self.interceptView];
     
 }
+- (void)downloadVideo{
+    NSLog(@"download..");
 
+    ZJDownloaderItem * item = [[ZJDownloaderItem alloc]init];
+    item.downloadUrl = self.url.absoluteString;
+    [[ZJDownloadManager sharedInstance]downloadWithItem:item];
+    
+}
 //#pragma mark -InterceptViewDelegate
 //-(void)interceptViewToback{
 //    [self play];

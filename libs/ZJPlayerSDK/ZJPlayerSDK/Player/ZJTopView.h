@@ -14,11 +14,20 @@
  */
 - (void)back;
 - (void)setRate:(float)rate;
+
+/**
+ 截图
+ */
 - (void)fetchScreen;
 /**
  GIF视频截屏
  */
 - (void)gifScreenshot;
+
+/**
+ 下载视频
+ */
+- (void)downloadVideo;
 @end
 @interface ZJTopView : UIView
 @property(weak,nonatomic) id<ZJTopViewDelegate> delegate;
@@ -33,4 +42,8 @@
 - (void)resetRate;
 - (void)resetFrame;
 
+/**
+ 设置下载完成状态
+ */
+- (void)downloadFinish;
 @end
