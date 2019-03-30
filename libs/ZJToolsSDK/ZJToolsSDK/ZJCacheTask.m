@@ -8,12 +8,21 @@
 
 #import "ZJCacheTask.h"
 #import "NSString+ZJHash.h"
+
 @interface ZJCacheTask()
+
+@property(strong,nonatomic) NSMutableDictionary * memoryCache;
+@property(strong,nonatomic) NSMutableDictionary * diskCache;
 
 @end
 
 @implementation ZJCacheTask
-
+- (NSMutableDictionary *)memoryCache{
+    if (_memoryCache == nil) {
+        _memoryCache = [NSMutableDictionary dictionaryWithCapacity:0];
+    }
+    return _memoryCache;
+}
 + (instancetype)shareTask
 {
     static ZJCacheTask *cachetask = nil;
@@ -21,22 +30,11 @@
     dispatch_once(&predicate, ^{
         cachetask = [[ZJCacheTask alloc]init];
         
-        [cachetask clearCache];//默认删除上次记录
+//     [cachetask clearCache];//默认删除观看上次记录
     });
     return cachetask;
 }
-- (NSString *)path{
-    // 1.获得沙盒根路径
-    NSString *home = NSHomeDirectory();
-    
-    // 2.document路径
-    NSString *docPath = [home stringByAppendingPathComponent:@"Documents"];
-    
-    // 3.文件路径
-    NSString *filepath = [docPath stringByAppendingPathComponent:@"videoTask.plist"];
-    
-    return filepath;
-}
+
 - (NSString *)cacheImagePath{
     // 1.获得沙盒根路径
     NSString *home = NSHomeDirectory();
@@ -49,13 +47,84 @@
     
     return filepath;
 }
+
+#pragma mark -缓存图片
+- (void)storeImage:(nullable UIImage *)image forKey:(nullable NSString *)key{
+    
+    
+    if (!image) {
+        return;
+    }
+    
+    
+    NSString * md5Str = [key md5String];
+    
+    //memory
+    [self.memoryCache setObject:image forKey:md5Str];
+    
+    //disk
+    NSString * filepath = [self cacheImagePath];
+    
+    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:filepath];
+
+    if (self.diskCache == nil) {
+        self.diskCache = [NSMutableDictionary dictionaryWithCapacity:0];
+    }
+    
+    NSData *imageData = UIImagePNGRepresentation(image);
+    [self.diskCache setObject:imageData forKey:md5Str];
+    [self.diskCache writeToFile:filepath atomically:YES];
+
+}
+
+- (nullable UIImage *)imageFromMemoryCacheForKey:(nullable NSString *)key{
+    
+    NSString * md5Str = [key md5String];
+    return [self.memoryCache valueForKey:md5Str];
+}
+
+- (nullable UIImage *)imageFromDiskCacheForKey:(nullable NSString *)key{
+    
+    NSString * md5Str = [key md5String];
+    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:[self cacheImagePath]];
+    
+    UIImage * diskImage = [UIImage imageWithData:[self.diskCache valueForKey:md5Str]];
+    if (diskImage) {
+        [self.memoryCache setObject:diskImage forKey:md5Str];
+    }
+    return diskImage;
+}
+
+- (nullable UIImage *)imageFromCacheForKey:(nullable NSString *)key {
+    // First check the in-memory cache...
+    UIImage *image = [self imageFromMemoryCacheForKey:key];
+    if (image) {
+        return image;
+    }
+    
+    // Second check the disk cache...
+    image = [self imageFromDiskCacheForKey:key];
+    return image;
+}
+@end
+
+@implementation ZJCacheTask (Video)
+
+- (NSString *)path{
+
+    NSString *home = NSHomeDirectory();
+    NSString *docPath = [home stringByAppendingPathComponent:@"Documents"];
+    NSString *filepath = [docPath stringByAppendingPathComponent:@"videoTask.plist"];
+    
+    return filepath;
+}
 - (void)writeToFileUrl:(NSString *)url time: (NSTimeInterval) currentTime{
     
     
     NSString * filepath = [self path];
     
     NSMutableArray *tasks = [[NSMutableArray alloc] initWithContentsOfFile:filepath];
-
+    
     
     if (tasks == nil) {
         tasks = [NSMutableArray arrayWithCapacity:0];
@@ -65,10 +134,10 @@
     
     NSDate * date = [NSDate dateWithTimeIntervalSince1970:currentTime];
     
-    for (NSMutableDictionary * dic in tasks) {
-
+    for (NSMutableDictionary * dic in tasks) {//优化-用hash表，命中率会会高些
+        
         if ([dic[@"url"] isEqualToString:url]) {
-
+            
             [dic setObject:date forKey:@"time"];
             
             isHave = YES;
@@ -78,11 +147,11 @@
     if (isHave == NO) {
         
         NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithCapacity:0];
-
+        
         [dic setObject:date forKey:@"time"];
         
         [dic setObject:url forKey:@"url"];
-            
+        
         [tasks addObject:dic];
     }
     
@@ -90,10 +159,10 @@
     
 }
 - (NSTimeInterval)queryToFileUrl:(NSString *)url{
-   
+    
     
     NSTimeInterval time = 0;
-
+    
     NSString * filepath = [self path];
     
     NSMutableArray *tasks = [[NSMutableArray alloc] initWithContentsOfFile:filepath];
@@ -104,8 +173,8 @@
             
             NSDate * date = [dic objectForKey:@"time"];
             
-           time = [date timeIntervalSince1970];
-
+            time = [date timeIntervalSince1970];
+            
         }
     }
     return time;
@@ -114,11 +183,11 @@
     [self writeToFileUrl:url time:0];
 }
 - (void)clearCache{
- 
+    
     NSFileManager* fileManager=[NSFileManager defaultManager];
     
     NSString * filepath = [self path];
-      BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filepath];
+    BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filepath];
     if (!blHave) {
         NSLog(@"no  have");
         return ;
@@ -131,53 +200,5 @@
             NSLog(@"dele fail");
         }
     }
-}
-
-- (void)cacheImageWith:(NSString *)url image:(UIImage *)image{
-    
-    
-    if (!image) {
-        return;
-    }
-    
-     NSString * md5Str = [url md5String];
-    
-    NSString * filepath = [self cacheImagePath];
-    
-    self.cacheImageDic = [[NSMutableDictionary alloc] initWithContentsOfFile:filepath];
-
-    if (self.cacheImageDic == nil) {
-        self.cacheImageDic = [NSMutableDictionary dictionaryWithCapacity:0];
-    }
-    
-    NSData *imageData = UIImagePNGRepresentation(image);
-   
-    [self.cacheImageDic setObject:imageData forKey:md5Str];
-
- 
-    [self.cacheImageDic writeToFile:filepath atomically:YES];
-  
-}
-
-/**
- 缓存图片
- */
-- (UIImage *)imageWith:(NSString *)url{
-    
-    NSString * md5Str = [url md5String];
-    
-    NSData * data = [self.cacheImageDic valueForKey:md5Str];
-    
-    UIImage * image = [UIImage imageWithData:data];
-    
-    if (!image){
-        
-         self.cacheImageDic = [[NSMutableDictionary alloc] initWithContentsOfFile:[self cacheImagePath]];
-
-        data = [self.cacheImageDic valueForKey:md5Str];
-
-        image = [UIImage imageWithData:data];
-    }
-    return image;
 }
 @end

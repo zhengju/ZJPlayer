@@ -8,14 +8,27 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
 @interface ZJCacheTask : NSObject
 
 + (instancetype)shareTask;
 
-@property(strong,nonatomic) NSMutableDictionary * cacheImageDic;
-
 /**
- 缓存 
+ 缓存图片
+ */
+- (void)storeImage:(nullable UIImage *)image forKey:(nullable NSString *)key;
+
+- (nullable UIImage *)imageFromMemoryCacheForKey:(nullable NSString *)key;
+
+- (nullable UIImage *)imageFromDiskCacheForKey:(nullable NSString *)key;
+
+- (nullable UIImage *)imageFromCacheForKey:(nullable NSString *)key;
+
+@end
+
+@interface ZJCacheTask (Video)
+/**
+ 缓存
  url:当前视频url
  currentTime:已经播放的时间时间点
  */
@@ -29,14 +42,5 @@
  针对已经播放完毕的视频从头开始播放，给清零
  */
 - (void)clearCacheToFileUrl:(NSString *)url;
-
-/**
- 缓存图片
- */
-- (void )cacheImageWith:(NSString *)url image:(UIImage *)image;
-/**
- 查询缓存图片
- */
-- (UIImage *)imageWith:(NSString *)url;
 
 @end

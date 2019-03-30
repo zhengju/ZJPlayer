@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
 {
 
     //判断是否有缓存
-    UIImage * Img = [[ZJCacheTask shareTask] imageWith:path.absoluteString];
+    UIImage * Img = [[ZJCacheTask shareTask] imageFromCacheForKey:path.absoluteString];
     if (Img) {
         return Img;
     }
@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
     UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
     CGImageRelease(image);
     //缓存
-    [[ZJCacheTask shareTask] cacheImageWith:path.absoluteString image:videoImage];
+    [[ZJCacheTask shareTask]storeImage:videoImage forKey:path.absoluteString];
     return videoImage;
 }
 #pragma mark -- 截屏
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
  */
 + (UIImage *)thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr{
     
-    UIImage * image = [[ZJCacheTask shareTask]imageWith:urlStr];
+    UIImage * image = [[ZJCacheTask shareTask]imageFromCacheForKey:urlStr];
     
     if (image) {//从缓存查找
         return image;
@@ -123,8 +123,7 @@ typedef NS_ENUM(NSInteger, GIFSize) {
     image=[UIImage imageWithCGImage:cgImage];//转化为UIImage
     
     //缓存
-    [[ZJCacheTask shareTask] cacheImageWith:urlStr image:image];
-
+    [[ZJCacheTask shareTask]storeImage:image forKey:urlStr];
     CGImageRelease(cgImage);
     return image;
 }
