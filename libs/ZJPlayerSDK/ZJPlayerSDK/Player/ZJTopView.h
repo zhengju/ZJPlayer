@@ -40,7 +40,7 @@
  倍速归1.0X
  */
 - (void)resetRate;
-- (void)resetFrame;
+- (void)resetFrame:(BOOL)fullScreen;
 
 /**
  设置下载完成状态

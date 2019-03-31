@@ -27,7 +27,7 @@ typedef void (^CompleteBlock)(NSError* error,NSURL* url);
  *
  *  @param timeBySecond 时间点
  */
-+ (UIImage *)thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr;
++ (void)thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr success:(void(^)(UIImage * image))successBlock;
 
 - (void)interceptVideoAndVideoUrl:(NSURL *)videoUrl withOutPath:(NSString *)outPath outputFileType:(NSString *)outputFileType range:(NSRange)videoRange compositionProgressBlock:(void(^)(CGFloat progress))compositionProgressBlock intercept:(InterceptBlock)interceptBlock;
 @end

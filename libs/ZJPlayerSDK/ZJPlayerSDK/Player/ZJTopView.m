@@ -196,15 +196,23 @@
     [self.rateBtn setTitle:[NSString stringWithFormat:@"%@X",self.rates[_rateIndex]] forState:UIControlStateNormal];
 }
 
-- (void)resetFrame{
-      self.closeButton.frame = CGRectMake(5, (self.frameH-35)/2.0, 35, 35);
-    self.rateBtn.frame = CGRectMake(self.frameW-50-5, (self.frameH-25)/2.0, 50, 25);
-    self.captureBtn.frame = CGRectMake(CGRectGetMinX(self.rateBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
-    self.gifScreenshotBtn.frame = CGRectMake(CGRectGetMinX(self.captureBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+- (void)resetFrame:(BOOL)fullScreen{
     
-     self.downloadBtn.frame = CGRectMake(CGRectGetMinX(self.gifScreenshotBtn.frame)-5-35, (self.frameH-25)/2.0, 35, 35);
+    CGFloat top = 0.0;
+    CGFloat height = self.frameH;
+    if (fullScreen) {
+        top = 20.0;
+        height -= 20;
+    }
+
+    self.closeButton.frame = CGRectMake(5, (height-35)/2.0+top, 35, 35);
+    self.rateBtn.frame = CGRectMake(self.frameW-50-5, (height-25)/2.0+top, 50, 25);
+    self.captureBtn.frame = CGRectMake(CGRectGetMinX(self.rateBtn.frame)-5-35, (height-25)/2.0+top, 35, 35);
+    self.gifScreenshotBtn.frame = CGRectMake(CGRectGetMinX(self.captureBtn.frame)-5-35, (height-25)/2.0+top, 35, 35);
     
-    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.closeButton.frame)+50, (self.frameH-25)/2.0, self.frameW-CGRectGetMaxX(self.closeButton.frame)-5-self.gifScreenshotBtn.frameW-5, 25);
+     self.downloadBtn.frame = CGRectMake(CGRectGetMinX(self.gifScreenshotBtn.frame)-5-35, (height-25)/2.0+top, 35, 35);
+    
+    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.closeButton.frame)+50, (height-25)/2.0+top, self.frameW-CGRectGetMaxX(self.closeButton.frame)-5-self.gifScreenshotBtn.frameW*2-5, 25);
 
 }
 - (void)downloadFinish{

@@ -402,16 +402,22 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     return _loadingIndicator;
 }
 - (void)configureFrame{
+    
+    
     if (self.placeholderImage) {
         
         self.BGImgView.image = self.placeholderImage;
     }else{
         
-        self.BGImgView.image = [ZJCustomTools thumbnailImageRequest:10.5 url:self.url.absoluteString];
+        [ZJCustomTools thumbnailImageRequest:2.5 url:self.url.absoluteString success:^(UIImage *image) {
+            self.BGImgView.image = image;
+        }];
     }
     
     if (self.isPushOrPopPlpay == NO) {
         self.BGImgView.hidden = NO;
+    }else{
+        self.BGImgView.hidden = YES;
     }
 
     self.topView.hidden = YES;
@@ -454,7 +460,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     self.bottomView.frame = CGRectMake(0, self.frameOnFatherView.size.height-50, self.frameOnFatherView.size.width, 50);
     [self.bottomView resetFrame];
     self.topView.frame = CGRectMake(0, 0, self.frameOnFatherView.size.width, 50);
-    [self.topView resetFrame];
+    [self.topView resetFrame:NO];
 }
 
 
@@ -1334,8 +1340,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
             
             self.bottomView.frame = CGRectMake(0, height-50, width, 50);
             [self.bottomView resetFrame];
-            self.topView.frame = CGRectMake(0, 0, width, 50);
-            [self.topView resetFrame];
+            self.topView.frame = CGRectMake(0, 0, width, 70);
+            [self.topView resetFrame:YES];
 
             self.transform = [self getTransformRotationAngle:interfaceOrientation];
 
@@ -1515,9 +1521,10 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     CGFloat nowTime = CMTimeGetSeconds(self.playerItem.currentTime);
 
     
-    UIImage *image = [ZJCustomTools thumbnailImageRequest:nowTime url:_url.absoluteString];
-    
-    [self saveImageToPhotos:image];
+    [ZJCustomTools thumbnailImageRequest:nowTime url:_url.absoluteString success:^(UIImage *image) {
+         [self saveImageToPhotos:image];
+    }];
+
 }
 - (void)gifScreenshot{
 

@@ -148,15 +148,12 @@
     if (_model.image) {
         self.bgView.image = _model.image;
     }else{
-        //放入异步线程中
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            UIImage * image = [ZJCustomTools thumbnailImageRequest:5.0 url:_model.url];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //回调或者说是通知主线程刷新，
-                self.bgView.image = image;
-                _model.image = image;
-            });
-        });
+
+        [ZJCustomTools thumbnailImageRequest:1.2 url:_model.url success:^(UIImage *image) {
+            self.bgView.image = image;
+            _model.image = image;
+        }];
+
     }
 }
 - (void)setIndexPath:(NSIndexPath *)indexPath{

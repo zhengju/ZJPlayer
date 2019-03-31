@@ -13,7 +13,9 @@
 
 @property(strong,nonatomic) NSMutableDictionary * memoryCache;
 @property(strong,nonatomic) NSMutableDictionary * diskCache;
-
+@property (strong, nonatomic, nonnull) NSString *diskCachePath;
+@property (strong, nonatomic, nullable) dispatch_queue_t ioQueue;
+@property (strong, nonatomic, nonnull) NSFileManager *fileManager;
 @end
 
 @implementation ZJCacheTask
@@ -34,59 +36,96 @@
     });
     return cachetask;
 }
-
+- (instancetype)init{
+    if (self = [super init]) {
+        _ioQueue = dispatch_queue_create("com.cacheImage.ZJImageCache", DISPATCH_QUEUE_SERIAL);
+         _diskCachePath = [self cacheImagePath];
+        dispatch_sync(_ioQueue, ^{
+            self.fileManager = [NSFileManager new];
+        });
+    }
+    return self;
+}
 - (NSString *)cacheImagePath{
     // 1.获得沙盒根路径
     NSString *home = NSHomeDirectory();
-    
     // 2.document路径
     NSString *docPath = [home stringByAppendingPathComponent:@"Documents"];
-    
     // 3.文件路径
     NSString *filepath = [docPath stringByAppendingPathComponent:@"cacheImage.plist"];
-    
     return filepath;
 }
 
 #pragma mark -缓存图片
 - (void)storeImage:(nullable UIImage *)image forKey:(nullable NSString *)key{
     
-    
     if (!image) {
         return;
     }
     
-    
     NSString * md5Str = [key md5String];
     
-    //memory
-    [self.memoryCache setObject:image forKey:md5Str];
+    [self storeMemoryCacheImage:image forKey:md5Str];
     
-    //disk
-    NSString * filepath = [self cacheImagePath];
-    
-    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:filepath];
+    [self storeDiskCacheImage:image forKey:md5Str];
 
+}
+
+//memory
+- (void)storeMemoryCacheImage:(nullable UIImage *)image forKey:(nullable NSString *)key{
+    @synchronized (self) {
+        [self.memoryCache setObject:image forKey:key];
+    }
+}
+//disk
+- (void)storeDiskCacheImage:(nullable UIImage *)image forKey:(nullable NSString *)key{
+   
+    if (!image || !key) {
+        return;
+    }
+    
+    dispatch_async(_ioQueue, ^{
+        [self _storeDiskCacheImage:image forKey:key];
+    });
+    
+}
+- (void)_storeDiskCacheImage:(nullable UIImage *)image forKey:(nullable NSString *)key{
+
+    
+    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:_diskCachePath];
+    
     if (self.diskCache == nil) {
         self.diskCache = [NSMutableDictionary dictionaryWithCapacity:0];
     }
     
-    NSData *imageData = UIImagePNGRepresentation(image);
-    [self.diskCache setObject:imageData forKey:md5Str];
-    [self.diskCache writeToFile:filepath atomically:YES];
+    NSData *imageData = UIImagePNGRepresentation(image);//image转data可以深挖，编码策略
+    
+    [self.diskCache setObject:imageData forKey:key];
+    
+    if ([self.diskCache writeToURL:[NSURL fileURLWithPath:_diskCachePath] atomically:YES]) {
+        NSLog(@"diskCache ok");
+    }else{
+        NSLog(@"diskCache fail");
+    }
 
 }
 
 - (nullable UIImage *)imageFromMemoryCacheForKey:(nullable NSString *)key{
     
     NSString * md5Str = [key md5String];
-    return [self.memoryCache valueForKey:md5Str];
+    UIImage * image = nil;
+    
+    @synchronized (self) {
+       image = [self.memoryCache valueForKey:md5Str];
+    }
+    
+    return image;
 }
 
 - (nullable UIImage *)imageFromDiskCacheForKey:(nullable NSString *)key{
     
     NSString * md5Str = [key md5String];
-    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:[self cacheImagePath]];
+    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:_diskCachePath];
     
     UIImage * diskImage = [UIImage imageWithData:[self.diskCache valueForKey:md5Str]];
     if (diskImage) {
@@ -183,17 +222,15 @@
     [self writeToFileUrl:url time:0];
 }
 - (void)clearCache{
-    
-    NSFileManager* fileManager=[NSFileManager defaultManager];
-    
+
     NSString * filepath = [self path];
-    BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:filepath];
+    BOOL blHave=[self.fileManager fileExistsAtPath:filepath];
     if (!blHave) {
         NSLog(@"no  have");
         return ;
     }else {
         NSLog(@" have");
-        BOOL blDele= [fileManager removeItemAtPath:filepath error:nil];
+        BOOL blDele= [self.fileManager removeItemAtPath:filepath error:nil];
         if (blDele) {
             NSLog(@"dele success");
         }else {

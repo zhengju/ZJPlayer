@@ -91,41 +91,58 @@ typedef NS_ENUM(NSInteger, GIFSize) {
  *
  *  @param timeBySecond 时间点
  */
-+ (UIImage *)thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr{
++ (void)thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr success:(void (^)(UIImage *))successBlock{
     
     UIImage * image = [[ZJCacheTask shareTask]imageFromCacheForKey:urlStr];
-    
-    if (image) {//从缓存查找
-        return image;
+    if (image&&successBlock) {
+        successBlock(image);
+        return;
     }
     
+    dispatch_async(dispatch_queue_create("com.customTools.thumbnail", DISPATCH_QUEUE_SERIAL), ^{
+        [self _thumbnailImageRequest:timeBySecond url:urlStr success:^(UIImage *image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //缓存
+                [[ZJCacheTask shareTask]storeImage:image forKey:urlStr];
+                if (successBlock) {
+                    successBlock(image);
+                    return;
+                }
+            });
+        }];
+    });
+}
++ (void)_thumbnailImageRequest:(CGFloat )timeBySecond url:(NSString *)urlStr success:(void (^)(UIImage *))successBlock{
+    
     //创建URL
-    NSURL *url=[ZJCustomTools getNetworkUrl:urlStr];
+    NSURL *url = [ZJCustomTools getNetworkUrl:urlStr];
     //根据url创建AVURLAsset
-    AVURLAsset *urlAsset=[AVURLAsset assetWithURL:url];
+    AVURLAsset *urlAsset = [AVURLAsset assetWithURL:url];
     //根据AVURLAsset创建AVAssetImageGenerator
-    AVAssetImageGenerator *imageGenerator=[AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
+    AVAssetImageGenerator *imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
     /*截图
      * requestTime:缩略图创建时间
      * actualTime:缩略图实际生成的时间
      */
-    NSError *error=nil;
-    CMTime time=CMTimeMakeWithSeconds(timeBySecond, 600);//CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要活的某一秒的第几帧可以使用CMTimeMake方法)
+    NSError *error = nil;
+    CMTime time = CMTimeMakeWithSeconds(timeBySecond, 600);//CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要活的某一秒的第几帧可以使用CMTimeMake方法)
     CMTime actualTime;
     CMTimeShow(time);
     /** 使用copyCGImageAtTime:actualTime:error:生成一张指定时间点的图片。AVFoundation不一定能精确的生成一张你所指定时间的图片，所以你可以在第二个参数传一个CMTime的指针，用来获取所生成图片的精确时间。**/
-    CGImageRef cgImage= [imageGenerator copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    CGImageRef cgImage = [imageGenerator copyCGImageAtTime:time actualTime:&actualTime error:&error];
     if(error){
         NSLog(@"截取视频缩略图时发生错误，错误信息：%@",error.localizedDescription);
-        return nil;
+        return;
     }
     CMTimeShow(actualTime);
-    image=[UIImage imageWithCGImage:cgImage];//转化为UIImage
-    
-    //缓存
-    [[ZJCacheTask shareTask]storeImage:image forKey:urlStr];
+   
+    UIImage * image = [UIImage imageWithCGImage:cgImage];//转化为UIImage
+
     CGImageRelease(cgImage);
-    return image;
+    
+    if (successBlock) {
+        successBlock(image);
+    }
 }
 /**
  *  取得网络文件路径
