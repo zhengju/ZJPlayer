@@ -12,7 +12,6 @@
 @interface ZJCacheTask()
 
 @property(strong,nonatomic) NSMutableDictionary * memoryCache;
-@property(strong,nonatomic) NSMutableDictionary * diskCache;
 @property (strong, nonatomic, nonnull) NSString *diskCachePath;
 @property (strong, nonatomic, nullable) dispatch_queue_t ioQueue;
 @property (strong, nonatomic, nonnull) NSFileManager *fileManager;
@@ -92,17 +91,17 @@
 - (void)_storeDiskCacheImage:(nullable UIImage *)image forKey:(nullable NSString *)key{
 
     
-    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:_diskCachePath];
+    NSMutableDictionary *diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:_diskCachePath];
     
-    if (self.diskCache == nil) {
-        self.diskCache = [NSMutableDictionary dictionaryWithCapacity:0];
+    if (diskCache == nil) {
+        diskCache = [NSMutableDictionary dictionaryWithCapacity:0];
     }
     
     NSData *imageData = UIImagePNGRepresentation(image);//image转data可以深挖，编码策略
     
-    [self.diskCache setObject:imageData forKey:key];
+    [diskCache setObject:imageData forKey:key];
     
-    if ([self.diskCache writeToURL:[NSURL fileURLWithPath:_diskCachePath] atomically:YES]) {
+    if ([diskCache writeToURL:[NSURL fileURLWithPath:_diskCachePath] atomically:YES]) {
         NSLog(@"diskCache ok");
     }else{
         NSLog(@"diskCache fail");
@@ -125,9 +124,9 @@
 - (nullable UIImage *)imageFromDiskCacheForKey:(nullable NSString *)key{
     
     NSString * md5Str = [key md5String];
-    self.diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:_diskCachePath];
+    NSMutableDictionary *diskCache = [[NSMutableDictionary alloc] initWithContentsOfFile:_diskCachePath];
     
-    UIImage * diskImage = [UIImage imageWithData:[self.diskCache valueForKey:md5Str]];
+    UIImage * diskImage = [UIImage imageWithData:[diskCache valueForKey:md5Str]];
     if (diskImage) {
         [self.memoryCache setObject:diskImage forKey:md5Str];
     }
