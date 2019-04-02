@@ -50,6 +50,8 @@
 		7A72142B223B923300B7C02E /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A721422223B923300B7C02E /* UINavigationController+Player.m */; };
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
 		7AEF92822249CDE100D32B19 /* libZJInterceptSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AEF92282249BE6300D32B19 /* libZJInterceptSDK.a */; };
+		7AF3A91622522824007901B5 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF3A91322522824007901B5 /* YYFPSLabel.m */; };
+		7AF3A91722522824007901B5 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF3A91522522824007901B5 /* YYWeakProxy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +182,10 @@
 		7AEF921A2249BE5100D32B19 /* ZJLivepPayerSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJLivepPayerSDK.xcodeproj; path = ZJLivepPayerSDK/ZJLivepPayerSDK.xcodeproj; sourceTree = "<group>"; };
 		7AEF92232249BE6300D32B19 /* ZJInterceptSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJInterceptSDK.xcodeproj; path = ZJInterceptSDK/ZJInterceptSDK.xcodeproj; sourceTree = "<group>"; };
 		7AEF92602249C50000D32B19 /* ZJToolsSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJToolsSDK.xcodeproj; path = ZJToolsSDK/ZJToolsSDK.xcodeproj; sourceTree = "<group>"; };
+		7AF3A90E22522824007901B5 /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YYWeakProxy.h; path = YYFPSLabel/YYWeakProxy.h; sourceTree = "<group>"; };
+		7AF3A91322522824007901B5 /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YYFPSLabel.m; path = YYFPSLabel/YYFPSLabel.m; sourceTree = "<group>"; };
+		7AF3A91422522824007901B5 /* YYFPSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YYFPSLabel.h; path = YYFPSLabel/YYFPSLabel.h; sourceTree = "<group>"; };
+		7AF3A91522522824007901B5 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YYWeakProxy.m; path = YYFPSLabel/YYWeakProxy.m; sourceTree = "<group>"; };
 		D6246B24FA4627EE93BB656B /* Pods-ZJPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -361,6 +367,10 @@
 		7A721347223A6F3000B7C02E /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				7AF3A90E22522824007901B5 /* YYWeakProxy.h */,
+				7AF3A91522522824007901B5 /* YYWeakProxy.m */,
+				7AF3A91422522824007901B5 /* YYFPSLabel.h */,
+				7AF3A91322522824007901B5 /* YYFPSLabel.m */,
 				18F05D00224E59670007D354 /* ZJPlayerSource.bundle */,
 				7AEF92602249C50000D32B19 /* ZJToolsSDK.xcodeproj */,
 				7AEF92232249BE6300D32B19 /* ZJInterceptSDK.xcodeproj */,
@@ -657,11 +667,13 @@
 				7A1A3DC522436970001E2994 /* MainViewController.m in Sources */,
 				18C204DB1F68FFFD0043A18E /* ZJTabBarItem.m in Sources */,
 				18C4B5F51F5FF025002430E4 /* AppDelegate.m in Sources */,
+				7AF3A91622522824007901B5 /* YYFPSLabel.m in Sources */,
 				182273E41F7907B700156FDA /* VideoController.m in Sources */,
 				182273E31F7907B500156FDA /* VideoList.m in Sources */,
 				18C4B5F21F5FF025002430E4 /* main.m in Sources */,
 				18C204DE1F6900260043A18E /* MyTabBarController.m in Sources */,
 				18C204D91F68FFFD0043A18E /* ZJTabBarButton.m in Sources */,
+				7AF3A91722522824007901B5 /* YYWeakProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

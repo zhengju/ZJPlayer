@@ -13,6 +13,9 @@
 #import "VideoListCell.h"
 #import "VideoList.h"
 
+#import "YYFPSLabel.h"
+
+
 @interface VideoListController ()<UITableViewDelegate,UITableViewDataSource,ZJPlayerDelegate>
 @property(strong,nonatomic) UITableView * tableView;
 @property(strong,nonatomic) NSMutableArray * datas;
@@ -30,6 +33,9 @@
     [super viewDidLoad];
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    
+    
     
     [self configureTableView];
     
@@ -125,6 +131,12 @@
     self.tableView.delegate = self;
     
     [self.view addSubview:self.tableView];
+    
+    
+  YYFPSLabel*  _fpsLabel = [YYFPSLabel new];
+    _fpsLabel.frame = CGRectMake(200, 200, 50, 30);
+    [_fpsLabel sizeToFit];
+    [self.view addSubview:_fpsLabel];
     
 }
 

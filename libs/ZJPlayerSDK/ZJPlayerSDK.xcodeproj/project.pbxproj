@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18F05D70224FA1E30007D354 /* libZJHttpDownload.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F05D6F224FA1AA0007D354 /* libZJHttpDownload.a */; };
 		7A1A3CEF223F99C0001E2994 /* ZJPlayerProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */; };
 		7A7213C7223B498C00B7C02E /* ZJVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BC223B498C00B7C02E /* ZJVideoPlayerView.m */; };
 		7A7213C8223B498C00B7C02E /* ZJProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213BD223B498C00B7C02E /* ZJProgress.m */; };
@@ -20,12 +19,13 @@
 		7A7213E8223B725F00B7C02E /* UIView+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213E7223B725F00B7C02E /* UIView+Player.m */; };
 		7ACF4CF4224A12C0001B0EB4 /* ZJJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */; };
 		7AEF926E2249C55400D32B19 /* libZJToolsSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */; };
+		7AF3A90D22522811007901B5 /* libZJHttpDownload.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF3A90C225227F0007901B5 /* libZJHttpDownload.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		18F05D6E224FA1AA0007D354 /* PBXContainerItemProxy */ = {
+		7AF3A90B225227F0007901B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 18F05D5C224F964C0007D354 /* ZJHttpDownload.xcodeproj */;
+			containerPortal = 7AF3A907225227F0007901B5 /* ZJHttpDownload.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 7A72132E223A6A9000B7C02E;
 			remoteInfo = ZJHttpDownload;
@@ -46,7 +46,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		18F05D5C224F964C0007D354 /* ZJHttpDownload.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJHttpDownload.xcodeproj; path = ../../../../ZJHttpDownload/ZJHttpDownload.xcodeproj; sourceTree = "<group>"; };
 		7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayerProtocol.h; sourceTree = "<group>"; };
 		7A72139B223B491800B7C02E /* libZJPlayerSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZJPlayerSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A72139E223B491800B7C02E /* ZJPlayerSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJPlayerSDK.h; sourceTree = "<group>"; };
@@ -71,6 +70,7 @@
 		7ACF4CF2224A12C0001B0EB4 /* ZJJPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJJPlayer.h; sourceTree = "<group>"; };
 		7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJJPlayer.m; sourceTree = "<group>"; };
 		7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZJToolsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AF3A907225227F0007901B5 /* ZJHttpDownload.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJHttpDownload.xcodeproj; path = ../../../../ZJHttpDownload/ZJHttpDownload.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18F05D70224FA1E30007D354 /* libZJHttpDownload.a in Frameworks */,
+				7AF3A90D22522811007901B5 /* libZJHttpDownload.a in Frameworks */,
 				7AEF926E2249C55400D32B19 /* libZJToolsSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,22 +86,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		18F05D6A224FA1A10007D354 /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				18F05D5C224F964C0007D354 /* ZJHttpDownload.xcodeproj */,
-			);
-			path = libs;
-			sourceTree = "<group>";
-		};
-		18F05D6B224FA1AA0007D354 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				18F05D6F224FA1AA0007D354 /* libZJHttpDownload.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		7A721392223B491800B7C02E = {
 			isa = PBXGroup;
 			children = (
@@ -131,7 +115,7 @@
 		7A7213BA223B498C00B7C02E /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				18F05D6A224FA1A10007D354 /* libs */,
+				7AF3A906225227E8007901B5 /* libs */,
 				7ACF4CF2224A12C0001B0EB4 /* ZJJPlayer.h */,
 				7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */,
 				7A7213C2223B498C00B7C02E /* ZJVideoPlayerView.h */,
@@ -163,6 +147,22 @@
 				7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7AF3A906225227E8007901B5 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				7AF3A907225227F0007901B5 /* ZJHttpDownload.xcodeproj */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		7AF3A908225227F0007901B5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7AF3A90C225227F0007901B5 /* libZJHttpDownload.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,8 +211,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 18F05D6B224FA1AA0007D354 /* Products */;
-					ProjectRef = 18F05D5C224F964C0007D354 /* ZJHttpDownload.xcodeproj */;
+					ProductGroup = 7AF3A908225227F0007901B5 /* Products */;
+					ProjectRef = 7AF3A907225227F0007901B5 /* ZJHttpDownload.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -223,11 +223,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		18F05D6F224FA1AA0007D354 /* libZJHttpDownload.a */ = {
+		7AF3A90C225227F0007901B5 /* libZJHttpDownload.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libZJHttpDownload.a;
-			remoteRef = 18F05D6E224FA1AA0007D354 /* PBXContainerItemProxy */;
+			remoteRef = 7AF3A90B225227F0007901B5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -375,6 +375,7 @@
 					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK/MD5\"",
 					"\"$(SRCROOT)/../ZJHttpDownload/ZJHttpDownload\"",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -392,6 +393,7 @@
 					"\"$(SRCROOT)/../ZJToolsSDK/ZJToolsSDK/MD5\"",
 					"\"$(SRCROOT)/../ZJHttpDownload/ZJHttpDownload\"",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
