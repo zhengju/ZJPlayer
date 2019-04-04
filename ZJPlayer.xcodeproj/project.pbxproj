@@ -43,6 +43,8 @@
 		7A1A3DC02243691E001E2994 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A1A3DBF2243691E001E2994 /* libbz2.tbd */; };
 		7A1A3DC222436926001E2994 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A1A3DC122436926001E2994 /* libz.tbd */; };
 		7A1A3DC522436970001E2994 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1A3DC422436970001E2994 /* MainViewController.m */; };
+		7A42D6292255D74B00BE1690 /* libZJLivepPayerSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AEF92212249BE5100D32B19 /* libZJLivepPayerSDK.a */; };
+		7A42D62E2255E31700BE1690 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A42D62D2255E31700BE1690 /* libc++.tbd */; };
 		7A7213D3223B4A4B00B7C02E /* libZJPlayerSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A7213D2223B49DA00B7C02E /* libZJPlayerSDK.a */; };
 		7A721426223B923300B7C02E /* UITabBarController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A72141A223B923300B7C02E /* UITabBarController+Player.m */; };
 		7A721428223B923300B7C02E /* AppDelegate+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A72141E223B923300B7C02E /* AppDelegate+Player.m */; };
@@ -167,6 +169,7 @@
 		7A1A3DC122436926001E2994 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		7A1A3DC322436970001E2994 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		7A1A3DC422436970001E2994 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		7A42D62D2255E31700BE1690 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		7A7213CD223B49DA00B7C02E /* ZJPlayerSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJPlayerSDK.xcodeproj; path = ZJPlayerSDK/ZJPlayerSDK.xcodeproj; sourceTree = "<group>"; };
 		7A72141A223B923300B7C02E /* UITabBarController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarController+Player.m"; sourceTree = "<group>"; };
 		7A72141B223B923300B7C02E /* UIViewController+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Player.h"; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A42D62E2255E31700BE1690 /* libc++.tbd in Frameworks */,
+				7A42D6292255D74B00BE1690 /* libZJLivepPayerSDK.a in Frameworks */,
 				7AEF92822249CDE100D32B19 /* libZJInterceptSDK.a in Frameworks */,
 				7A1A3DC222436926001E2994 /* libz.tbd in Frameworks */,
 				7A1A3DC02243691E001E2994 /* libbz2.tbd in Frameworks */,
@@ -220,6 +225,7 @@
 		0740AE84A3A2CA100E9F6C30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7A42D62D2255E31700BE1690 /* libc++.tbd */,
 				7A1A3DC122436926001E2994 /* libz.tbd */,
 				7A1A3DBF2243691E001E2994 /* libbz2.tbd */,
 				7A1A3DBD22436915001E2994 /* libiconv.tbd */,

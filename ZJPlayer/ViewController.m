@@ -13,7 +13,7 @@
 #import "Masonry.h"
 #import "ZJDownloadManager.h"
 #import "ZJInterceptSDK.h"
-//#import "MainViewController.h"
+#import "MainViewController.h"
 #import <BlocksKit/BlocksKit.h>
 
 #import "ZJPlayerController.h"
@@ -45,7 +45,7 @@
 
     [self.view addSubview:player];
 
-    UIButton * liveBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, kScreenHeight-150, kScreenWidth-100, 40)];
+    UIButton * liveBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, kScreenHeight-300, kScreenWidth-100, 40)];
     
     [liveBtn setTitle:@"看直播" forState:UIControlStateNormal];
 
@@ -65,8 +65,8 @@
     
 }
 - (void)liveVideo{
-//    MainViewController * vc = [[MainViewController alloc]init];
-//    [self.navigationController pushViewController:vc animated:YES];
+    MainViewController * vc = [[MainViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
