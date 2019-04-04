@@ -8,6 +8,7 @@
 
 #import "ZJResourceLoaderManager.h"
 
+static NSString *kCacheScheme = @"__VIMediaCache___:";
 
 @interface ZJResourceLoaderManager()
 
@@ -20,10 +21,17 @@
 @implementation ZJResourceLoaderManager
 - (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(nonnull AVAssetResourceLoadingRequest *)loadingRequest{
 //1.获取系统中不能处理的URL
-    NSURL * sourceURL = [loadingRequest.request URL];
+    NSURL * resourceURL = [loadingRequest.request URL];
     //2.判断这个URL是否遵守URL规范和其是否是所设定的URL
     if (1) {
         //3.判断当前的URL网络请求是否已经被加载过了。
+        
+        NSURL *originURL = nil;
+        NSString *originStr = [resourceURL absoluteString];
+        originStr = [originStr stringByReplacingOccurrencesOfString:kCacheScheme withString:@""];
+        originURL = [NSURL URLWithString:originStr];
+        
+        
         
     }
     return YES;
@@ -44,4 +52,32 @@
         //2.判断本地中是否已经有文件的缓存
     }
 }
+@end
+@implementation ZJResourceLoaderManager (Convenient)
+
++ (NSURL *)assetURLWithURL:(NSURL *)url {
+    if (!url) {
+        return nil;
+    }
+    
+    NSURL *assetURL = [NSURL URLWithString:[kCacheScheme stringByAppendingString:[url absoluteString]]];
+    return assetURL;
+}
+
+- (AVPlayerItem *)playerItemWithURL:(NSURL *)url {
+    NSURL *assetURL = [ZJResourceLoaderManager assetURLWithURL:url];
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:assetURL options:nil];
+    [urlAsset.resourceLoader setDelegate:self queue:dispatch_get_main_queue()];
+    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:urlAsset];
+    if ([playerItem respondsToSelector:@selector(setCanUseNetworkResourcesForLiveStreamingWhilePaused:)]) {
+        if (@available(iOS 9.0, *)) {
+            playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    return playerItem;
+}
+
+
 @end

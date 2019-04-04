@@ -219,17 +219,17 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
        }else{
            self.isLocalVideo = NO;
            self.playerItem = nil;
-           NSURLComponents *components = [[NSURLComponents alloc]initWithURL:_url resolvingAgainstBaseURL:NO];
-           ////注意，不加这一句不能执行到回调操作
-           components.scheme = kCustomVideoScheme;
-           
-           self.asset=[[AVURLAsset alloc]initWithURL:components.URL options:nil];
+//           NSURLComponents *components = [[NSURLComponents alloc]initWithURL:_url resolvingAgainstBaseURL:NO];
+//           ////注意，不加这一句不能执行到回调操作
+//           components.scheme = kCustomVideoScheme;
+
+           self.asset=[[AVURLAsset alloc]initWithURL:url options:nil];
            
            _resourceManager = [[ZJResourceLoaderManager alloc]init];
+
+//           self.playerItem = [_resourceManager playerItemWithURL:url];
            
-           [self.asset.resourceLoader setDelegate:_resourceManager queue:dispatch_get_main_queue()];
-           
-           self.playerItem=[AVPlayerItem playerItemWithAsset:self.asset];
+         self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset];
            
            if (!self.player) {
 
@@ -237,7 +237,8 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
            } else {
                [self.player pause];
                [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
-           } self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
+           }
+           //self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
 
        }
  

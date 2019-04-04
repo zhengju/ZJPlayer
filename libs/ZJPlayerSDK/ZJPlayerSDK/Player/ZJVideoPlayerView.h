@@ -60,8 +60,6 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 
 @property(nonatomic, strong) UIView<ZJPlayerProtocolDelegate> * interceptView;
 
-
-
 /**
  默认背景图片
  */

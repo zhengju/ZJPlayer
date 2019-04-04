@@ -12,3 +12,6 @@
 @interface ZJResourceLoaderManager : NSObject<AVAssetResourceLoaderDelegate>
 
 @end
+@interface ZJResourceLoaderManager (Convenient)
+- (AVPlayerItem *)playerItemWithURL:(NSURL *)url;
+@end
