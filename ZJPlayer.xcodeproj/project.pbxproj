@@ -18,6 +18,10 @@
 		182273E91F790BFB00156FDA /* DownloadListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 182273D51F79077E00156FDA /* DownloadListCell.xib */; };
 		1830FDA61F72566B00097115 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830FDA51F72566B00097115 /* CoreGraphics.framework */; };
 		184829B51F79E99200BF2BDB /* ZJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184829B41F79E99200BF2BDB /* ZJSuperViewController.m */; };
+		188D656222589F9200935141 /* libCocoaHTTPServerSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F05DDA22585F010007D354 /* libCocoaHTTPServerSDK.a */; };
+		188D65642258A05200935141 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188D65632258A05200935141 /* UIKit.framework */; };
+		188D65662258A05900935141 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188D65652258A05900935141 /* Foundation.framework */; };
+		188D657A2258A38C00935141 /* Web in Resources */ = {isa = PBXBuildFile; fileRef = 188D65792258A38C00935141 /* Web */; };
 		18C204D71F68FFFD0043A18E /* ZJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204CE1F68FFFD0043A18E /* ZJNavigationController.m */; };
 		18C204D81F68FFFD0043A18E /* ZJTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204D01F68FFFD0043A18E /* ZJTabBar.m */; };
 		18C204D91F68FFFD0043A18E /* ZJTabBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C204D21F68FFFD0043A18E /* ZJTabBarButton.m */; };
@@ -36,6 +40,8 @@
 		18F05CED224E55FA0007D354 /* btn_player_pause@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F05CEB224E55FA0007D354 /* btn_player_pause@3x.png */; };
 		18F05CEE224E55FA0007D354 /* btn_player_pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18F05CEC224E55FA0007D354 /* btn_player_pause@2x.png */; };
 		18F05D01224E59670007D354 /* ZJPlayerSource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18F05D00224E59670007D354 /* ZJPlayerSource.bundle */; };
+		18F05E1A225860240007D354 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F05E19225860230007D354 /* Security.framework */; };
+		18F05E1C2258602C0007D354 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F05E1B2258602C0007D354 /* CFNetwork.framework */; };
 		3840C09380C84C11938B886B /* Pods_ZJPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */; };
 		7A1A3DBA224368F8001E2994 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A1A3DB9224368F8001E2994 /* CoreMedia.framework */; };
 		7A1A3DBC22436909001E2994 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A1A3DBB22436909001E2994 /* VideoToolbox.framework */; };
@@ -63,6 +69,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 18F05CD5224E530C0007D354;
 			remoteInfo = ZJPlayerSource;
+		};
+		18F05DD922585F010007D354 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18F05DD522585F010007D354 /* CocoaHTTPServerSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 18F05DC922585EE20007D354;
+			remoteInfo = CocoaHTTPServerSDK;
 		};
 		7A7213D1223B49DA00B7C02E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -129,6 +142,9 @@
 		1830FDA51F72566B00097115 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		184829B41F79E99200BF2BDB /* ZJSuperViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJSuperViewController.m; sourceTree = "<group>"; };
 		184829B61F79EA6B00BF2BDB /* ZJSuperViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJSuperViewController.h; sourceTree = "<group>"; };
+		188D65632258A05200935141 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		188D65652258A05900935141 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		188D65792258A38C00935141 /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Web; sourceTree = "<group>"; };
 		1895D6CF1F64BD5400A3D3CD /* ZJCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJCommonHeader.h; sourceTree = "<group>"; };
 		18C204CD1F68FFFD0043A18E /* ZJNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJNavigationController.h; sourceTree = "<group>"; };
 		18C204CE1F68FFFD0043A18E /* ZJNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJNavigationController.m; sourceTree = "<group>"; };
@@ -160,6 +176,9 @@
 		18F05CEB224E55FA0007D354 /* btn_player_pause@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_player_pause@3x.png"; path = "SourceBundle/btn_player_pause@3x.png"; sourceTree = SOURCE_ROOT; };
 		18F05CEC224E55FA0007D354 /* btn_player_pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_player_pause@2x.png"; path = "SourceBundle/btn_player_pause@2x.png"; sourceTree = SOURCE_ROOT; };
 		18F05D00224E59670007D354 /* ZJPlayerSource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZJPlayerSource.bundle; sourceTree = "<group>"; };
+		18F05DD522585F010007D354 /* CocoaHTTPServerSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CocoaHTTPServerSDK.xcodeproj; path = CocoaHTTPServerSDK/CocoaHTTPServerSDK.xcodeproj; sourceTree = "<group>"; };
+		18F05E19225860230007D354 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		18F05E1B2258602C0007D354 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		361D498D03AAD591B5D34253 /* Pods_ZJPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZJPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EB192BACD32CA54F2F1785 /* Pods-ZJPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZJPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZJPlayer/Pods-ZJPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		7A1A3DB9224368F8001E2994 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -197,6 +216,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				188D65662258A05900935141 /* Foundation.framework in Frameworks */,
+				188D65642258A05200935141 /* UIKit.framework in Frameworks */,
+				188D656222589F9200935141 /* libCocoaHTTPServerSDK.a in Frameworks */,
+				18F05E1C2258602C0007D354 /* CFNetwork.framework in Frameworks */,
+				18F05E1A225860240007D354 /* Security.framework in Frameworks */,
 				7A42D62E2255E31700BE1690 /* libc++.tbd in Frameworks */,
 				7A42D6292255D74B00BE1690 /* libZJLivepPayerSDK.a in Frameworks */,
 				7AEF92822249CDE100D32B19 /* libZJInterceptSDK.a in Frameworks */,
@@ -225,6 +249,10 @@
 		0740AE84A3A2CA100E9F6C30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				188D65652258A05900935141 /* Foundation.framework */,
+				188D65632258A05200935141 /* UIKit.framework */,
+				18F05E1B2258602C0007D354 /* CFNetwork.framework */,
+				18F05E19225860230007D354 /* Security.framework */,
 				7A42D62D2255E31700BE1690 /* libc++.tbd */,
 				7A1A3DC122436926001E2994 /* libz.tbd */,
 				7A1A3DBF2243691E001E2994 /* libbz2.tbd */,
@@ -358,6 +386,7 @@
 				18C4B5FE1F5FF025002430E4 /* LaunchScreen.storyboard */,
 				18C4B6011F5FF025002430E4 /* Info.plist */,
 				18C4B5F11F5FF025002430E4 /* main.m */,
+				188D65792258A38C00935141 /* Web */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -370,6 +399,14 @@
 			path = ZJPlayerSource;
 			sourceTree = "<group>";
 		};
+		18F05DD622585F010007D354 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				18F05DDA22585F010007D354 /* libCocoaHTTPServerSDK.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7A721347223A6F3000B7C02E /* libs */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,6 +414,7 @@
 				7AF3A91522522824007901B5 /* YYWeakProxy.m */,
 				7AF3A91422522824007901B5 /* YYFPSLabel.h */,
 				7AF3A91322522824007901B5 /* YYFPSLabel.m */,
+				18F05DD522585F010007D354 /* CocoaHTTPServerSDK.xcodeproj */,
 				18F05D00224E59670007D354 /* ZJPlayerSource.bundle */,
 				7AEF92602249C50000D32B19 /* ZJToolsSDK.xcodeproj */,
 				7AEF92232249BE6300D32B19 /* ZJInterceptSDK.xcodeproj */,
@@ -521,6 +559,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 18F05DD622585F010007D354 /* Products */;
+					ProjectRef = 18F05DD522585F010007D354 /* CocoaHTTPServerSDK.xcodeproj */;
+				},
+				{
 					ProductGroup = 7AEF92242249BE6300D32B19 /* Products */;
 					ProjectRef = 7AEF92232249BE6300D32B19 /* ZJInterceptSDK.xcodeproj */;
 				},
@@ -546,6 +588,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		18F05DDA22585F010007D354 /* libCocoaHTTPServerSDK.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCocoaHTTPServerSDK.a;
+			remoteRef = 18F05DD922585F010007D354 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		7A7213D2223B49DA00B7C02E /* libZJPlayerSDK.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -583,6 +632,7 @@
 			files = (
 				18C4B6001F5FF025002430E4 /* LaunchScreen.storyboard in Resources */,
 				182273E91F790BFB00156FDA /* DownloadListCell.xib in Resources */,
+				188D657A2258A38C00935141 /* Web in Resources */,
 				18C4B5FD1F5FF025002430E4 /* Assets.xcassets in Resources */,
 				18F05D01224E59670007D354 /* ZJPlayerSource.bundle in Resources */,
 				18C4B5FB1F5FF025002430E4 /* Main.storyboard in Resources */,
@@ -827,6 +877,7 @@
 					"\"$(SRCROOT)/libs/ZJLivepPayerSDK/ZJLivepPayerSDK\"",
 					"\"$(SRCROOT)/libs/ZJInterceptSDK/ZJInterceptSDK\"/**",
 					"\"$(SRCROOT)/libs/ZJToolsSDK/ZJToolsSDK\"",
+					"\"$(SRCROOT)/libs/CocoaHTTPServerSDK/CocoaHTTPServerSDK\"/**",
 				);
 				INFOPLIST_FILE = ZJPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -861,6 +912,7 @@
 					"\"$(SRCROOT)/libs/ZJLivepPayerSDK/ZJLivepPayerSDK\"",
 					"\"$(SRCROOT)/libs/ZJInterceptSDK/ZJInterceptSDK\"/**",
 					"\"$(SRCROOT)/libs/ZJToolsSDK/ZJToolsSDK\"",
+					"\"$(SRCROOT)/libs/CocoaHTTPServerSDK/CocoaHTTPServerSDK\"/**",
 				);
 				INFOPLIST_FILE = ZJPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

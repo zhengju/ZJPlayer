@@ -34,10 +34,21 @@
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     
+//    UIWebView * web = [[UIWebView alloc]initWithFrame:self.view.bounds];
+//    [self.view addSubview:web];
+//
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost:12345"]];
+//    [web loadRequest:request];
+//    [web loadRequest:request];
+//
+//
+//
+//    return;
+
     
     InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
 
-    ZJVideoPlayerView * player =  [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:@"http://img.house.china.com.cn/voice/rongch.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
+    ZJVideoPlayerView * player =  [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:@"http://localhost:12345/2233.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
     
     player.interceptView  = interceptView;
     
