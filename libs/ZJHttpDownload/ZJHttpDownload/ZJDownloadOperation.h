@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, assign) ZJDownloadType downloadType;
 /** 流 */
-@property (nonatomic, strong) NSOutputStream *stream;
+@property (nonatomic, strong,nullable) NSOutputStream *stream;
 @property (nonatomic, weak) id<ZJDownloadOperationDelegate> delegate;
 - (id)initWithItem:(ZJDownloaderItem *)item;
 - (ZJDownloaderItem *)downloadItem;

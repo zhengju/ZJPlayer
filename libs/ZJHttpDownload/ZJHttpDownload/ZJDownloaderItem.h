@@ -20,7 +20,7 @@ typedef enum {
 
 
 typedef enum {
-    ZJDownloadwriteToFile = 0,     /** 写文件 */
+    ZJDownloadwriteToFile = 1,     /** 写文件 */
     ZJDownloadOutputStream,     /** 文件流 */ //暂时有e问题
 }ZJDownloadType;
 

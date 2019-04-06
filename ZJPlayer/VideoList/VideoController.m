@@ -48,6 +48,7 @@
     return NO;
     
 }
+
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations//支持哪些方向
 {
     return UIInterfaceOrientationMaskAll;

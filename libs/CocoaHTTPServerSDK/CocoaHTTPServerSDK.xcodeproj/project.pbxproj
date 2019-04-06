@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		188D65862258F48700935141 /* HTTPServer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 18F05DFD22585FE70007D354 /* HTTPServer.h */; };
 		18F05DCE22585EE20007D354 /* CocoaHTTPServerSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F05DCD22585EE20007D354 /* CocoaHTTPServerSDK.m */; };
 		18F05DCF22585EE20007D354 /* CocoaHTTPServerSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 18F05DCC22585EE20007D354 /* CocoaHTTPServerSDK.h */; };
 		18F05DE922585FA20007D354 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F05DE822585FA20007D354 /* GCDAsyncSocket.m */; };
@@ -40,6 +41,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				188D65862258F48700935141 /* HTTPServer.h in CopyFiles */,
 				18F05DCF22585EE20007D354 /* CocoaHTTPServerSDK.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,12 +178,12 @@
 				18F05DEE22585FE50007D354 /* HTTPDataResponse.m */,
 				18F05DEF22585FE50007D354 /* HTTPRedirectResponse.h */,
 				18F05DF022585FE50007D354 /* HTTPDynamicFileResponse.m */,
+				18F05DF622585FE50007D354 /* HTTPFileResponse.h */,
 				18F05DF122585FE50007D354 /* HTTPFileResponse.m */,
 				18F05DF222585FE50007D354 /* HTTPAsyncFileResponse.m */,
 				18F05DF322585FE50007D354 /* HTTPRedirectResponse.m */,
 				18F05DF422585FE50007D354 /* HTTPDataResponse.h */,
 				18F05DF522585FE50007D354 /* HTTPErrorResponse.h */,
-				18F05DF622585FE50007D354 /* HTTPFileResponse.h */,
 				18F05DF722585FE50007D354 /* HTTPDynamicFileResponse.h */,
 			);
 			path = Responses;
@@ -431,6 +433,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/CocoaHTTPServerSDK\"",
+					"\"$(SRCROOT)/CocoaHTTPServerSDK/HTTP\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -442,6 +448,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/CocoaHTTPServerSDK\"",
+					"\"$(SRCROOT)/CocoaHTTPServerSDK/HTTP\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -22,6 +22,7 @@
 
 @interface ZJDownloadManager : NSObject
 
+@property(nonatomic, assign) ZJDownloadType downloadType;
 
 @property(nonatomic, weak) id<ZJDownloadManagerDelegate> delegate;
 

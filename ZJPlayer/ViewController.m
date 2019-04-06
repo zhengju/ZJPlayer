@@ -17,7 +17,10 @@
 #import <BlocksKit/BlocksKit.h>
 
 #import "ZJPlayerController.h"
+#import "ZJPlayerControl.h"
 
+
+#define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
 
 @interface ViewController ()
 
@@ -44,18 +47,28 @@
 //
 //
 //    return;
+    //NSString * urlStr = @"http://img.house.china.com.cn/voice/hdzxjh.mp4";
 
     
-    InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
+//    InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
 
-    ZJVideoPlayerView * player =  [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:@"http://localhost:12345/2233.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
     
-    player.interceptView  = interceptView;
+    ZJPlayerControl * control = [[ZJPlayerControl alloc]initWithView:self.view andFrame:CGRectMake(0, 0, self.view.bounds.size.width, 300) url:@"http://img.house.china.com.cn/voice/rongch.mp4"];
     
-    player.isRotatingSmallScreen = YES;
+    
+    
+    
+//    ZJVideoPlayerView * player =  [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:@"http://localhost:12345/35011f625548a53b13919c825b022aaa.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
+    
+//    player.interceptView  = interceptView;
+    
+//    player.isRotatingSmallScreen = YES;
+//
+//    [self.view addSubview:player];
 
-    [self.view addSubview:player];
-
+    
+    
+    
     UIButton * liveBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, kScreenHeight-300, kScreenWidth-100, 40)];
     
     [liveBtn setTitle:@"看直播" forState:UIControlStateNormal];
@@ -66,13 +79,14 @@
     
     [self.view addSubview:liveBtn];
     
-    ZJPlayerController * vc = [ZJPlayerController sharePlayerController];
     
     
-    player.orientationWillChange = ^(ZJVideoPlayerView *player, BOOL isFullScreen) {
-        
-//        [self setNeedsStatusBarAppearanceUpdate];
-    };
+//    ZJPlayerController * vc = [ZJPlayerController sharePlayerController];
+    
+//    player.orientationWillChange = ^(ZJVideoPlayerView *player, BOOL isFullScreen) {
+//
+////        [self setNeedsStatusBarAppearanceUpdate];
+//    };
     
 }
 - (void)liveVideo{

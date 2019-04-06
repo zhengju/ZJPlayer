@@ -9,8 +9,10 @@
 #import "AppDelegate.h"
 #import "MyTabBarController.h"
 
-#import "CocoaHTTPServerSDK.h"
-
+#import "ZJPlayerSDK.h"
+#import "HTTPServer.h"
+#import "DDLog.h"
+#import "DDTTYLogger.h"
 #define webPath [[NSBundle mainBundle] pathForResource:@"Web" ofType:nil]
 
 @interface AppDelegate ()
@@ -35,6 +37,8 @@
 //        DDLogError(@"Error starting HTTP Server: %@", error);
     }
 }
+
+#define ZJCachesDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"ZJCache"]
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -61,21 +65,19 @@
     [httpServer setPort:12345];
     
     // Serve files from our embedded Web folder
-    NSString *webPath2 =  [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Web"];
+    NSString *webPath2 = ZJCachesDirectory;
+    //[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Web"];
+//    ;
+    
 
     NSLog(@"Setting document root: %@", webPath2);
     
     [httpServer setDocumentRoot:webPath2];
     
-    
 
-    
-    [self startServer];
-    
-    
-   
-   
-    
+            [self startServer];
+
+
     return YES;
 }
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {

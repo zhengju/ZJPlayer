@@ -145,6 +145,7 @@ static ZJDownloadManager *manager = nil;
 - (void)startOperationWithRequestItem:(ZJDownloaderItem *)dItem
 {
     ZJDownloadOperation *  operation = [[ZJDownloadOperation alloc] initWithItem:dItem];
+    operation.downloadType = self.downloadType;
     operation.delegate = self;
     [_downloadOperationQueue addOperation:operation];
     [self.operationCaches setObject:operation forKey:ZJFileName(dItem.downloadUrl)];//添加到缓存中

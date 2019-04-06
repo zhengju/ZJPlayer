@@ -34,7 +34,7 @@
 //    self.title = @"下载";
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    self.downloadManager = [ZJDownloadManager sharedInstance];
+    self.downloadManager = [[ZJDownloadManager alloc]init];
     self.downloadManager.delegate = self;
     [self configDatas];
     [self configureTableView];

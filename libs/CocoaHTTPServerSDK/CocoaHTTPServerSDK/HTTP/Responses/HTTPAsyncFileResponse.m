@@ -59,7 +59,12 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 			return nil;
 		}
 		
-		fileLength = (UInt64)[[fileAttributes objectForKey:NSFileSize] unsignedLongLongValue];
+//        fileLength = (UInt64)[[fileAttributes objectForKey:NSFileSize] unsignedLongLongValue];
+        
+        NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"fileSize"];
+        fileLength = [number longLongValue];
+        
+        
 		fileOffset = 0;
 		
 		aborted = NO;

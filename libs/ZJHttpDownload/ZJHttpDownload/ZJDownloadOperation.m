@@ -190,10 +190,19 @@
         
         _downloadItem.totalFileSize = totalLength;
         
+            [[NSUserDefaults standardUserDefaults ] setValue:[NSNumber numberWithLongLong:response.expectedContentLength] forKey:@"fileSize"];
         
     }
     // 接收这个请求，允许接收服务器的数据
     completionHandler(NSURLSessionResponseAllow);
+}
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask{
+    
+}
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
+    
 }
 /**
  * 接收到服务器返回的数据
@@ -206,7 +215,11 @@
         [self.stream write:data.bytes maxLength:data.length];
         
         _downloadItem.downloadedFileSize = ZJDownloaderItemLength(_downloadItem.downloadUrl);
-
+        _downloadItem.downloadedFileSize = dataTask.countOfBytesReceived;
+        
+        NSLog(@"--%lld ",dataTask.countOfBytesReceived);
+        
+        
         
     }
 }
