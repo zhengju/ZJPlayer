@@ -17,6 +17,7 @@
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 
+#import "ZJNetWorkUtils.h"
 
 @interface ZJPlayerControl()<ZJDownloadManagerDelegate>
 {
@@ -37,10 +38,17 @@
         _urlStr = urlStr;
         [self initHttpServer];
         [self configurePlayer];
-        
+        [self monitorNet];
     }
     return self;
 }
+
+- (void)monitorNet{
+    [ZJNetWorkUtils netWorkState:^(NSInteger netState) {
+        NSLog(@"------》》》%ld",(long)netState);
+    }];
+}
+
 - (void)configurePlayer{
     
     ZJDownloaderItem * item = [[ZJDownloaderItem alloc]init];
