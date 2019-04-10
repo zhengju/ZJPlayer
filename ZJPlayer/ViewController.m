@@ -7,7 +7,7 @@
 //
 //http://localhost:8080/hls/room.m3u8
 //http://img.house.china.com.cn/voice/hdzxjh.mp4
-
+//https://mvvideo5.meitudata.com/56ea0e90d6cb2653.mp4
 #import "ViewController.h"
 #import "ZJVideoPlayerView.h"
 #import "Masonry.h"
@@ -37,38 +37,22 @@
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     
+    //测试本地服务
 //    UIWebView * web = [[UIWebView alloc]initWithFrame:self.view.bounds];
 //    [self.view addSubview:web];
-//
 //    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost:12345"]];
 //    [web loadRequest:request];
 //    [web loadRequest:request];
-//
-//
-//
 //    return;
-    //NSString * urlStr = @"http://img.house.china.com.cn/voice/hdzxjh.mp4";
+    
+    NSString * urlStr = @"http://img.house.china.com.cn/voice/hdzxjh.mp4";
 
     
 //    InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
 
-    
-    ZJPlayerControl * control = [[ZJPlayerControl alloc]initWithView:self.view andFrame:CGRectMake(0, 0, self.view.bounds.size.width, 300) url:@"http://img.house.china.com.cn/voice/rongch.mp4"];
-    
-    
-    
-    
-//    ZJVideoPlayerView * player =  [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:@"http://localhost:12345/35011f625548a53b13919c825b022aaa.mp4"] withSuperView:self.view frame:CGRectMake(0, 0, self.view.bounds.size.width, 300) controller:self];
-    
-//    player.interceptView  = interceptView;
-    
-//    player.isRotatingSmallScreen = YES;
-//
-//    [self.view addSubview:player];
+    ZJPlayerControl * control = [[ZJPlayerControl alloc]initWithView:self.view andFrame:CGRectMake(0, 0, self.view.bounds.size.width, 300) url:urlStr];
 
-    
-    
-    
+
     UIButton * liveBtn = [[UIButton alloc]initWithFrame:CGRectMake(50, kScreenHeight-300, kScreenWidth-100, 40)];
     
     [liveBtn setTitle:@"看直播" forState:UIControlStateNormal];

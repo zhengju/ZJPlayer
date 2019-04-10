@@ -19,6 +19,9 @@
 
 #import "ZJNetWorkUtils.h"
 
+#import "VIMediaCache.h"
+#import "VIMediaCacheWorker.h"
+
 @interface ZJPlayerControl()<ZJDownloadManagerDelegate>
 {
     HTTPServer *httpServer;
@@ -36,9 +39,11 @@
         _playerFatherView = view;
         _fatherFrame = frame;
         _urlStr = urlStr;
-        [self initHttpServer];
+//        [self initHttpServer];
+        [self cleanCache];
+        
         [self configurePlayer];
-        [self monitorNet];
+//        [self monitorNet];
     }
     return self;
 }
@@ -48,25 +53,67 @@
         NSLog(@"------》》》%ld",(long)netState);
     }];
 }
-
-- (void)configurePlayer{
-    
+- (void)httpServer{
     ZJDownloaderItem * item = [[ZJDownloaderItem alloc]init];
     item.downloadUrl = _urlStr;
-    
     ZJDownloadManager * downManager = [[ZJDownloadManager alloc]init];
-    
     downManager.delegate = self;
     downManager.downloadType = ZJDownloadOutputStream;
     [downManager downloadWithItem:item];
-
-
-    NSString * playUrlString = [NSString stringWithFormat:@"http://localhost:12345/%@.mp4",[_urlStr md5String]];
-
-    ZJVideoPlayerView * player =  [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:playUrlString] withSuperView:_playerFatherView frame:_fatherFrame controller:nil];
+    NSString *   playUrlString =   [NSString stringWithFormat:@"http://localhost:12345/%@.mp4",[_urlStr md5String]];
+    ZJVideoPlayerView * player = [[ZJVideoPlayerView alloc]initWithUrl:[NSURL URLWithString:playUrlString] withSuperView:_playerFatherView frame:_fatherFrame controller:nil];
     player.isRotatingSmallScreen = YES;
     [_playerFatherView addSubview:player];
+}
 
+- (void)cleanCache {
+    unsigned long long fileSize = [VICacheManager calculateCachedSizeWithError:nil];
+    NSLog(@"file cache size: %@", @(fileSize));
+    NSError *error;
+    [VICacheManager cleanAllCacheWithError:&error];
+    if (error) {
+        NSLog(@"clean cache failure: %@", error);
+    }
+    
+    [VICacheManager cleanAllCacheWithError:&error];
+}
+
+- (void)configurePlayer{
+
+    
+    //http://img.house.china.com.cn/voice/hdzxjh.mp4
+    //https://mvvideo5.meitudata.com/56ea0e90d6cb2653.mp4
+    
+//    NSURL *url = [NSURL URLWithString:@"http://img.house.china.com.cn/voice/hdzxjh.mp4"];
+//
+//
+//    VIMediaCacheWorker * worker =  [[VIMediaCacheWorker alloc] initWithURL:url];
+//
+//    VIMediaDownloader *downloader = [[VIMediaDownloader alloc] initWithURL:url cacheWorker:worker];
+//
+//    [downloader downloadFromStartToEnd];
+//
+//    return;
+    
+    ZJVideoPlayerView * player = [[ZJVideoPlayerView alloc]initWithFrame:_fatherFrame withSuperView:_playerFatherView controller:nil];
+    VIResourceLoaderManager *resourceLoaderManager = [VIResourceLoaderManager new];
+
+    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:_urlStr]];
+    //[resourceLoaderManager playerItemWithURL:[NSURL URLWithString:_urlStr]];
+
+    VICacheConfiguration *configuration = [VICacheManager cacheConfigurationForURL:[NSURL URLWithString:_urlStr]];
+
+    if (configuration.progress >= 1.0) {
+        NSLog(@"cache completed");
+    }
+    player.playerItem = playerItem;
+    [player configurePLayer];
+    player.isRotatingSmallScreen = YES;
+    
+    [_playerFatherView addSubview:player];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mediaCacheDidChanged:) name:VICacheManagerDidUpdateCacheNotification object:nil];
+    
 }
 - (BOOL)startServer
 {
@@ -130,4 +177,44 @@
     NSLog(@"ZJPlayerControl :%f",progress);
 
 }
+
+#pragma mark - notification
+
+- (void)mediaCacheDidChanged:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.userInfo;
+    VICacheConfiguration *configuration = userInfo[VICacheConfigurationKey];
+    NSArray<NSValue *> *cachedFragments = configuration.cacheFragments;
+    long long contentLength = configuration.contentInfo.contentLength;
+    
+    NSInteger number = 100;
+    NSMutableString *progressStr = [NSMutableString string];
+    
+    [cachedFragments enumerateObjectsUsingBlock:^(NSValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSRange range = obj.rangeValue;
+        
+        NSInteger location = roundf((range.location / (double)contentLength) * number);
+        
+        NSInteger progressCount = progressStr.length;
+        [self string:progressStr appendString:@"0" muti:location - progressCount];
+        
+        NSInteger length = roundf((range.length / (double)contentLength) * number);
+        [self string:progressStr appendString:@"1" muti:length];
+        
+        
+        if (idx == cachedFragments.count - 1 && (location + length) <= number + 1) {
+            [self string:progressStr appendString:@"0" muti:number - (length + location)];
+        }
+    }];
+    
+    NSLog(@"%@", progressStr);
+}
+
+- (void)string:(NSMutableString *)string appendString:(NSString *)appendString muti:(NSInteger)muti {
+    for (NSInteger i = 0; i < muti; i++) {
+        [string appendString:appendString];
+    }
+}
+
+
+
 @end

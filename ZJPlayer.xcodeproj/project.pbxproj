@@ -55,7 +55,9 @@
 		7A721428223B923300B7C02E /* AppDelegate+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A72141E223B923300B7C02E /* AppDelegate+Player.m */; };
 		7A72142A223B923300B7C02E /* UIViewController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A721420223B923300B7C02E /* UIViewController+Player.m */; };
 		7A72142B223B923300B7C02E /* UINavigationController+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A721422223B923300B7C02E /* UINavigationController+Player.m */; };
+		7A724B0C225DCE280048DF70 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A724B07225DCE280048DF70 /* AVFoundation.framework */; };
 		7AA4F36F216B6E590091094C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA4F36E216B6E590091094C /* AVKit.framework */; };
+		7AED2A2A225D927D0032C675 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AED2A25225D927D0032C675 /* MobileCoreServices.framework */; };
 		7AEF92822249CDE100D32B19 /* libZJInterceptSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AEF92282249BE6300D32B19 /* libZJInterceptSDK.a */; };
 		7AF3A91622522824007901B5 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF3A91322522824007901B5 /* YYFPSLabel.m */; };
 		7AF3A91722522824007901B5 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF3A91522522824007901B5 /* YYWeakProxy.m */; };
@@ -189,9 +191,11 @@
 		7A721421223B923300B7C02E /* UITabBarController+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarController+Player.h"; sourceTree = "<group>"; };
 		7A721422223B923300B7C02E /* UINavigationController+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Player.m"; sourceTree = "<group>"; };
 		7A721425223B923300B7C02E /* AppDelegate+Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Player.h"; sourceTree = "<group>"; };
+		7A724B07225DCE280048DF70 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		7AA4F36E216B6E590091094C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		7AA4F370216B7D870091094C /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		7AA4F388216CB0A30091094C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AED2A25225D927D0032C675 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7AEF921A2249BE5100D32B19 /* ZJLivepPayerSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJLivepPayerSDK.xcodeproj; path = ZJLivepPayerSDK/ZJLivepPayerSDK.xcodeproj; sourceTree = "<group>"; };
 		7AEF92232249BE6300D32B19 /* ZJInterceptSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJInterceptSDK.xcodeproj; path = ZJInterceptSDK/ZJInterceptSDK.xcodeproj; sourceTree = "<group>"; };
 		7AEF92602249C50000D32B19 /* ZJToolsSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJToolsSDK.xcodeproj; path = ZJToolsSDK/ZJToolsSDK.xcodeproj; sourceTree = "<group>"; };
@@ -207,6 +211,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A724B0C225DCE280048DF70 /* AVFoundation.framework in Frameworks */,
+				7AED2A2A225D927D0032C675 /* MobileCoreServices.framework in Frameworks */,
 				188D65662258A05900935141 /* Foundation.framework in Frameworks */,
 				188D65642258A05200935141 /* UIKit.framework in Frameworks */,
 				18F05E1C2258602C0007D354 /* CFNetwork.framework in Frameworks */,
@@ -239,6 +245,8 @@
 		0740AE84A3A2CA100E9F6C30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7A724B07225DCE280048DF70 /* AVFoundation.framework */,
+				7AED2A25225D927D0032C675 /* MobileCoreServices.framework */,
 				188D65652258A05900935141 /* Foundation.framework */,
 				188D65632258A05200935141 /* UIKit.framework */,
 				18F05E1B2258602C0007D354 /* CFNetwork.framework */,
@@ -532,6 +540,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

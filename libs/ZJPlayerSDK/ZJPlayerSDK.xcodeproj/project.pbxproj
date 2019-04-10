@@ -21,6 +21,17 @@
 		7A7213E2223B5A2200B7C02E /* ZJResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213E1223B5A2200B7C02E /* ZJResourceLoaderManager.m */; };
 		7A7213E8223B725F00B7C02E /* UIView+Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7213E7223B725F00B7C02E /* UIView+Player.m */; };
 		7ACF4CF4224A12C0001B0EB4 /* ZJJPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */; };
+		7AED2A0C225D84780032C675 /* VIResourceLoadingRequestWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED29FF225D84770032C675 /* VIResourceLoadingRequestWorker.m */; };
+		7AED2A0D225D84780032C675 /* VIMediaDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A03225D84770032C675 /* VIMediaDownloader.m */; };
+		7AED2A0E225D84780032C675 /* VIResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A05225D84780032C675 /* VIResourceLoader.m */; };
+		7AED2A0F225D84780032C675 /* VIResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A06225D84780032C675 /* VIResourceLoaderManager.m */; };
+		7AED2A10225D84780032C675 /* VIContentInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A07225D84780032C675 /* VIContentInfo.m */; };
+		7AED2A1E225D84B10032C675 /* VIMediaCacheWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A12225D84B00032C675 /* VIMediaCacheWorker.m */; };
+		7AED2A1F225D84B10032C675 /* VICacheAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A15225D84B00032C675 /* VICacheAction.m */; };
+		7AED2A20225D84B10032C675 /* VICacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A17225D84B00032C675 /* VICacheManager.m */; };
+		7AED2A21225D84B10032C675 /* NSString+VIMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A19225D84B10032C675 /* NSString+VIMD5.m */; };
+		7AED2A22225D84B10032C675 /* VICacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A1A225D84B10032C675 /* VICacheConfiguration.m */; };
+		7AED2A23225D84B10032C675 /* VICacheSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AED2A1B225D84B10032C675 /* VICacheSessionManager.m */; };
 		7AEF926E2249C55400D32B19 /* libZJToolsSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */; };
 		7AF3A90D22522811007901B5 /* libZJHttpDownload.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF3A90C225227F0007901B5 /* libZJHttpDownload.a */; };
 /* End PBXBuildFile section */
@@ -90,6 +101,29 @@
 		7A7213E7223B725F00B7C02E /* UIView+Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Player.m"; path = "ZJPlayerSDK/UIView+Player.m"; sourceTree = SOURCE_ROOT; };
 		7ACF4CF2224A12C0001B0EB4 /* ZJJPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJJPlayer.h; sourceTree = "<group>"; };
 		7ACF4CF3224A12C0001B0EB4 /* ZJJPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJJPlayer.m; sourceTree = "<group>"; };
+		7AED29FF225D84770032C675 /* VIResourceLoadingRequestWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIResourceLoadingRequestWorker.m; sourceTree = "<group>"; };
+		7AED2A03225D84770032C675 /* VIMediaDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIMediaDownloader.m; sourceTree = "<group>"; };
+		7AED2A04225D84770032C675 /* VIMediaDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIMediaDownloader.h; sourceTree = "<group>"; };
+		7AED2A05225D84780032C675 /* VIResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIResourceLoader.m; sourceTree = "<group>"; };
+		7AED2A06225D84780032C675 /* VIResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIResourceLoaderManager.m; sourceTree = "<group>"; };
+		7AED2A07225D84780032C675 /* VIContentInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIContentInfo.m; sourceTree = "<group>"; };
+		7AED2A08225D84780032C675 /* VIResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIResourceLoader.h; sourceTree = "<group>"; };
+		7AED2A09225D84780032C675 /* VIResourceLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIResourceLoaderManager.h; sourceTree = "<group>"; };
+		7AED2A0A225D84780032C675 /* VIResourceLoadingRequestWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIResourceLoadingRequestWorker.h; sourceTree = "<group>"; };
+		7AED2A0B225D84780032C675 /* VIContentInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIContentInfo.h; sourceTree = "<group>"; };
+		7AED2A12225D84B00032C675 /* VIMediaCacheWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIMediaCacheWorker.m; sourceTree = "<group>"; };
+		7AED2A13225D84B00032C675 /* VICacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheManager.h; sourceTree = "<group>"; };
+		7AED2A14225D84B00032C675 /* VIMediaCacheWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIMediaCacheWorker.h; sourceTree = "<group>"; };
+		7AED2A15225D84B00032C675 /* VICacheAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheAction.m; sourceTree = "<group>"; };
+		7AED2A16225D84B00032C675 /* VICacheConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheConfiguration.h; sourceTree = "<group>"; };
+		7AED2A17225D84B00032C675 /* VICacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheManager.m; sourceTree = "<group>"; };
+		7AED2A18225D84B10032C675 /* VICacheSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheSessionManager.h; sourceTree = "<group>"; };
+		7AED2A19225D84B10032C675 /* NSString+VIMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+VIMD5.m"; sourceTree = "<group>"; };
+		7AED2A1A225D84B10032C675 /* VICacheConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheConfiguration.m; sourceTree = "<group>"; };
+		7AED2A1B225D84B10032C675 /* VICacheSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheSessionManager.m; sourceTree = "<group>"; };
+		7AED2A1C225D84B10032C675 /* VICacheAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheAction.h; sourceTree = "<group>"; };
+		7AED2A1D225D84B10032C675 /* NSString+VIMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+VIMD5.h"; sourceTree = "<group>"; };
+		7AED2A24225D84DD0032C675 /* VIMediaCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIMediaCache.h; sourceTree = "<group>"; };
 		7AEF926D2249C55400D32B19 /* libZJToolsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZJToolsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AF3A907225227F0007901B5 /* ZJHttpDownload.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZJHttpDownload.xcodeproj; path = ../../../../ZJHttpDownload/ZJHttpDownload.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -128,6 +162,17 @@
 		7A42D5F722544A9300BE1690 /* ResourceLoader */ = {
 			isa = PBXGroup;
 			children = (
+				7AED2A11225D849D0032C675 /* Cache */,
+				7AED2A0B225D84780032C675 /* VIContentInfo.h */,
+				7AED2A07225D84780032C675 /* VIContentInfo.m */,
+				7AED2A04225D84770032C675 /* VIMediaDownloader.h */,
+				7AED2A03225D84770032C675 /* VIMediaDownloader.m */,
+				7AED2A08225D84780032C675 /* VIResourceLoader.h */,
+				7AED2A05225D84780032C675 /* VIResourceLoader.m */,
+				7AED2A09225D84780032C675 /* VIResourceLoaderManager.h */,
+				7AED2A06225D84780032C675 /* VIResourceLoaderManager.m */,
+				7AED2A0A225D84780032C675 /* VIResourceLoadingRequestWorker.h */,
+				7AED29FF225D84770032C675 /* VIResourceLoadingRequestWorker.m */,
 				7A7213E0223B5A2100B7C02E /* ZJResourceLoaderManager.h */,
 				7A7213E1223B5A2200B7C02E /* ZJResourceLoaderManager.m */,
 			);
@@ -156,6 +201,7 @@
 			children = (
 				7A7213BA223B498C00B7C02E /* Player */,
 				7A72139E223B491800B7C02E /* ZJPlayerSDK.h */,
+				7AED2A24225D84DD0032C675 /* VIMediaCache.h */,
 			);
 			path = ZJPlayerSDK;
 			sourceTree = "<group>";
@@ -188,6 +234,25 @@
 				7A1A3CEE223F9840001E2994 /* ZJPlayerProtocol.h */,
 			);
 			path = Player;
+			sourceTree = "<group>";
+		};
+		7AED2A11225D849D0032C675 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				7AED2A1D225D84B10032C675 /* NSString+VIMD5.h */,
+				7AED2A19225D84B10032C675 /* NSString+VIMD5.m */,
+				7AED2A1C225D84B10032C675 /* VICacheAction.h */,
+				7AED2A15225D84B00032C675 /* VICacheAction.m */,
+				7AED2A16225D84B00032C675 /* VICacheConfiguration.h */,
+				7AED2A1A225D84B10032C675 /* VICacheConfiguration.m */,
+				7AED2A13225D84B00032C675 /* VICacheManager.h */,
+				7AED2A17225D84B00032C675 /* VICacheManager.m */,
+				7AED2A18225D84B10032C675 /* VICacheSessionManager.h */,
+				7AED2A1B225D84B10032C675 /* VICacheSessionManager.m */,
+				7AED2A14225D84B00032C675 /* VIMediaCacheWorker.h */,
+				7AED2A12225D84B00032C675 /* VIMediaCacheWorker.m */,
+			);
+			path = Cache;
 			sourceTree = "<group>";
 		};
 		7AEF926C2249C55400D32B19 /* Frameworks */ = {
@@ -310,16 +375,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AED2A10225D84780032C675 /* VIContentInfo.m in Sources */,
 				7A7213E2223B5A2200B7C02E /* ZJResourceLoaderManager.m in Sources */,
 				7A7213CB223B498C00B7C02E /* ZJBrightness.m in Sources */,
+				7AED2A1F225D84B10032C675 /* VICacheAction.m in Sources */,
+				7AED2A22225D84B10032C675 /* VICacheConfiguration.m in Sources */,
 				7A7213CC223B498C00B7C02E /* ZJPlayerController.m in Sources */,
+				7AED2A0F225D84780032C675 /* VIResourceLoaderManager.m in Sources */,
 				188D657D2258AEE000935141 /* ZJPlayerControl.m in Sources */,
 				7A7213C9223B498C00B7C02E /* ZJTopView.m in Sources */,
+				7AED2A20225D84B10032C675 /* VICacheManager.m in Sources */,
 				7ACF4CF4224A12C0001B0EB4 /* ZJJPlayer.m in Sources */,
 				7A7213E8223B725F00B7C02E /* UIView+Player.m in Sources */,
+				7AED2A21225D84B10032C675 /* NSString+VIMD5.m in Sources */,
 				7A7213C8223B498C00B7C02E /* ZJProgress.m in Sources */,
 				7A7213CA223B498C00B7C02E /* ZJControlView.m in Sources */,
+				7AED2A0D225D84780032C675 /* VIMediaDownloader.m in Sources */,
 				7A7213DF223B598800B7C02E /* ZJLoadingIndicator.m in Sources */,
+				7AED2A0E225D84780032C675 /* VIResourceLoader.m in Sources */,
+				7AED2A1E225D84B10032C675 /* VIMediaCacheWorker.m in Sources */,
+				7AED2A0C225D84780032C675 /* VIResourceLoadingRequestWorker.m in Sources */,
+				7AED2A23225D84B10032C675 /* VICacheSessionManager.m in Sources */,
 				7A7213C7223B498C00B7C02E /* ZJVideoPlayerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

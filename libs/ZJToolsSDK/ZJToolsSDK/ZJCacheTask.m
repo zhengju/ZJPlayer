@@ -185,11 +185,13 @@
     if (isHave == NO) {
         
         NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithCapacity:0];
-        
+
         [dic setObject:date forKey:@"time"];
         
-        [dic setObject:url forKey:@"url"];
-        
+        if (url) {
+            [dic setObject:url forKey:@"url"];
+        }
+
         [tasks addObject:dic];
     }
     

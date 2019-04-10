@@ -49,6 +49,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 };
 
 @interface ZJVideoPlayerView()<ZJControlViewDelegate,ZJTopViewDelegate>//,InterceptViewDelegate>
+
+@property (nonatomic, strong) id timeObserver;
+
 /**
  默认背景图
  */
@@ -185,52 +188,59 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     }
 }
 
-#pragma mark -设置当前url
-- (void)setUrl:(NSURL *)url{
-    
-    //初始化
+- (void)configurePLayer{
+    [self configurePLayerWithUrl:nil];
+}
 
+#pragma mark -设置当前url
+- (void)configurePLayerWithUrl:(NSURL *)url{
+    
     _url = url;
     
     self.isPlayAfterPause = NO;
     
     //判断是否有缓存
-    if ([[ZJDownloadManager sharedInstance]isCompletion:_url.absoluteString]) {//有缓存
-        _url = [NSURL fileURLWithPath:[[ZJDownloadManager sharedInstance] path:_url.absoluteString]];
+    if ([[ZJDownloadManager sharedInstance]isCompletion:url.absoluteString]) {//有缓存
+        _url = [NSURL fileURLWithPath:[[ZJDownloadManager sharedInstance] path:url.absoluteString]];
 
         [self.topView downloadFinish];
     }
 
-    if (![_url.absoluteString hasPrefix:@"http"])
+    if (![url.absoluteString hasPrefix:@"http"])
     {
-        
+
         self.isLocalVideo = YES;
 
-        self.asset = [AVURLAsset URLAssetWithURL:_url options:nil];
-           
-        self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset];
-           
-           if (!self.player) {
-               self.player = [ZJJPlayer playerWithPlayerItem:self.playerItem];
-           } else {
-               [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
-           }
+        if (!self.playerItem) {
+            self.asset = [AVURLAsset URLAssetWithURL:url options:nil];
+            self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset];
+        }
 
-       }else{
+       if (!self.player) {
+           self.player = [ZJJPlayer playerWithPlayerItem:self.playerItem];
+       } else {
+           [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
+       }
+        
+    }else{
            self.isLocalVideo = NO;
            self.playerItem = nil;
-//           NSURLComponents *components = [[NSURLComponents alloc]initWithURL:_url resolvingAgainstBaseURL:NO];
-//           ////注意，不加这一句不能执行到回调操作
-//           components.scheme = kCustomVideoScheme;
+        
+           NSURLComponents *components = [[NSURLComponents alloc]initWithURL:_url resolvingAgainstBaseURL:NO];
+           ////注意，不加这一句不能执行到回调操作
+           components.scheme = kCustomVideoScheme;
 
            self.asset=[[AVURLAsset alloc]initWithURL:url options:nil];
            
-           _resourceManager = [[ZJResourceLoaderManager alloc]init];
+//           _resourceManager = [[ZJResourceLoaderManager alloc]init];
 
 //           self.playerItem = [_resourceManager playerItemWithURL:url];
-           
-         self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset];
-           
+        
+        
+        if (!self.playerItem) {
+            self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset];
+        }
+        
            if (!self.player) {
 
                self.player = [ZJJPlayer playerWithPlayerItem:self.playerItem];
@@ -239,9 +249,15 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
                [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
            }
            //self.playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = YES;
-
+        
        }
- 
+
+    if (@available(iOS 10.0, *)) {
+        self.player.automaticallyWaitsToMinimizeStalling = NO;
+    } else {
+        // Fallback on earlier versions
+    }
+    
     [self addObserverToPlayerItem:self.playerItem];
 }
 #pragma  当前播放视频的标题
@@ -296,11 +312,14 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         [_fatherView addSubview:self];
     }
 }
+- (instancetype)initWithFrame:(CGRect)frame withSuperView:(UIView *)superView controller:(UIViewController *)controller{
+    return [self initWithUrl:nil withSuperView:superView frame:frame controller:controller];
+}
 #pragma 实例化
 -(instancetype)initWithUrl:(NSURL *)url  withSuperView:(UIView *)superView frame:(CGRect)frame controller:(UIViewController *)controller{
     self = [super init];
     if (self) {
-        _url = url;
+//        _url = url;
         self.controller = controller;
         self.fatherView = superView;
         
@@ -484,9 +503,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
      */
     self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
 
-    if (_url.absoluteString.length > 0) {
-        self.url = _url;
-    }
+//    if (_url.absoluteString.length > 0) {
+//        [self  configurePLayerWithUrl:_url];
+//    }
 
     if (self.progress == nil) {
          self.progress = [[ZJProgress alloc]initWithSuperView:self];
@@ -494,7 +513,6 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     if (self.brightness == nil) {
         self.brightness = [[ZJBrightness alloc]initWithSuperView:self];
     }
-
 
 }
 #pragma  mark -- 加滑动手势
@@ -1238,9 +1256,12 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         
         // 获取当前播放的时间
         NSTimeInterval currentTime = CMTimeGetSeconds(weakSelf.player.currentItem.currentTime);
-        ZJCacheTask * task =  [ZJCacheTask shareTask];
-        [task writeToFileUrl:weakSelf.url.absoluteString time:currentTime];
-    
+        
+        if (weakSelf.url) {
+            ZJCacheTask * task =  [ZJCacheTask shareTask];
+            [task writeToFileUrl:weakSelf.url.absoluteString time:currentTime];
+        }
+        
         // 不是拖拽中的话更新UI
         if (!weakSelf.isDragSlider)
         {
@@ -1427,13 +1448,14 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 
     ZJCacheTask * task =  [ZJCacheTask shareTask];
     
-    NSTimeInterval time = [task queryToFileUrl:_url.absoluteString];
-    
-    //判断是开始播放，还是暂停之后的播放
-    if (time > 0 &&self.isPlayAfterPause == NO) {
-        
-        [self.player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    if (_url) {
+        NSTimeInterval time = [task queryToFileUrl:_url.absoluteString];
+        //判断是开始播放，还是暂停之后的播放
+        if (time > 0 &&self.isPlayAfterPause == NO) {
+            [self.player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+        }
     }
+    
     if (self.isPlayAfterPause == NO) {
         [self.topView resetRate];
     }else{//暂停播放，倍速还原为之前的
