@@ -329,6 +329,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         if (!CGRectEqualToRect(frame, CGRectZero)) {
             self.frameOnFatherView = frame;
             [self configureUI];
+            [self configurePLayerWithUrl:url];
             [self configureFrame];
         }
 
@@ -1325,7 +1326,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     CGFloat height = kScreenWidth;
 
     
-    [[UIApplication sharedApplication] setStatusBarOrientation:(interfaceOrientation) animated:NO];
+    [[UIApplication sharedApplication] setStatusBarOrientation:(interfaceOrientation) animated:NO];//执行旋转状态栏
     
     if (interfaceOrientation == UIInterfaceOrientationLandscapeRight || interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
         

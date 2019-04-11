@@ -31,7 +31,7 @@
     self.player.fatherView = self.view;
 
     
-    self.player.url = [NSURL URLWithString:self.model.url];
+    [self.player configurePLayerWithUrl:[NSURL URLWithString:self.model.url]];
     
     [self.player setPlayerFrame:CGRectMake(0, 0, kScreenWidth, 300)];
 

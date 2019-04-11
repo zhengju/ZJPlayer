@@ -74,7 +74,7 @@
                          @"2",
                          @"3",
                          @"4",
-                         @"5",
+                         @"搞笑视频来啦",
                          ];
 
     NSArray * urls = @[
@@ -86,7 +86,8 @@
                        @"https://www.apple.com/105/media/cn/mac/family/2018/46c4b917_abfd_45a3_9b51_4e3054191797/films/bruce/mac-bruce-tpl-cn-2018_1280x720h.mp4",
                        @"http://tb-video.bdstatic.com/tieba-smallvideo/5_6d3243c354755b781f6cc80f60756ee5.mp4",
                        @"http://tb-video.bdstatic.com/tieba-smallvideo/12_cc75b3fb04b8a23546d62e3f56619e85.mp4",
-                       @"http://tb-video.bdstatic.com/tieba-smallvideo/15_ad895ac5fb21e5e7655556abee3775f8.mp4"
+                       
+                       @"https://mvvideo5.meitudata.com/56ea0e90d6cb2653.mp4"
                        
                        ];
     
@@ -107,7 +108,7 @@
     
     self.player.isPushOrPopPlpay = NO;
     
-    self.player.url = [NSURL URLWithString:cell.model.url];
+    [self.player configurePLayerWithUrl:[NSURL URLWithString:cell.model.url]];
 
     self.player.delegate = self;
 

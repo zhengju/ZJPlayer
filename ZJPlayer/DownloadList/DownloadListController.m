@@ -35,6 +35,7 @@
     self.backBtn.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     self.downloadManager = [[ZJDownloadManager alloc]init];
+    self.downloadManager.downloadType = ZJDownloadwriteToFile;
     self.downloadManager.delegate = self;
     [self configDatas];
     [self configureTableView];
@@ -60,13 +61,15 @@
     NSArray * titles = @[
                          @"许家印讲话",
                          @"融创中国宣传片",
-                         @"苹果"
+                         @"苹果",
+                         @"搞笑视频"
                          ];
     
     NSArray * urls = @[
                        @"http://img.house.china.com.cn/voice/hdzxjh.mp4",
                        @"http://img.house.china.com.cn/voice/rongch.mp4",
-                       @"https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4"
+                       @"https://www.apple.com/105/media/us/iphone-x/2017/01df5b43-28e4-4848-bf20-490c34a926a7/films/feature/iphone-x-feature-tpl-cc-us-20170912_1280x720h.mp4",
+                       @"https://mvvideo5.meitudata.com/56ea0e90d6cb2653.mp4"
                        ];
     
     for (int i = 0; i < urls.count; i++) {

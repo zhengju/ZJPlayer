@@ -149,7 +149,7 @@
         self.bgView.image = _model.image;
     }else{
 
-        [ZJCustomTools thumbnailImageRequest:1.2 url:_model.url success:^(UIImage *image) {
+        [ZJCustomTools thumbnailImageRequest:4.2 url:_model.url success:^(UIImage *image) {
             self.bgView.image = image;
             _model.image = image;
         }];

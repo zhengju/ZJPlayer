@@ -105,29 +105,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "libs/ZJPlayerSDK/ZJPlayerSDK/Player/ZJTopView.m"
-            timestampString = "576659051.349157"
+            filePath = "libs/ZJHttpDownload/ZJHttpDownload/ZJDownloadManager.m"
+            timestampString = "576667081.694083"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "-configureUI"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "libs/ZJPlayerSDK/ZJPlayerSDK/Player/ZJTopView.m"
-            timestampString = "576659051.349208"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
-            landmarkName = "-configureUI"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "-startOperationWithRequestItem:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
