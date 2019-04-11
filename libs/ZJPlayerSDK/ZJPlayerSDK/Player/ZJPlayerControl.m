@@ -22,6 +22,8 @@
 #import "VIMediaCache.h"
 #import "VIMediaCacheWorker.h"
 
+#import "InterceptView.h"
+
 @interface ZJPlayerControl()<ZJDownloadManagerDelegate>
 {
     HTTPServer *httpServer;
@@ -95,19 +97,28 @@
 //
 //    return;
     
+    InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
+    
     ZJVideoPlayerView * player = [[ZJVideoPlayerView alloc]initWithFrame:_fatherFrame withSuperView:_playerFatherView controller:nil];
+    
+    player.interceptView =  interceptView;
+    
     VIResourceLoaderManager *resourceLoaderManager = [VIResourceLoaderManager new];
 
-    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:_urlStr]];
+//    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:_urlStr]];
+    
+    //[AVPlayerItem playerItemWithURL:[NSURL URLWithString:_urlStr]];
     //[resourceLoaderManager playerItemWithURL:[NSURL URLWithString:_urlStr]];
 
-    VICacheConfiguration *configuration = [VICacheManager cacheConfigurationForURL:[NSURL URLWithString:_urlStr]];
-
-    if (configuration.progress >= 1.0) {
-        NSLog(@"cache completed");
-    }
-    player.playerItem = playerItem;
-    [player configurePLayer];
+//    VICacheConfiguration *configuration = [VICacheManager cacheConfigurationForURL:[NSURL URLWithString:_urlStr]];
+//
+//    if (configuration.progress >= 1.0) {
+//        NSLog(@"cache completed");
+//    }
+    
+//    player.playerItem = playerItem;
+    
+    [player configurePLayerWithUrl:[NSURL URLWithString:_urlStr]];
     player.isRotatingSmallScreen = YES;
     
     [_playerFatherView addSubview:player];

@@ -217,7 +217,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         }
 
        if (!self.player) {
-           self.player = [ZJJPlayer playerWithPlayerItem:self.playerItem];
+           self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
        } else {
            [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
        }
@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
         
            if (!self.player) {
 
-               self.player = [ZJJPlayer playerWithPlayerItem:self.playerItem];
+               self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
            } else {
                [self.player pause];
                [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
@@ -375,9 +375,9 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     
 }
 
-- (ZJJPlayer *)player{
+- (AVPlayer *)player{
     if (_player == nil) {
-        _player = [[ZJJPlayer alloc] init];
+        _player = [[AVPlayer alloc] init];
     }
     return _player;
 }
@@ -1538,7 +1538,7 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
 - (void)setRate:(float)rate{
     self.player.rate = rate;
 }
-
+#pragma mark -截一帧
 - (void)fetchScreen{
     
     CGFloat nowTime = CMTimeGetSeconds(self.playerItem.currentTime);
@@ -1549,17 +1549,13 @@ typedef NS_ENUM(NSInteger, ZJPlayerSliding) {
     }];
 
 }
+#pragma mark -截视频和GIF
 - (void)gifScreenshot{
 
     [self pause];
 
-//    InterceptView * view = [[InterceptView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem currentTime:self.playerItem.currentTime];
-//    view.currentTtime = self.playerItem.currentTime;
-//    view.playerItem = self.player.currentItem;
-//    view.delegate = self;
-    
     [self.interceptView setFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) url:self.url playerItem:self.playerItem currentTime:self.playerItem.currentTime];
-    
+
     [self addSubview:self.interceptView];
     
 }

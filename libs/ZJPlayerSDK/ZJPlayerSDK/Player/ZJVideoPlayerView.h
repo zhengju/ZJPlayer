@@ -48,7 +48,7 @@ extern NSString *const ZJEventSubtypeRemoteControlTogglePlayPause; // 暂停键
 
 @property(weak,nonatomic) id<ZJPlayerDelegate> delegate;
 
-@property(strong,nonatomic) ZJJPlayer * player;
+@property(strong,nonatomic) AVPlayer * player;
 
 @property(strong,nonatomic) AVPlayerLayer * playerLayer;
 

@@ -9,7 +9,7 @@
 #import "VIResourceLoaderManager.h"
 #import "VIResourceLoader.h"
 
-static NSString *kCacheScheme = @"zzjj://";
+static NSString *kCacheScheme = @"__zzz__:";
 
 @interface VIResourceLoaderManager () <VIResourceLoaderDelegate,AVAssetResourceLoaderDelegate>
 
@@ -49,7 +49,7 @@ static NSString *kCacheScheme = @"zzjj://";
 - (AVPlayerItem *)playerItemWithURL:(NSURL *)url {
     NSURL *assetURL = [VIResourceLoaderManager assetURLWithURL:url];
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:assetURL options:nil];
-    [urlAsset.resourceLoader setDelegate:self queue:dispatch_get_global_queue(0, 0)];
+    [urlAsset.resourceLoader setDelegate:self queue:dispatch_get_main_queue()];
     AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:urlAsset];
     if ([playerItem respondsToSelector:@selector(setCanUseNetworkResourcesForLiveStreamingWhilePaused:)]) {
         if (@available(iOS 9.0, *)) {

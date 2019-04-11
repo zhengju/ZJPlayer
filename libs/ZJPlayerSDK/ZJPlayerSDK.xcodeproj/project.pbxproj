@@ -528,6 +528,7 @@
 					"\"$(SRCROOT)/../CocoaHTTPServerSDK/CocoaHTTPServerSDK\"/**",
 					"\"$(SRCROOT)/../CocoaHTTPServerSDK/CocoaHTTPServerSDK/CocoaHTTPServerSDK.h\"/**",
 					"\"$(SRCROOT)/../ZJHTTPNetWorking/ZJHTTPNetWorking\"",
+					"\"$(SRCROOT)/../ZJInterceptSDK/ZJInterceptSDK/VideoScreenshot\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
@@ -550,6 +551,7 @@
 					"\"$(SRCROOT)/../CocoaHTTPServerSDK/CocoaHTTPServerSDK\"/**",
 					"\"$(SRCROOT)/../CocoaHTTPServerSDK/CocoaHTTPServerSDK/CocoaHTTPServerSDK.h\"/**",
 					"\"$(SRCROOT)/../ZJHTTPNetWorking/ZJHTTPNetWorking\"",
+					"\"$(SRCROOT)/../ZJInterceptSDK/ZJInterceptSDK/VideoScreenshot\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";

@@ -50,6 +50,7 @@
     
 //    InterceptView<ZJPlayerProtocolDelegate> * interceptView = [[InterceptView alloc]init];
 
+    
     ZJPlayerControl * control = [[ZJPlayerControl alloc]initWithView:self.view andFrame:CGRectMake(0, 0, self.view.bounds.size.width, 300) url:urlStr];
 
 

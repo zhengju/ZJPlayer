@@ -109,7 +109,6 @@
 }
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        [self loadData];
     }
     return self;
 }
@@ -118,7 +117,6 @@
 {
     self = [super init];
     if (self) {
-        [self loadData];
     }
     return self;
 }
